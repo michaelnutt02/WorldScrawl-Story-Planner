@@ -1,6 +1,7 @@
 package com.example.worldscrawl
 
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
@@ -11,20 +12,13 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var addProfileButton:FloatingActionButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
 
-//        findViewById<FloatingActionButton>(R.id.addFAB).setOnClickListener { view ->
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                    .setAction("Action", null).show()
-//        }
-
-        addProfileButton = findViewById<FloatingActionButton>(R.id.addFAB)
-
+        var addButton:FloatingActionButton = findViewById<FloatingActionButton>(R.id.addFAB)
 
         //based this code off of https://stackoverflow.com/a/44190200 , which is recommended in the "hint" section of the lab
 
@@ -36,32 +30,24 @@ class MainActivity : AppCompatActivity() {
 
             when(it.itemId){
                 R.id.navigation_characters -> {
-                    switchTo = CharactersFragment(this, addProfileButton)
-                    true
+                    switchTo = CharactersFragment(this, addButton)
                 }
                 R.id.navigation_worlds -> {
-                    switchTo = WorldsFragment(this, addProfileButton)
-                    true
+                    switchTo = WorldsFragment(this, addButton)
                 }
                 R.id.navigation_stories -> {
-                    switchTo = StoriesFragment(this)
-                    true
-                }
-                else -> {
-
-                    false
+                    switchTo = StoriesFragment(this, addButton)
                 }
 
             }
 
+
             //load proper fragment in based off of navigation
             if(switchTo != null){
                 val ft = supportFragmentManager.beginTransaction()
-//                ft.add(R.id.fragment_container,switchTo)
+
                 ft.replace(R.id.fragment_container,switchTo)
-//                while(supportFragmentManager.backStackEntryCount > 0){
-//                    supportFragmentManager.popBackStackImmediate()
-//                }
+
                 ft.commit()
 
             }
@@ -88,4 +74,7 @@ class MainActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
+
+
 }

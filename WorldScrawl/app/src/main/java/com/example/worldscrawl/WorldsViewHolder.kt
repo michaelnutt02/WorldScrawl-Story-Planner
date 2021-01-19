@@ -9,15 +9,15 @@ import androidx.recyclerview.widget.RecyclerView
 
 class WorldsViewHolder: RecyclerView.ViewHolder {
 
-    private var questionText: TextView? = null
-    private var viewCard: CardView = itemView.findViewById(R.id.single_question)
+
+    private var questionText:TextView = itemView.findViewById(R.id.question_text)
     lateinit var adapter:WorldsAdapter
     lateinit var context: Context
 
     constructor(itemView: View, adapter:WorldsAdapter, context: Context):super(itemView){
         this.context = context
         this.adapter = adapter
-        questionText = itemView.findViewById(R.id.question_text)
+
 
         //update position, etc
     }
@@ -25,6 +25,7 @@ class WorldsViewHolder: RecyclerView.ViewHolder {
     fun bind(mathFact: MathFact){
         //update view to show question strings :)
         questionText?.text = mathFact.getReview()
+
         Log.i("New Review","Adapter Position is added at  ${adapterPosition}")
 
     }

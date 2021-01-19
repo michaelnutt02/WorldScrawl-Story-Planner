@@ -29,7 +29,8 @@ class WorldsAdapter(var context: Context): RecyclerView.Adapter<WorldsViewHolder
     fun add(){
         val fact = MathFact(10.toDouble(),2.toDouble())
 
-        list.add(fact)
+        list.add(0,fact)
+        notifyItemInserted(0)
     }
 
 

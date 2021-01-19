@@ -21,20 +21,22 @@ class CharactersFragment() : Fragment() {
 
     lateinit var adapter: WorldsAdapter
     lateinit var recycleView: RecyclerView
+    lateinit var addButton:FloatingActionButton
 
     private lateinit var con: Context
-    private lateinit var addProfileButton: FloatingActionButton
 
-    constructor(context: Context, addProfileButton: FloatingActionButton) : this() {
+
+    constructor(context: Context, addButton: FloatingActionButton) : this() {
 
         this.con = context
-        this.addProfileButton = addProfileButton
+        this.addButton = addButton
     }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
 
 
     }
@@ -48,13 +50,16 @@ class CharactersFragment() : Fragment() {
         val layout = inflater.inflate(R.layout.fragment_worlds, container, false)
         //figured out how to do this from https://stackoverflow.com/questions/59864600/recyclerview-still-not-showing-items-on-fragment
         adapter = WorldsAdapter(con)
-        recycleView = layout.findViewById(R.id.characters_recycler_view)
+        recycleView = layout.findViewById(R.id.worlds_recycler_view)
         recycleView.layoutManager = LinearLayoutManager(con)
         recycleView.adapter = adapter
 
-        addProfileButton.setOnClickListener{
+
+        addButton.setOnClickListener{
             adapter.add()
+            Log.i("Adding Profile","In Characters")
         }
+
 
         return layout
 

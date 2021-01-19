@@ -21,20 +21,19 @@ class WorldsFragment() : Fragment() {
 
     lateinit var adapter: WorldsAdapter
     lateinit var recycleView: RecyclerView
-    lateinit var addProfileButton:FloatingActionButton
+    lateinit var addButton: FloatingActionButton
 
     private lateinit var con:Context
 
-    constructor(context: Context, addProfileButton: FloatingActionButton) : this() {
+    constructor(context: Context, addButton: FloatingActionButton) : this() {
 
         this.con = context
-        this.addProfileButton = addProfileButton
-
+        this.addButton = addButton
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
+
 
     }
 
@@ -49,9 +48,10 @@ class WorldsFragment() : Fragment() {
         recycleView.layoutManager = LinearLayoutManager(con)
         recycleView.adapter = adapter
 
-        this.addProfileButton.setOnClickListener{
-            Log.i("New Profile","Pressing FAB")
+        addButton.setOnClickListener{
             adapter.add()
+            var size = adapter.itemCount
+            Log.i("Adding Profile","In Worlds, number of facts are $size")
         }
 
         return layout
