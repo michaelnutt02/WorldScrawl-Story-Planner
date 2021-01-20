@@ -8,9 +8,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
+import com.example.worldscrawl.profilecategory.Profile
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),WorldsFragment.OnProfileSelectedListener {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,6 +76,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onProfileSelected(profile: Profile) {
+        Log.i("profile selected", "opening fragment")
+        val profileFragment = ProfileFragment(this, profile)
+        val ft = supportFragmentManager.beginTransaction()
+        ft.replace(R.id.fragment_container, profileFragment)
+        ft.addToBackStack("detail")
+        ft.commit()
+    }
 
 
 }

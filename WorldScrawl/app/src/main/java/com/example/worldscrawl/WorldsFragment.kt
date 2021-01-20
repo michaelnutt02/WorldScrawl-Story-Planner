@@ -13,15 +13,19 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.worldscrawl.profilecategory.Profile
+import com.example.worldscrawl.profilecategory.ProfileCardAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 class WorldsFragment() : Fragment() {
 
 
-    lateinit var adapter: WorldsAdapter
+    lateinit var adapter: ProfileCardAdapter
     lateinit var recycleView: RecyclerView
     lateinit var addButton: FloatingActionButton
+
+    private var listener : OnProfileSelectedListener? = null
 
     private lateinit var con:Context
 
@@ -43,15 +47,16 @@ class WorldsFragment() : Fragment() {
     ): View? {
         val layout = inflater.inflate(R.layout.fragment_worlds, container, false)
 
-        adapter = WorldsAdapter(con)
+        adapter = ProfileCardAdapter(con, listener)
         recycleView = layout.findViewById(R.id.worlds_recycler_view)
         recycleView.layoutManager = LinearLayoutManager(con)
         recycleView.adapter = adapter
 
         addButton.setOnClickListener{
-            adapter.add()
+            var newprofile = Profile("Mary Sue")
+            adapter.add(newprofile)
             var size = adapter.itemCount
-            Log.i("Adding Profile","In Worlds, number of facts are $size")
+            Log.i("Adding Profile","In Worlds, number of profiles are $size")
         }
 
         return layout
@@ -59,11 +64,17 @@ class WorldsFragment() : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        if(context is OnProfileSelectedListener){
+            listener = context
+        }else{
+            throw RuntimeException(context.toString()+ "must implement OnWorldSelected")
+        }
 
     }
 
     override fun onDetach() {
         super.onDetach()
+        listener = null
 
     }
 
@@ -82,6 +93,10 @@ class WorldsFragment() : Fragment() {
             else -> super.onOptionsItemSelected(item)
         }
 
+    }
+
+    interface OnProfileSelectedListener{
+        fun onProfileSelected(profile:Profile)
     }
 
 

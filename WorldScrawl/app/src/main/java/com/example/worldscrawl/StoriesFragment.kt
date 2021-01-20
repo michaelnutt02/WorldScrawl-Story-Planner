@@ -10,14 +10,18 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.worldscrawl.profilecategory.Profile
+import com.example.worldscrawl.profilecategory.ProfileCardAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 class StoriesFragment() : Fragment() {
 
-    lateinit var adapter: WorldsAdapter
+    lateinit var adapter: ProfileCardAdapter
     lateinit var recycleView: RecyclerView
     lateinit var  addButton:FloatingActionButton
+
+    private var listener : WorldsFragment.OnProfileSelectedListener? = null
 
     private lateinit var con:Context
 
@@ -40,15 +44,17 @@ class StoriesFragment() : Fragment() {
         // Inflate the layout for this fragment
         val layout = inflater.inflate(R.layout.fragment_stories, container, false)
 
-        adapter = WorldsAdapter(con)
+        adapter = ProfileCardAdapter(con, listener)
         recycleView = layout.findViewById(R.id.stories_recycler_view)
         recycleView.layoutManager = LinearLayoutManager(con)
         recycleView.adapter = adapter
 
 
         addButton.setOnClickListener{
-            adapter.add()
-            Log.i("Adding Profile","In Stories")
+            var newprofile = Profile("Mary Sue",arrayListOf(), R.drawable.harry_potter)
+            adapter.add(newprofile)
+            var size = adapter.itemCount
+            Log.i("Adding Profile","In Stories, number of profiles are $size")
         }
 
         return layout
@@ -57,12 +63,17 @@ class StoriesFragment() : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        if(context is WorldsFragment.OnProfileSelectedListener){
+            listener = context
+        }else{
+            throw RuntimeException(context.toString()+ "must implement OnProfileSelected")
+        }
 
     }
 
     override fun onDetach() {
         super.onDetach()
-
+        listener = null
     }
 
 
