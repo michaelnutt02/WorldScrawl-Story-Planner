@@ -5,8 +5,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.*
 
-class ProfileDetailAdapter(var context: Context) : RecyclerView.Adapter<ProfileDetailViewHolder>() {
+class ProfileDetailAdapter(var context: Context, var profileId: String) : RecyclerView.Adapter<ProfileDetailViewHolder>() {
     private val profileDetails: ArrayList<ProfileDetail> = arrayListOf(
         ProfileDetail(ProfileDetail.TYPE.SINGLE, "Test Normal", "Value"),
         ProfileDetail(ProfileDetail.TYPE.SINGLE, "Test Normal2", "Value2"),
@@ -14,6 +15,57 @@ class ProfileDetailAdapter(var context: Context) : RecyclerView.Adapter<ProfileD
         ProfileDetail(ProfileDetail.TYPE.CATEGORY, "Test Category"),
         ProfileDetail(ProfileDetail.TYPE.TAGS)
     )
+
+    init {
+        val profileRef = FirebaseFirestore
+            .getInstance()
+            .collection("profiles")
+            .document(profileId)
+
+        profileRef.get().addOnSuccessListener { snapshot: DocumentSnapshot ->
+            val detailRefs: ArrayList<DocumentReference> = snapshot["details"] as ArrayList<DocumentReference>
+            val sample: DocumentReference? = null
+
+            for(profileDetail in detailRefs) {
+                profileDetail.get().addOnSuccessListener { snapshot: DocumentSnapshot ->
+                    Log.d("WS", snapshot.id)
+                    Log.d("WS", (snapshot.data?:"//this is null").toString())
+                    val newProfileDetail = snapshot.toObject(ProfileDetail::class.java)
+                    if (newProfileDetail != null) {
+                        Log.d("WS", newProfileDetail.title)
+                    }
+                    else Log.d("WS", "newProfileDetail is null")
+                }
+            }
+        }
+
+
+//        quotesRef.orderBy(ProfileDetail.LAST_TOUCHED_KEY, Query.Direction.ASCENDING)
+//            .addSnapshotListener { snapshot: QuerySnapshot?, exception: FirebaseFirestoreException? ->
+//                if(exception != null) {
+//                    Log.e("MQ", "Listen error $exception")
+//                }
+//                for(docChange in snapshot!!.documentChanges) {
+//                    val profileDetail = ProfileDetail.fromSnapshot(docChange.document)
+//                    when (docChange.type) {
+//                        DocumentChange.Type.ADDED -> {
+//                            profileDetails.add(0, profileDetail)
+//                            notifyItemInserted(0)
+//                        }
+//                        DocumentChange.Type.REMOVED -> {
+//                            val pos = profileDetails.indexOfFirst { profileDetail.id == it.id }
+//                            profileDetails.removeAt(pos)
+//                            notifyItemRemoved(pos)
+//                        }
+//                        DocumentChange.Type.MODIFIED -> {
+//                            val pos = profileDetails.indexOfFirst { profileDetail.id == it.id }
+//                            profileDetails[pos] = profileDetail
+//                            notifyItemChanged(pos)
+//                        }
+//                    }
+//                }
+//            }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, index: Int): ProfileDetailViewHolder {
         Log.d("PD", "index is ${index}")
