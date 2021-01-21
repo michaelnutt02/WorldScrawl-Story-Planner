@@ -1,4 +1,4 @@
-package com.example.worldscrawl
+package com.example.wordscrawl
 
 import android.content.Context
 import android.util.Log

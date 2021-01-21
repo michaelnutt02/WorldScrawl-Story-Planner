@@ -1,4 +1,4 @@
-package com.example.worldscrawl.profilecategory
+package com.example.wordscrawl.profilecategory
 
 import android.content.Context
 import android.view.View
@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.example.worldscrawl.R
+import com.example.wordscrawl.R
 
 class ProfileCardViewHolder : RecyclerView.ViewHolder {
     lateinit var context: Context

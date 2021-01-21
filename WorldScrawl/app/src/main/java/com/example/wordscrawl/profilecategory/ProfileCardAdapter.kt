@@ -1,12 +1,12 @@
-package com.example.worldscrawl.profilecategory
+package com.example.wordscrawl.profilecategory
 
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.worldscrawl.R
-import com.example.worldscrawl.WorldsFragment
+import com.example.wordscrawl.R
+import com.example.wordscrawl.WorldsFragment
 
 class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnProfileSelectedListener?) : RecyclerView.Adapter<ProfileCardViewHolder>() {
     private val profiles: ArrayList<Profile> = arrayListOf(

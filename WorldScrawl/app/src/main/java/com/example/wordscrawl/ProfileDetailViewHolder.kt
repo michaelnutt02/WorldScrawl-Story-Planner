@@ -1,4 +1,4 @@
-package com.example.worldscrawl
+package com.example.wordscrawl
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -9,7 +9,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.worldscrawl.profilecategory.ProfileCardAdapter
+import com.example.wordscrawl.profilecategory.ProfileCardAdapter
 
 class ProfileDetailViewHolder : RecyclerView.ViewHolder {
     lateinit var context: Context
