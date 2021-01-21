@@ -8,13 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.*
 
 class ProfileDetailAdapter(var context: Context, var profileId: String) : RecyclerView.Adapter<ProfileDetailViewHolder>() {
-    private val profileDetails: ArrayList<ProfileDetail> = arrayListOf(
-        ProfileDetail(ProfileDetail.TYPE.SINGLE, "Test Normal", "Value"),
-        ProfileDetail(ProfileDetail.TYPE.SINGLE, "Test Normal2", "Value2"),
-        ProfileDetail(ProfileDetail.TYPE.PARAGRAPH, "Test Paragraph", "blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah"),
-        ProfileDetail(ProfileDetail.TYPE.CATEGORY, "Test Category"),
-        ProfileDetail(ProfileDetail.TYPE.TAGS)
-    )
+    private val profileDetails: ArrayList<ProfileDetail> = arrayListOf()
 
     init {
         val profileRef = FirebaseFirestore
@@ -31,8 +25,8 @@ class ProfileDetailAdapter(var context: Context, var profileId: String) : Recycl
                     if(!snapshot.exists()) Log.d("WS",  "this detail doc (${snapshot.id}) doesn't exist")
                     val newProfileDetail = snapshot.toObject(ProfileDetail::class.java)
                     if (newProfileDetail != null) {
-                        profileDetails.add(0, newProfileDetail)
-                        notifyItemInserted(0)
+                        profileDetails.add(newProfileDetail)
+                        notifyDataSetChanged()
                     }
                 }
             }
