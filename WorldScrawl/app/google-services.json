@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "803872755983",
+    "project_id": "wordscrawl-story-planner",
+    "storage_bucket": "wordscrawl-story-planner.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:803872755983:android:97fe743451630313c22e7a",
+        "android_client_info": {
+          "package_name": "com.example.wordscrawl"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "803872755983-chpvsoietc63emkmrh7fq536hgbavam7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgo6dcz7pQgjQU2xWNjOyaIhs6tpLnze0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "803872755983-chpvsoietc63emkmrh7fq536hgbavam7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
