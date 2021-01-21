@@ -28,13 +28,12 @@ class ProfileDetailAdapter(var context: Context, var profileId: String) : Recycl
 
             for(profileDetail in detailRefs) {
                 profileDetail.get().addOnSuccessListener { snapshot: DocumentSnapshot ->
-                    Log.d("WS", snapshot.id)
-                    Log.d("WS", (snapshot.data?:"//this is null").toString())
+                    if(!snapshot.exists()) Log.d("WS",  "this detail doc (${snapshot.id}) doesn't exist")
                     val newProfileDetail = snapshot.toObject(ProfileDetail::class.java)
                     if (newProfileDetail != null) {
-                        Log.d("WS", newProfileDetail.title)
+                        profileDetails.add(0, newProfileDetail)
+                        notifyItemInserted(0)
                     }
-                    else Log.d("WS", "newProfileDetail is null")
                 }
             }
         }
