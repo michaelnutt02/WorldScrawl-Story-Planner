@@ -34,13 +34,20 @@ class ProfileFragment() : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
+
         var layout = inflater.inflate(R.layout.profile_with_picture, container, false)
+//        var layout = inflater.inflate(R.layout.fragment_profile, container, false)
 
         adapter = ProfileDetailAdapter(con, "szo5if1k5bKSCX1iPtYB")
         recycleView = layout.findViewById(R.id.profile_detail_recycler)
         recycleView.layoutManager = LinearLayoutManager(con)
         recycleView.setHasFixedSize(true)
         recycleView.adapter = adapter
+
+        for(detail in profile.details){
+            adapter.add(detail)
+        }
+
 
 
         return layout
