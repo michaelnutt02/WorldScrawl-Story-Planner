@@ -18,17 +18,32 @@ class ProfileDetailAdapter(var context: Context, var profileId: String) : Recycl
 
         profileRef.get().addOnSuccessListener { snapshot: DocumentSnapshot ->
             val detailRefs: ArrayList<DocumentReference> = snapshot["details"] as ArrayList<DocumentReference>
-            val sample: DocumentReference? = null
-
-            for(profileDetail in detailRefs) {
-                profileDetail.get().addOnSuccessListener { snapshot: DocumentSnapshot ->
-                    if(!snapshot.exists()) Log.d("WS",  "this detail doc (${snapshot.id}) doesn't exist")
-                    val newProfileDetail = snapshot.toObject(ProfileDetail::class.java)
-                    if (newProfileDetail != null) {
-                        profileDetails.add(newProfileDetail)
+            for(doc in detailRefs) {
+                doc.addSnapshotListener { snapshot: DocumentSnapshot?, exception: FirebaseFirestoreException? ->
+                    if(exception != null) {
+                        Log.e("MQ", "Listen error $exception")
+                    }
+                    if(!snapshot?.exists()!!) Log.d("WS",  "this detail doc (${snapshot.id}) doesn't exist")
+                    val profileDetail = ProfileDetail.fromSnapshot(snapshot)
+                    if (profileDetail != null) {
+                        val pos = profileDetails.indexOfFirst { profileDetail.id == it.id }
+                        Log.d("WS",  "pos is $pos")
+                        when (pos) {
+                            -1 -> profileDetails.add(profileDetail)
+                            else -> profileDetails[pos] = profileDetail
+                        }
                         notifyDataSetChanged()
                     }
                 }
+
+//                { snapshot: DocumentSnapshot?, _ ->
+//                    if(!snapshot?.exists()!!) Log.d("WS",  "this detail doc (${snapshot.id}) doesn't exist")
+//                    val newProfileDetail = snapshot.toObject(ProfileDetail::class.java)
+//                    if (newProfileDetail != null) {
+//                        profileDetails.add(newProfileDetail)
+//                        notifyDataSetChanged()
+//                    }
+//                }
             }
         }
 

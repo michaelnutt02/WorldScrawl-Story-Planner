@@ -6,7 +6,7 @@ import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.ServerTimestamp
 
 data class ProfileDetail(var type: TYPE = TYPE.SINGLE, var title: String = "", var body: String = "", var isSelected: Boolean = false) {
-    enum class TYPE {
+    enum class TYPE { //remove isSelected, it breaks the selection in certain conditions
         SINGLE,
         PARAGRAPH,
         CATEGORY,
@@ -17,9 +17,9 @@ data class ProfileDetail(var type: TYPE = TYPE.SINGLE, var title: String = "", v
     companion object {
         const val LAST_TOUCHED_KEY = "lastTouched"
         fun fromSnapshot(snapshot: DocumentSnapshot): ProfileDetail {
-            val mq = snapshot.toObject(ProfileDetail::class.java)!!
-            mq.id = snapshot.id
-            return mq
+            val pd = snapshot.toObject(ProfileDetail::class.java)!!
+            pd.id = snapshot.id
+            return pd
         }
     }
 }
