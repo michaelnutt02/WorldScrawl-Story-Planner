@@ -22,6 +22,8 @@ class ProfileDetailViewHolder : RecyclerView.ViewHolder {
     }
 
     fun bind(profileDetail: ProfileDetail) {
+//        val existingCardView = itemView.findViewById<CardView>(R.id.profile_detail_single_view)
+//        if(existingCardView != null) itemView.findViewById<RecyclerView>(R.id.profile_detail_recycler).remove(existingCardView)
         var color = ContextCompat.getColor(context, R.color.grey)
         val cardView: CardView = when (profileDetail.type) {
             ProfileDetail.TYPE.SINGLE -> itemView.findViewById<CardView>(R.id.profile_detail_single_view)
