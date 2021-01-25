@@ -5,14 +5,34 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.wordscrawl.ProfileDetail
 import com.example.wordscrawl.R
 import com.example.wordscrawl.WorldsFragment
+import com.google.firebase.firestore.*
 
 class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnProfileSelectedListener?) : RecyclerView.Adapter<ProfileCardViewHolder>() {
     private val profiles: ArrayList<Profile> = arrayListOf(
         Profile("Bob"),
         Profile("Harry Potter", arrayListOf(), R.drawable.harry_potter)
     )
+
+    init {
+        //we will want to make a characters/world/story parameter later for collection path
+        val profilesRef = FirebaseFirestore
+                .getInstance()
+                .collection("profiles")
+
+//        profilesRef.get().addOnSuccessListener { snapshot: QuerySnapshot? ->
+//            if (snapshot != null) {
+//                for(doc in snapshot){
+//                    val pr = doc.toObject(Profile::class.java)
+//                    add(pr)
+//                }
+//            }
+//        }
+
+
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, index: Int): ProfileCardViewHolder {
         Log.d("PD", "index is ${index}")
