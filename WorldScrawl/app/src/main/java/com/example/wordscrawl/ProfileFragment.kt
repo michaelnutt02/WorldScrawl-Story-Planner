@@ -40,8 +40,7 @@ class ProfileFragment() : Fragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
 
-        var layout = inflater.inflate(R.layout.profile_with_picture, container, false)
-//        var layout = inflater.inflate(R.layout.fragment_profile, container, false)
+        var layout = inflater.inflate(if(profile.picture == null) R.layout.profile else R.layout.profile_with_picture, container, false)
 
 //        adapter = ProfileDetailAdapter(con, "szo5if1k5bKSCX1iPtYB")
         adapter = ProfileDetailAdapter(con, profile.id)
@@ -51,20 +50,7 @@ class ProfileFragment() : Fragment() {
         recycleView.adapter = adapter
 
 
-        val spinner: Spinner = recycleView.findViewById(R.id.add_details_spinner)
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter.createFromResource(
-                con,
-                R.array.add_details_array,
-                android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            // Specify the layout to use when the list of choices appears
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            // Apply the adapter to the spinner
-            spinner.adapter = adapter
-        }
-
-        recycleView.findViewById<FloatingActionButton>(R.id.addFAB).setOnClickListener {
+        layout.findViewById<FloatingActionButton>(R.id.addFAB).setOnClickListener {
             if (adapter != null) {
                 adapter.showAddDialog()
             }

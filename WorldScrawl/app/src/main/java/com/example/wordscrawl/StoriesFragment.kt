@@ -18,16 +18,14 @@ class StoriesFragment() : Fragment() {
 
     lateinit var adapter: ProfileCardAdapter
     lateinit var recycleView: RecyclerView
-    lateinit var  addButton:FloatingActionButton
 
     private var listener : WorldsFragment.OnProfileSelectedListener? = null
 
     private lateinit var con:Context
 
-    constructor(context: Context, addButton:FloatingActionButton) : this() {
+    constructor(context: Context) : this() {
 
         this.con = context
-        this.addButton = addButton
 
     }
 
@@ -49,7 +47,7 @@ class StoriesFragment() : Fragment() {
         recycleView.adapter = adapter
 
 
-        addButton.setOnClickListener{
+        layout.findViewById<FloatingActionButton>(R.id.addFAB).setOnClickListener{
             var newprofile = Profile(Profile.TYPE.STORY,"Great Expectations",arrayListOf(), R.drawable.harry_potter)
             adapter.add(newprofile)
             var size = adapter.itemCount

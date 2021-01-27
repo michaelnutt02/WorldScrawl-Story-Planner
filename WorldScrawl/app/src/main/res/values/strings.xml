@@ -18,8 +18,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="add_detail_title">Add a detail</string>
     <string-array name="add_details_array">
-        <item>Single</item>
-        <item>Paragraph</item>
-        <item>Category</item>
+        <item>SINGLE</item>
+        <item>PARAGRAPH</item>
+        <item>CATEGORY</item>
     </string-array>
 </resources>

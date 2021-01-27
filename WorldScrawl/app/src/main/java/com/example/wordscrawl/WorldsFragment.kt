@@ -22,16 +22,14 @@ class WorldsFragment() : Fragment() {
 
     lateinit var adapter: ProfileCardAdapter
     lateinit var recycleView: RecyclerView
-    lateinit var addButton: FloatingActionButton
 
     private var listener : OnProfileSelectedListener? = null
 
     private lateinit var con:Context
 
-    constructor(context: Context, addButton: FloatingActionButton) : this() {
+    constructor(context: Context) : this() {
 
         this.con = context
-        this.addButton = addButton
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,7 +49,7 @@ class WorldsFragment() : Fragment() {
         recycleView.layoutManager = LinearLayoutManager(con)
         recycleView.adapter = adapter
 
-        addButton.setOnClickListener{
+        layout.findViewById<FloatingActionButton>(R.id.addFAB).setOnClickListener{
             var newprofile = Profile(Profile.TYPE.WORLD,"Hogwarts")
             adapter.add(newprofile)
             var size = adapter.itemCount

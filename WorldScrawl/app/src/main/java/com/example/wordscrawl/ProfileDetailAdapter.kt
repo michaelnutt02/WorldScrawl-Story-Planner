@@ -3,9 +3,14 @@ package com.example.wordscrawl
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.EditText
+import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.get
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.*
 
@@ -57,8 +62,26 @@ class ProfileDetailAdapter(var context: Context, var profileId: String) : Recycl
         val builder = AlertDialog.Builder(context)
         builder.setTitle(context.getString(R.string.add_detail_title))
         val view = LayoutInflater.from(context).inflate(R.layout.dialog_add, null, false)
+        val spinner: Spinner = view.findViewById(R.id.add_details_spinner)
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter.createFromResource(
+                context,
+                R.array.add_details_array,
+                android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            spinner.adapter = adapter
+        }
         builder.setView(view)
         builder.setPositiveButton(android.R.string.ok) {_,_->
+            profileDetails.add(ProfileDetail(when(spinner.selectedItem){
+                "SINGLE" -> ProfileDetail.TYPE.SINGLE
+                "PARAGRAPH" -> ProfileDetail.TYPE.PARAGRAPH
+                "CATEGORY" -> ProfileDetail.TYPE.CATEGORY
+                else -> ProfileDetail.TYPE.TAGS
+            }))
         }
         builder.setNegativeButton(android.R.string.cancel, null)
         builder.create().show()

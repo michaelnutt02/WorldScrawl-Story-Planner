@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity(),WorldsFragment.OnProfileSelectedListene
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
 
-        var addButton:FloatingActionButton = findViewById<FloatingActionButton>(R.id.addFAB)
+//        var addButton:FloatingActionButton = findViewById<FloatingActionButton>(R.id.addFAB)
 
         //based this code off of https://stackoverflow.com/a/44190200 , which is recommended in the "hint" section of the lab
 
@@ -30,13 +30,13 @@ class MainActivity : AppCompatActivity(),WorldsFragment.OnProfileSelectedListene
 
             when(it.itemId){
                 R.id.navigation_characters -> {
-                    switchTo = CharactersFragment(this, addButton)
+                    switchTo = CharactersFragment(this)
                 }
                 R.id.navigation_worlds -> {
-                    switchTo = WorldsFragment(this, addButton)
+                    switchTo = WorldsFragment(this)
                 }
                 R.id.navigation_stories -> {
-                    switchTo = StoriesFragment(this, addButton)
+                    switchTo = StoriesFragment(this)
                 }
 
             }
