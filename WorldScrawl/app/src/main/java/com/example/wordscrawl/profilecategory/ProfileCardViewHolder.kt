@@ -1,6 +1,7 @@
 package com.example.wordscrawl.profilecategory
 
 import android.content.Context
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -18,12 +19,23 @@ class ProfileCardViewHolder : RecyclerView.ViewHolder {
         itemView.setOnClickListener{
             adapter.selectProfileAt(adapterPosition)
         }
+        itemView.setOnLongClickListener{
+            adapter.remove(adapterPosition)
+            true
+        }
     }
 
     fun bind(profile: Profile) {
+        if(profile.picture == null){
+            Log.i("adding profile", "${profile.name} has null picture" )
+        }else{
+            Log.i("adding profile", "${profile.name} does not have null picture" )
+        }
+
         var color = ContextCompat.getColor(context, R.color.purple_200)
         val cardView: CardView = when (profile.picture) {
             null -> itemView.findViewById<CardView>(R.id.profile_card_view)
+            -1 -> itemView.findViewById<CardView>(R.id.profile_card_view)
             else -> itemView.findViewById<CardView>(R.id.profile_card_with_picture_view)
         }
 

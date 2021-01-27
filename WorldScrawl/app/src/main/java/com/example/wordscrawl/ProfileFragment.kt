@@ -38,15 +38,14 @@ class ProfileFragment() : Fragment() {
         var layout = inflater.inflate(R.layout.profile_with_picture, container, false)
 //        var layout = inflater.inflate(R.layout.fragment_profile, container, false)
 
-        adapter = ProfileDetailAdapter(con, "szo5if1k5bKSCX1iPtYB")
+//        adapter = ProfileDetailAdapter(con, "szo5if1k5bKSCX1iPtYB")
+        adapter = ProfileDetailAdapter(con, profile.id)
         recycleView = layout.findViewById(R.id.profile_detail_recycler)
         recycleView.layoutManager = LinearLayoutManager(con)
         recycleView.setHasFixedSize(true)
         recycleView.adapter = adapter
 
-        for(detail in profile.details){
-            adapter.add(detail)
-        }
+
 
 
 

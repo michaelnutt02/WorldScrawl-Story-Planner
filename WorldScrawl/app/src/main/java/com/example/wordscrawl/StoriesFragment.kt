@@ -50,7 +50,7 @@ class StoriesFragment() : Fragment() {
 
 
         addButton.setOnClickListener{
-            var newprofile = Profile("Mary Sue",arrayListOf(), R.drawable.harry_potter)
+            var newprofile = Profile(Profile.TYPE.STORY,"Great Expectations",arrayListOf(), R.drawable.harry_potter)
             adapter.add(newprofile)
             var size = adapter.itemCount
             Log.i("Adding Profile","In Stories, number of profiles are $size")

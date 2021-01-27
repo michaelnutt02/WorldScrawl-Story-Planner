@@ -52,7 +52,7 @@ class WorldsFragment() : Fragment() {
         recycleView.adapter = adapter
 
         addButton.setOnClickListener{
-            var newprofile = Profile("Mary Sue")
+            var newprofile = Profile(Profile.TYPE.WORLD,"Hogwarts")
             adapter.add(newprofile)
             var size = adapter.itemCount
             Log.i("Adding Profile","In Worlds, number of profiles are $size")

@@ -12,24 +12,48 @@ import com.google.firebase.firestore.*
 
 class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnProfileSelectedListener?) : RecyclerView.Adapter<ProfileCardViewHolder>() {
     private val profiles: ArrayList<Profile> = arrayListOf(
-        Profile("Bob"),
-        Profile("Harry Potter", arrayListOf(), R.drawable.harry_potter)
+//        Profile(Profile.TYPE.CHARACTER,"Bob"),
+//        Profile(Profile.TYPE.CHARACTER,"Harry Potter", arrayListOf(), R.drawable.harry_potter)
     )
+
+    val profilesRef = FirebaseFirestore
+            .getInstance()
+            .collection("profiles")
 
     init {
         //we will want to make a characters/world/story parameter later for collection path
-        val profilesRef = FirebaseFirestore
-                .getInstance()
-                .collection("profiles")
+        profilesRef
+                .orderBy(Profile.LAST_TOUCHED_KEY, Query.Direction.ASCENDING)
+                .addSnapshotListener{ snapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
+                    if(error != null){
+                        Log.e("ERROR","Listen error $error")
+                    }
+                    for(docChange in snapshot!!.documentChanges){
+                        val profile = Profile.fromSnapshot(docChange.document)
+                        when(docChange.type){
+                            DocumentChange.Type.ADDED ->{
+                                profiles.add(0,profile)
+                                notifyItemInserted(0)
+//                                notifyDataSetChanged()
+                                Log.i("adding profile","${profile.name} in adapter with type ${profile.type}")
+                            }
+                            DocumentChange.Type.REMOVED ->{
+                                val pos = profiles.indexOfFirst{profile.id == it.id}
+                                profiles.removeAt(pos)
+                                notifyItemRemoved(pos)
+                            }
+                            DocumentChange.Type.MODIFIED ->{
+                                val pos = profiles.indexOfFirst{profile.id == it.id}
+                                profiles[pos] = profile
+                                notifyItemChanged(pos)
 
-//        profilesRef.get().addOnSuccessListener { snapshot: QuerySnapshot? ->
-//            if (snapshot != null) {
-//                for(doc in snapshot){
-//                    val pr = doc.toObject(Profile::class.java)
-//                    add(pr)
-//                }
-//            }
-//        }
+                            }
+                        }
+                    }
+
+
+                }
+
 
 
     }
@@ -55,14 +79,18 @@ class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnPr
 
     override fun getItemCount() = profiles.size
 
-    fun add(profileDetail: Profile) {
-        profiles.add(profileDetail)
-        notifyItemInserted(profiles.size-1)
+    fun add(profile: Profile) {
+//        profiles.add(profileDetail)
+//        notifyItemInserted(profiles.size-1)
+        profilesRef.add(profile)
+        profilesRef.add(Profile(Profile.TYPE.CHARACTER,"Bob"))
+
     }
 
     fun remove(position: Int) {
-        profiles.removeAt(position)
-        notifyItemRemoved(position)
+//        profiles.removeAt(position)
+//        notifyItemRemoved(position)
+        profilesRef.document(profiles[position].id).delete()
     }
 
     fun selectProfileAt(adapterPosition: Int){

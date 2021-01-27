@@ -55,10 +55,10 @@ class CharactersFragment() : Fragment() {
 
 
         addButton.setOnClickListener{
-            var newprofile = Profile("Mary Sue",arrayListOf(), R.drawable.harry_potter)
+            var newprofile = Profile(Profile.TYPE.CHARACTER,"Mary Sue",arrayListOf(), R.drawable.bob)
             adapter.add(newprofile)
             var size = adapter.itemCount
-            Log.i("Adding Profile","In Characters, number of profiles are $size")
+            Log.i("adding profile","In Characters, number of profiles are $size")
         }
 
 
