@@ -4,6 +4,8 @@ import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.*
 
@@ -49,6 +51,17 @@ class ProfileDetailAdapter(var context: Context, var profileId: String) : Recycl
             }
             , parent, false)
         return ProfileDetailViewHolder(view, this, context)
+    }
+
+    fun showAddDialog(position: Int = -1) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle(context.getString(R.string.add_detail_title))
+        val view = LayoutInflater.from(context).inflate(R.layout.dialog_add, null, false)
+        builder.setView(view)
+        builder.setPositiveButton(android.R.string.ok) {_,_->
+        }
+        builder.setNegativeButton(android.R.string.cancel, null)
+        builder.create().show()
     }
 
     override fun getItemViewType(position: Int): Int {
