@@ -43,7 +43,7 @@ class StoriesFragment() : Fragment() {
         // Inflate the layout for this fragment
         val layout = inflater.inflate(R.layout.fragment_stories, container, false)
 
-        adapter = ProfileCardAdapter(con, listener)
+        adapter = ProfileCardAdapter(con, listener, Profile.TYPE.STORY)
         recycleView = layout.findViewById(R.id.stories_recycler_view)
         recycleView.layoutManager = LinearLayoutManager(con)
         recycleView.adapter = adapter

@@ -10,7 +10,7 @@ import com.example.wordscrawl.R
 import com.example.wordscrawl.WorldsFragment
 import com.google.firebase.firestore.*
 
-class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnProfileSelectedListener?) : RecyclerView.Adapter<ProfileCardViewHolder>() {
+class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnProfileSelectedListener?, val type:Profile.TYPE) : RecyclerView.Adapter<ProfileCardViewHolder>() {
     private val profiles: ArrayList<Profile> = arrayListOf(
 //        Profile(Profile.TYPE.CHARACTER,"Bob"),
 //        Profile(Profile.TYPE.CHARACTER,"Harry Potter", arrayListOf(), R.drawable.harry_potter)
@@ -23,7 +23,8 @@ class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnPr
     init {
         //we will want to make a characters/world/story parameter later for collection path
         profilesRef
-                .orderBy(Profile.LAST_TOUCHED_KEY, Query.Direction.ASCENDING)
+//                .orderBy(Profile.LAST_TOUCHED_KEY, Query.Direction.ASCENDING)
+                .whereEqualTo("type",type.toString())
                 .addSnapshotListener{ snapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
                     if(error != null){
                         Log.e("ERROR","Listen error $error")
@@ -83,7 +84,7 @@ class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnPr
 //        profiles.add(profileDetail)
 //        notifyItemInserted(profiles.size-1)
         profilesRef.add(profile)
-        profilesRef.add(Profile(Profile.TYPE.CHARACTER,"Bob"))
+//        profilesRef.add(Profile(Profile.TYPE.CHARACTER,"Bob", arrayListOf(),null))
 
     }
 

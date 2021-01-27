@@ -46,7 +46,7 @@ class WorldsFragment() : Fragment() {
     ): View? {
         val layout = inflater.inflate(R.layout.fragment_worlds, container, false)
 
-        adapter = ProfileCardAdapter(con, listener)
+        adapter = ProfileCardAdapter(con, listener, Profile.TYPE.WORLD)
         recycleView = layout.findViewById(R.id.worlds_recycler_view)
         recycleView.layoutManager = LinearLayoutManager(con)
         recycleView.adapter = adapter

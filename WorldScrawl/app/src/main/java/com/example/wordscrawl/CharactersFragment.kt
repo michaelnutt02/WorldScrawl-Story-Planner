@@ -48,7 +48,7 @@ class CharactersFragment() : Fragment() {
 
         val layout = inflater.inflate(R.layout.fragment_worlds, container, false)
         //figured out how to do this from https://stackoverflow.com/questions/59864600/recyclerview-still-not-showing-items-on-fragment
-        adapter = ProfileCardAdapter(con, listener)
+        adapter = ProfileCardAdapter(con, listener, Profile.TYPE.CHARACTER)
         recycleView = layout.findViewById(R.id.worlds_recycler_view)
         recycleView.layoutManager = LinearLayoutManager(con)
         recycleView.adapter = adapter

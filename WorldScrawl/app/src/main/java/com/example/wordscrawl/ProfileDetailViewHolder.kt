@@ -9,6 +9,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.wordscrawl.profilecategory.Profile
 import com.example.wordscrawl.profilecategory.ProfileCardAdapter
 
 class ProfileDetailViewHolder : RecyclerView.ViewHolder {
@@ -59,7 +60,7 @@ class ProfileDetailViewHolder : RecyclerView.ViewHolder {
         }
 
         if(profileDetail.type == ProfileDetail.TYPE.CATEGORY) {
-            val adapter = ProfileCardAdapter(context, null)
+            val adapter = ProfileCardAdapter(context, null, Profile.TYPE.CHARACTER)
             val profileCategoryRecycler = cardView.findViewById<RecyclerView>(R.id.profile_category_recycler)
             profileCategoryRecycler.layoutManager = LinearLayoutManager(context)
             profileCategoryRecycler.setHasFixedSize(true)
