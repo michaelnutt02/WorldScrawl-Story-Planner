@@ -20,6 +20,7 @@
     <string name="add_a_detail">Add a detail</string>
     <string name="profile">Profile</string>
     <string name="write_something">Write something!</string>
+    <string name="enter_a_label">Enter a label</string>
     <string-array name="add_details_array">
         <item>SINGLE</item>
         <item>PARAGRAPH</item>

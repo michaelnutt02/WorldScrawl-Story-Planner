@@ -14,12 +14,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <TextView
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/profile_edit_detail_title"
             android:textSize="30dp"
-            android:text="Title"/>
+            android:text="Title"
+            android:hint="@string/enter_a_label"/>
+
+        <ImageButton
+            android:id="@+id/trashButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="fitXY"
+            android:layout_marginLeft="150dp"
+            app:srcCompat="@drawable/ic_baseline_delete_24"
+            android:backgroundTint="@color/white"/>
+
+    </LinearLayout>
+
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"

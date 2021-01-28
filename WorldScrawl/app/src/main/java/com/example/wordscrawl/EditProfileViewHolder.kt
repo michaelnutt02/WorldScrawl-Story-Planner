@@ -3,6 +3,7 @@ package com.example.wordscrawl
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
@@ -21,6 +22,11 @@ class EditProfileViewHolder: RecyclerView.ViewHolder {
 //        itemView.setOnClickListener {
 //            adapter.selectProfileDetail(adapterPosition)
 //        }
+
+        var trashButton = itemView.findViewById<ImageButton>(R.id.trashButton)
+        trashButton.setOnClickListener{
+            adapter.remove(adapterPosition)
+        }
     }
 
     fun bind(editDetail: EditProfileDetail) {

@@ -32,6 +32,12 @@ class EditProfileAdapter(var context: Context): RecyclerView.Adapter<EditProfile
 
     fun add(){
         var emptyEdit = EditProfileDetail("Empty")
-        editDetails.add(emptyEdit)
+        editDetails.add(0,emptyEdit)
+        notifyItemInserted(0)
+    }
+
+    fun remove(position: Int){
+        editDetails.removeAt(position)
+        notifyItemRemoved(position)
     }
 }
