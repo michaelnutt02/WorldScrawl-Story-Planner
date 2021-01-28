@@ -17,6 +17,9 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="add_detail_title">Add a detail</string>
+    <string name="add_a_detail">Add a detail</string>
+    <string name="profile">Profile</string>
+    <string name="write_something">Write something!</string>
     <string-array name="add_details_array">
         <item>SINGLE</item>
         <item>PARAGRAPH</item>

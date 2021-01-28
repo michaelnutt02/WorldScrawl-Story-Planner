@@ -53,10 +53,18 @@ class CharactersFragment() : Fragment() {
 
 
         layout.findViewById<FloatingActionButton>(R.id.addFAB).setOnClickListener{
-            var newprofile = Profile(Profile.TYPE.CHARACTER,"Mary Sue",arrayListOf(), R.drawable.bob)
+            var newprofile = Profile(Profile.TYPE.CHARACTER,"Mary Sue")
             adapter.add(newprofile)
-            var size = adapter.itemCount
-            Log.i("adding profile","In Characters, number of profiles are $size")
+//            var size = adapter.itemCount
+//            Log.i("adding profile","In Characters, number of profiles are $size")
+            val editProfileFragment = EditProfileFragment(con, newprofile)
+            val ft = getActivity()?.supportFragmentManager?.beginTransaction()
+            if (ft != null) {
+                ft.replace(R.id.fragment_container, editProfileFragment)
+                ft.addToBackStack("detail")
+                ft.commit()
+            }
+
         }
 
 
