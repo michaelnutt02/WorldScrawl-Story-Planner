@@ -12,34 +12,40 @@ import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.get
 import androidx.recyclerview.widget.RecyclerView
+import com.example.wordscrawl.profilecategory.Profile
 import com.google.firebase.firestore.*
 
 class ProfileDetailAdapter(var context: Context, var profileId: String) : RecyclerView.Adapter<ProfileDetailViewHolder>() {
     private val profileDetails: ArrayList<ProfileDetail> = arrayListOf()
+    private val detailsRef = FirebaseFirestore
+            .getInstance()
+            .collection("profile-details")
 
     init {
-        val profileRef = FirebaseFirestore
-            .getInstance()
-            .collection("profiles")
-            .document(profileId)
-
-        profileRef.get().addOnSuccessListener { snapshot: DocumentSnapshot ->
-            val detailRefs: ArrayList<DocumentReference> = snapshot["details"] as ArrayList<DocumentReference>
-            for(doc in detailRefs) {
-                doc.addSnapshotListener { snapshot: DocumentSnapshot?, exception: FirebaseFirestoreException? ->
-                    if(exception != null) {
-                        Log.e("MQ", "Listen error $exception")
+        detailsRef
+        .orderBy(Profile.LAST_TOUCHED_KEY, Query.Direction.ASCENDING)
+        .whereEqualTo("profileId",profileId)
+        .addSnapshotListener{ snapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
+            if(error != null){
+                Log.e("ERROR","Listen error $error")
+            }
+            for(docChange in snapshot!!.documentChanges){
+                val profileDetail = ProfileDetail.fromSnapshot(docChange.document)
+                when(docChange.type){
+                    DocumentChange.Type.ADDED ->{
+                        val pos = profileDetails.size
+                        profileDetails.add(pos, profileDetail)
+                        notifyItemInserted(pos)
                     }
-                    if(!snapshot?.exists()!!) Log.d("WS",  "this detail doc (${snapshot.id}) doesn't exist")
-                    val profileDetail = ProfileDetail.fromSnapshot(snapshot)
-                    if (profileDetail != null) {
-                        val pos = profileDetails.indexOfFirst { profileDetail.id == it.id }
-                        Log.d("WS",  "pos is $pos")
-                        when (pos) {
-                            -1 -> profileDetails.add(profileDetails.size, profileDetail)
-                            else -> profileDetails[pos] = profileDetail
-                        }
-                        notifyDataSetChanged()
+                    DocumentChange.Type.REMOVED ->{
+                        val pos = profileDetails.indexOfFirst{profileDetail.id == it.id}
+                        profileDetails.removeAt(pos)
+                        notifyItemRemoved(pos)
+                    }
+                    DocumentChange.Type.MODIFIED ->{
+                        val pos = profileDetails.indexOfFirst{profileDetail.id == it.id}
+                        profileDetails[pos] = profileDetail
+                        notifyItemChanged(pos)
                     }
                 }
             }
@@ -76,12 +82,12 @@ class ProfileDetailAdapter(var context: Context, var profileId: String) : Recycl
         }
         builder.setView(view)
         builder.setPositiveButton(android.R.string.ok) {_,_->
-            profileDetails.add(ProfileDetail(when(spinner.selectedItem){
+            add(ProfileDetail(type = when(spinner.selectedItem){
                 "SINGLE" -> ProfileDetail.TYPE.SINGLE
                 "PARAGRAPH" -> ProfileDetail.TYPE.PARAGRAPH
                 "CATEGORY" -> ProfileDetail.TYPE.CATEGORY
                 else -> ProfileDetail.TYPE.TAGS
-            }))
+            }, profileId = profileId))
         }
         builder.setNegativeButton(android.R.string.cancel, null)
         builder.create().show()
@@ -103,8 +109,7 @@ class ProfileDetailAdapter(var context: Context, var profileId: String) : Recycl
     override fun getItemCount() = profileDetails.size
 
     fun add(profileDetail: ProfileDetail) {
-        profileDetails.add(profileDetail)
-        notifyItemInserted(profileDetails.size-1)
+        detailsRef.add(profileDetail)
     }
 
     fun remove(position: Int) {

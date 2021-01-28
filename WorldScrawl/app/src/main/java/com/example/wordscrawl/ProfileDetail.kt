@@ -5,7 +5,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.ServerTimestamp
 
-data class ProfileDetail(var type: TYPE = TYPE.SINGLE, var title: String = "", var body: String = "", var isSelected: Boolean = false) {
+data class ProfileDetail(var type: TYPE = TYPE.SINGLE, var title: String = "", var body: String = "", var profileId: String = "", var isSelected: Boolean = false) {
     enum class TYPE { //remove isSelected, it breaks the selection in certain conditions
         SINGLE,
         PARAGRAPH,
