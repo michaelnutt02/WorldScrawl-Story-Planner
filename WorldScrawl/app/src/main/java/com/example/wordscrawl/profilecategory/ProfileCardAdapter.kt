@@ -16,6 +16,7 @@ class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnPr
 //        Profile(Profile.TYPE.CHARACTER,"Harry Potter", arrayListOf(), R.drawable.harry_potter)
     )
 
+
     val profilesRef = FirebaseFirestore
             .getInstance()
             .collection("profiles")
@@ -35,7 +36,6 @@ class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnPr
                             DocumentChange.Type.ADDED ->{
                                 profiles.add(0,profile)
                                 notifyItemInserted(0)
-//                                notifyDataSetChanged()
                                 Log.i("adding profile","${profile.name} in adapter with type ${profile.type}")
                             }
                             DocumentChange.Type.REMOVED ->{
@@ -81,12 +81,11 @@ class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnPr
     override fun getItemCount() = profiles.size
 
     fun add(profile: Profile) {
-//        profiles.add(profileDetail)
-//        notifyItemInserted(profiles.size-1)
+
         profilesRef.add(profile)
-//        profilesRef.add(Profile(Profile.TYPE.CHARACTER,"Bob", arrayListOf(),null))
 
     }
+
 
     fun remove(position: Int) {
 //        profiles.removeAt(position)

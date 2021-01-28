@@ -26,6 +26,7 @@ class EditProfileViewHolder: RecyclerView.ViewHolder {
         var trashButton = itemView.findViewById<ImageButton>(R.id.trashButton)
         trashButton.setOnClickListener{
             adapter.remove(adapterPosition)
+            //TODO: Make an undo snackbar for a card, also do it for profile swipe delete
         }
     }
 

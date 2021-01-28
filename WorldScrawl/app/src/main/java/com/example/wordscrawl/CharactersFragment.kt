@@ -12,6 +12,8 @@ import android.util.Log
 import com.example.wordscrawl.profilecategory.Profile
 import com.example.wordscrawl.profilecategory.ProfileCardAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 
 
 class CharactersFragment() : Fragment() {
@@ -20,6 +22,10 @@ class CharactersFragment() : Fragment() {
     lateinit var recycleView: RecyclerView
 
     private var listener : WorldsFragment.OnProfileSelectedListener? = null
+
+    val profilesRef = FirebaseFirestore
+            .getInstance()
+            .collection("profiles")
 
     private lateinit var con: Context
 
@@ -53,10 +59,29 @@ class CharactersFragment() : Fragment() {
 
 
         layout.findViewById<FloatingActionButton>(R.id.addFAB).setOnClickListener{
+
             var newprofile = Profile(Profile.TYPE.CHARACTER,"Mary Sue")
             adapter.add(newprofile)
-//            var size = adapter.itemCount
-//            Log.i("adding profile","In Characters, number of profiles are $size")
+
+            //get the latest added profile to pass on to fragment (it needs to be added to firestore in the profilecardadapter)
+//            profilesRef
+//                    .orderBy(Profile.LAST_TOUCHED_KEY, Query.Direction.ASCENDING)
+//                    .addSnapshotListener { snapshot, error ->
+//                        if(error != null){
+//                            Log.e("ERROR","Listen error $error")
+//                        }
+//                        if (snapshot != null) {
+//                            for(doc in snapshot){
+//                                newprofile = Profile.fromSnapshot(doc)
+//                                Log.i("profile.id", "worked in characters fragment, is is ${newprofile.id}")
+//                            }
+//                        }else{
+//                            Log.i("profile.id", "snapshot is null")
+//                        }
+//
+//                    }
+
+
             val editProfileFragment = EditProfileFragment(con, newprofile)
             val ft = getActivity()?.supportFragmentManager?.beginTransaction()
             if (ft != null) {
