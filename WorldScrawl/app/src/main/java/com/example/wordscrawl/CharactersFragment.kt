@@ -70,7 +70,6 @@ class CharactersFragment() : Fragment() {
                         if(snapshot != null){
                             for(doc in snapshot.documents){
                                 newprofile = Profile.fromSnapshot(doc)
-                                Log.i("adding","profile id is added ${newprofile.id}")
                                 val editProfileFragment = EditProfileFragment(con, newprofile)
                                 val ft = getActivity()?.supportFragmentManager?.beginTransaction()
                                 if (ft != null) {
@@ -81,8 +80,6 @@ class CharactersFragment() : Fragment() {
                             }
                         }
                     }
-
-
 
         }
 

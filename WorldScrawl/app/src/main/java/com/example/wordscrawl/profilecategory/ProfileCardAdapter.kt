@@ -20,6 +20,10 @@ class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnPr
             .getInstance()
             .collection("profiles")
 
+    private val detailsRef = FirebaseFirestore
+            .getInstance()
+            .collection("profile-details")
+
     init {
         //we will want to make a characters/world/story parameter later for collection path
         profilesRef
@@ -87,9 +91,35 @@ class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnPr
 
 
     fun remove(position: Int) {
-//        profiles.removeAt(position)
-//        notifyItemRemoved(position)
-        //TODO: we need to also delete all details that belong to that profile in firestore
+
+        //DONE: we need to also delete all details that belong to that profile in firestore
+        var details:ArrayList<ProfileDetail> = arrayListOf()
+        detailsRef
+                .whereEqualTo("profileId",profiles[position].id)
+                .addSnapshotListener{ snapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
+
+                    if(error != null){
+                        Log.e("ERROR","Listen error $error")
+                    }
+
+                    if(snapshot != null){
+                        for(doc in snapshot){
+                            val detail = ProfileDetail.fromSnapshot(doc)
+                            details.add(detail)
+                            Log.i("adding", "snapshot is not empty, details is size ${details.size} and detail id is ${detail.id}")
+                        }
+                        for(detail in details){
+                            detailsRef.document(detail.id).delete()
+                            Log.i("adding", "deleting detail with id ${detail.id}")
+                        }
+
+                    }else{
+                        Log.i("adding", "snapshot is empty")
+                    }
+                }
+
+
+
         profilesRef.document(profiles[position].id).delete()
     }
 

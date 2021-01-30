@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -53,6 +54,16 @@ class ProfileFragment() : Fragment() {
         layout.findViewById<FloatingActionButton>(R.id.addFAB).setOnClickListener {
             if (adapter != null) {
                 adapter.showAddDialog()
+            }
+        }
+
+        layout.findViewById<ImageButton>(R.id.editButton).setOnClickListener() {
+            val editProfileFragment = EditProfileFragment(con, profile)
+            val ft = getActivity()?.supportFragmentManager?.beginTransaction()
+            if (ft != null) {
+                ft.replace(R.id.fragment_container, editProfileFragment)
+                ft.addToBackStack("detail")
+                ft.commit()
             }
         }
 
