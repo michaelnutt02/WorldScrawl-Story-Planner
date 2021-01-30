@@ -28,6 +28,7 @@ class EditProfileFragment() : Fragment() {
 
         this.con = context
         this.profile = profile
+        Log.i("profileId", "profile.id is ${profile.id}")
 
     }
 
@@ -41,7 +42,7 @@ class EditProfileFragment() : Fragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         var view = inflater.inflate(R.layout.fragment_edit_profile, container, false)
-        adapter = EditProfileAdapter(con)
+        adapter = EditProfileAdapter(con, profile.id)
         recycleView = view.findViewById(R.id.edit_profile_recycler)
         recycleView.layoutManager = LinearLayoutManager(con)
         recycleView.adapter = adapter
@@ -58,6 +59,7 @@ class EditProfileFragment() : Fragment() {
             }else{
                 Log.i("profileId", "profile.id not empty string")
             }
+            adapter.updateFirestore()
 
             //TODO: need to make sure that profile call goes back to characters list, right now doesn't do that
             val profileFragment = ProfileFragment(con, profile)

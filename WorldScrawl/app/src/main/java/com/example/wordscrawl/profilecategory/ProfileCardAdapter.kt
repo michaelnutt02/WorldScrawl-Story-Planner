@@ -16,7 +16,6 @@ class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnPr
 //        Profile(Profile.TYPE.CHARACTER,"Harry Potter", arrayListOf(), R.drawable.harry_potter)
     )
 
-
     val profilesRef = FirebaseFirestore
             .getInstance()
             .collection("profiles")
@@ -90,8 +89,11 @@ class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnPr
     fun remove(position: Int) {
 //        profiles.removeAt(position)
 //        notifyItemRemoved(position)
+        //TODO: we need to also delete all details that belong to that profile in firestore
         profilesRef.document(profiles[position].id).delete()
     }
+
+
 
     fun selectProfileAt(adapterPosition: Int){
         val profile = profiles[adapterPosition]

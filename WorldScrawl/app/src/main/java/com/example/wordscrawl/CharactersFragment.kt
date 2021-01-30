@@ -13,7 +13,9 @@ import com.example.wordscrawl.profilecategory.Profile
 import com.example.wordscrawl.profilecategory.ProfileCardAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.QuerySnapshot
 
 
 class CharactersFragment() : Fragment() {
@@ -39,9 +41,6 @@ class CharactersFragment() : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
-
-
     }
 
     override fun onCreateView(
@@ -63,32 +62,27 @@ class CharactersFragment() : Fragment() {
             var newprofile = Profile(Profile.TYPE.CHARACTER,"Mary Sue")
             adapter.add(newprofile)
 
-            //get the latest added profile to pass on to fragment (it needs to be added to firestore in the profilecardadapter)
-//            profilesRef
-//                    .orderBy(Profile.LAST_TOUCHED_KEY, Query.Direction.ASCENDING)
-//                    .addSnapshotListener { snapshot, error ->
-//                        if(error != null){
-//                            Log.e("ERROR","Listen error $error")
-//                        }
-//                        if (snapshot != null) {
-//                            for(doc in snapshot){
-//                                newprofile = Profile.fromSnapshot(doc)
-//                                Log.i("profile.id", "worked in characters fragment, is is ${newprofile.id}")
-//                            }
-//                        }else{
-//                            Log.i("profile.id", "snapshot is null")
-//                        }
-//
-//                    }
+            //find newest added profile in firestore, give it to the edit fragment
+            profilesRef
+                    .orderBy(Profile.LAST_TOUCHED_KEY, Query.Direction.DESCENDING)
+                    .limit(1)
+                    .addSnapshotListener { snapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
+                        if(snapshot != null){
+                            for(doc in snapshot.documents){
+                                newprofile = Profile.fromSnapshot(doc)
+                                Log.i("adding","profile id is added ${newprofile.id}")
+                                val editProfileFragment = EditProfileFragment(con, newprofile)
+                                val ft = getActivity()?.supportFragmentManager?.beginTransaction()
+                                if (ft != null) {
+                                    ft.replace(R.id.fragment_container, editProfileFragment)
+                                    ft.addToBackStack("detail")
+                                    ft.commit()
+                                }
+                            }
+                        }
+                    }
 
 
-            val editProfileFragment = EditProfileFragment(con, newprofile)
-            val ft = getActivity()?.supportFragmentManager?.beginTransaction()
-            if (ft != null) {
-                ft.replace(R.id.fragment_container, editProfileFragment)
-                ft.addToBackStack("detail")
-                ft.commit()
-            }
 
         }
 

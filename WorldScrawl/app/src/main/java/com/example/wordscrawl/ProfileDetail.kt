@@ -3,6 +3,7 @@ package com.example.wordscrawl
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Exclude
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ServerTimestamp
 
 data class ProfileDetail(var type: TYPE = TYPE.SINGLE, var title: String = "", var body: String = "", var profileId: String = "", var isSelected: Boolean = false) {
@@ -12,6 +13,22 @@ data class ProfileDetail(var type: TYPE = TYPE.SINGLE, var title: String = "", v
         CATEGORY,
         TAGS
     }
+
+    fun setDetailBody(newBody:String){
+        body = newBody
+
+        //update the type of detail every time the body is set
+        if(body.count() > 50){
+            type = ProfileDetail.TYPE.PARAGRAPH
+        }else{
+            type = ProfileDetail.TYPE.SINGLE
+        }
+    }
+    fun setDetailTitle(newTitle:String){
+        title = newTitle
+    }
+
+
     @get:Exclude var id: String = ""
     @ServerTimestamp var lastTouched: Timestamp? = null
     companion object {
@@ -20,6 +37,23 @@ data class ProfileDetail(var type: TYPE = TYPE.SINGLE, var title: String = "", v
             val pd = snapshot.toObject(ProfileDetail::class.java)!!
             pd.id = snapshot.id
             return pd
+        }
+
+        fun fromSnapshots(snapshot: QuerySnapshot):ArrayList<ProfileDetail>{
+            var list = arrayListOf<ProfileDetail>()
+
+            val pds = snapshot.toObjects(ProfileDetail::class.java)
+            if(pds != null){
+                var i = 0
+                for(pd in pds){
+                    pd.id = snapshot.elementAt(i).id
+                    i++
+                    list.add(pd)
+                }
+            }
+
+
+            return list
         }
     }
 }
