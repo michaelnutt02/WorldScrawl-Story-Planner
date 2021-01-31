@@ -4,8 +4,10 @@ import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wordscrawl.profilecategory.Profile
+import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.firestore.*
 
 class EditProfileAdapter(var context: Context, val profileId:String): RecyclerView.Adapter<EditProfileViewHolder>() {
@@ -19,6 +21,7 @@ class EditProfileAdapter(var context: Context, val profileId:String): RecyclerVi
 
     lateinit var viewHolder: EditProfileViewHolder
 
+
     init {
         var isInitialized = false
         //add all existing details of the profile into editDetails
@@ -30,6 +33,7 @@ class EditProfileAdapter(var context: Context, val profileId:String): RecyclerVi
                         Log.e("ERROR","Listen error $error")
                     }
                     if(snapshot != null && !isInitialized){
+                        Log.i("adding", "Has details, profile id is $profileId")
                         editDetails.addAll(ProfileDetail.fromSnapshots(snapshot))
                         notifyDataSetChanged()
                     }else{
@@ -42,8 +46,6 @@ class EditProfileAdapter(var context: Context, val profileId:String): RecyclerVi
 
                     Log.i("adding", "In loop, profile id is $profileId")
                 }
-
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EditProfileViewHolder {
@@ -55,6 +57,8 @@ class EditProfileAdapter(var context: Context, val profileId:String): RecyclerVi
 
     override fun onBindViewHolder(holder: EditProfileViewHolder, position: Int) {
         this.viewHolder = holder
+        holder.titleEdit.setText(editDetails[position].title)
+        holder.bodyEdit.setText(editDetails[position].body)
         this.viewHolder.bind(editDetails[position])
     }
 
@@ -78,6 +82,11 @@ class EditProfileAdapter(var context: Context, val profileId:String): RecyclerVi
         notifyItemRemoved(position)
     }
 
+    fun get(position: Int):ProfileDetail{
+        return editDetails[position]
+    }
+
+
     fun updateFirestore(){
 
 
@@ -85,15 +94,24 @@ class EditProfileAdapter(var context: Context, val profileId:String): RecyclerVi
         for(detail in deletedDetails){
             detailsRef.document(detail.id).delete()
         }
+        Log.i("arrayList is","${editDetails.toString()}")
+//        var position = 0
         //add and modify the rest of the details (make sure to convert to profileDetail)
         for(detail in editDetails){
-            this.viewHolder.bind(detail)
+
+
             if(detail.profileId.equals("")){
                 detail.profileId = profileId
+//                this.viewHolder.bind(detail)
                 detailsRef.add(detail)
+                Log.i("profileId","adding ${detail.title} to firestore")
             }else{
+//                notifyItemChanged(position)
                 detailsRef.document(detail.id).set(detail)
+                Log.i("profileId","modifying ${detail.title} in firestore")
             }
+//            position++
+//            this.viewHolder.bind(detail)
         }
 
     }
