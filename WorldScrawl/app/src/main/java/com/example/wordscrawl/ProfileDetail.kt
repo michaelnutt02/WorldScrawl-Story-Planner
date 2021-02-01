@@ -18,7 +18,7 @@ data class ProfileDetail(var type: TYPE = TYPE.SINGLE, var title: String = "", v
         body = newBody
 
         //update the type of detail every time the body is set
-        if(body.count() > 50){
+        if(body.count() > 20){
             type = ProfileDetail.TYPE.PARAGRAPH
         }else{
             type = ProfileDetail.TYPE.SINGLE

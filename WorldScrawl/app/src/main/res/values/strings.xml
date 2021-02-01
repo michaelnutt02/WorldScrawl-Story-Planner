@@ -21,6 +21,9 @@
     <string name="profile">Profile</string>
     <string name="write_something">Write something!</string>
     <string name="enter_a_label">Enter a label</string>
+    <string name="enter_name">Enter Name</string>
+    <string name="default_character_name">Unnamed</string>
+    <string name="title">Title</string>
     <string-array name="add_details_array">
         <item>SINGLE</item>
         <item>PARAGRAPH</item>

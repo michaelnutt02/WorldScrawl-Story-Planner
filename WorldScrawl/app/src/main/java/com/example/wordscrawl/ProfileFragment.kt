@@ -6,10 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.Spinner
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -49,6 +46,10 @@ class ProfileFragment() : Fragment() {
         recycleView.layoutManager = LinearLayoutManager(con)
         recycleView.setHasFixedSize(true)
         recycleView.adapter = adapter
+
+        //set name on view
+        var name:TextView = layout.findViewById(R.id.profile_name_no_pic)
+        name.setText(profile.name)
 
 
         layout.findViewById<FloatingActionButton>(R.id.addFAB).setOnClickListener {

@@ -95,23 +95,22 @@ class EditProfileAdapter(var context: Context, val profileId:String): RecyclerVi
             detailsRef.document(detail.id).delete()
         }
         Log.i("arrayList is","${editDetails.toString()}")
-//        var position = 0
+
         //add and modify the rest of the details (make sure to convert to profileDetail)
         for(detail in editDetails){
 
 
             if(detail.profileId.equals("")){
                 detail.profileId = profileId
-//                this.viewHolder.bind(detail)
+
                 detailsRef.add(detail)
                 Log.i("profileId","adding ${detail.title} to firestore")
             }else{
-//                notifyItemChanged(position)
+
                 detailsRef.document(detail.id).set(detail)
                 Log.i("profileId","modifying ${detail.title} in firestore")
             }
-//            position++
-//            this.viewHolder.bind(detail)
+
         }
 
     }

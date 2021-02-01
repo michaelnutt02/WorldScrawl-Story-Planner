@@ -27,7 +27,7 @@ class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnPr
     init {
         //we will want to make a characters/world/story parameter later for collection path
         profilesRef
-//                .orderBy(Profile.LAST_TOUCHED_KEY, Query.Direction.ASCENDING)
+                .orderBy("name",Query.Direction.DESCENDING)
                 .whereEqualTo("type",type.toString())
                 .addSnapshotListener{ snapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
                     if(error != null){
