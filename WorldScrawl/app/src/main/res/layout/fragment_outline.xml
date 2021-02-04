@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/black"
+            android:padding = "10dp">
+
+            <ImageButton
+                android:id="@+id/italicsButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_baseline_format_italic_24" />
+
+            <ImageButton
+                android:id="@+id/boldButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_baseline_format_bold_24" />
+
+            <ImageButton
+                android:id="@+id/underlineButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_baseline_format_underlined_24" />
+
+            <ImageButton
+                android:id="@+id/strikeThroughButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_baseline_format_strikethrough_24" />
+
+            <ImageButton
+                android:id="@+id/bulletButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_baseline_format_list_bulleted_24" />
+
+            <ImageButton
+                android:id="@+id/numberedListButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_baseline_format_list_numbered_24" />
+
+            <ImageButton
+                android:id="@+id/indentButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_baseline_format_indent_increase_24" />
+            <ImageButton
+                android:id="@+id/leftalignButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_baseline_format_align_left_24" />
+            <ImageButton
+                android:id="@+id/centeralignButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_baseline_format_align_center_24" />
+            <ImageButton
+                android:id="@+id/rightalignButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_baseline_format_align_right_24" />
+
+
+            <ImageButton
+                android:id="@+id/superscriptButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_baseline_superscript_24" />
+
+            <ImageButton
+                android:id="@+id/subscriptButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_baseline_subscript_24" />
+
+            <ImageButton
+                android:id="@+id/checkboxButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_baseline_check_box_24" />
+
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+
+
+
+
+    <jp.wasabeef.richeditor.RichEditor
+        android:id="@+id/editor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+
+
+</LinearLayout>

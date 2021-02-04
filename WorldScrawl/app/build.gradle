@@ -50,4 +50,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-firestore-ktx:21.4.3'
 
+    implementation 'jp.wasabeef:richeditor-android:2.0.0'
+
+
 }

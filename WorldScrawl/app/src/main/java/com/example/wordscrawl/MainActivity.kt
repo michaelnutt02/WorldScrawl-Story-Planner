@@ -36,7 +36,8 @@ class MainActivity : AppCompatActivity(),WorldsFragment.OnProfileSelectedListene
                     switchTo = WorldsFragment(this)
                 }
                 R.id.navigation_stories -> {
-                    switchTo = StoriesFragment(this)
+//                    switchTo = StoriesFragment(this)
+                    switchTo = OutlineFragment()
                 }
 
             }

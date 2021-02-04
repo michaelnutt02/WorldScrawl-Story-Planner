@@ -11,10 +11,7 @@ import com.example.wordscrawl.WorldsFragment
 import com.google.firebase.firestore.*
 
 class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnProfileSelectedListener?, val type:Profile.TYPE) : RecyclerView.Adapter<ProfileCardViewHolder>() {
-    private val profiles: ArrayList<Profile> = arrayListOf(
-//        Profile(Profile.TYPE.CHARACTER,"Bob"),
-//        Profile(Profile.TYPE.CHARACTER,"Harry Potter", arrayListOf(), R.drawable.harry_potter)
-    )
+    private val profiles: ArrayList<Profile> = arrayListOf()
 
     val profilesRef = FirebaseFirestore
             .getInstance()
@@ -70,6 +67,8 @@ class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnPr
                 else -> R.layout.profile_card_with_picture
             }
             , parent, false)
+
+
         return ProfileCardViewHolder(view, this, context)
     }
 

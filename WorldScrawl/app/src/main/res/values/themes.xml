@@ -23,9 +23,14 @@
 
     <style name="Theme.WorldScrawl.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name = "editStyle" parent="TextAppearance.Design.Counter">
+    <style name="editStyle" parent="TextAppearance.Design.Counter">
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/black</item>
 
+    </style>
+
+    <style name="ThemeOverlay.WorldScrawl.FullscreenContainer" parent="">
+        <item name="fullscreenBackgroundColor">@color/light_blue_600</item>
+        <item name="fullscreenTextColor">@color/light_blue_A200</item>
     </style>
 </resources>

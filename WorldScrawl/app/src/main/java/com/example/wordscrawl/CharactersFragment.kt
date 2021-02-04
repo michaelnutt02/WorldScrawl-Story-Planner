@@ -56,7 +56,6 @@ class CharactersFragment() : Fragment() {
         recycleView.layoutManager = LinearLayoutManager(con)
         recycleView.adapter = adapter
 
-
         layout.findViewById<FloatingActionButton>(R.id.addFAB).setOnClickListener{
 
             var newprofile = Profile(Profile.TYPE.CHARACTER,"Mary Sue")
