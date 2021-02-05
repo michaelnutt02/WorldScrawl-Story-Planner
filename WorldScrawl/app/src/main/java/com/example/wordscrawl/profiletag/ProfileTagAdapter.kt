@@ -1,4 +1,4 @@
-package com.example.wordscrawl.profilecategory
+package com.example.wordscrawl.profiletag
 
 import android.content.Context
 import android.util.Log
@@ -8,9 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.wordscrawl.ProfileDetail
 import com.example.wordscrawl.R
 import com.example.wordscrawl.WorldsFragment
+import com.example.wordscrawl.profilecategory.*
 import com.google.firebase.firestore.*
 
-class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnProfileSelectedListener?, type:Profile.TYPE) : RecyclerView.Adapter<ProfileCardViewHolder>() {
+class ProfileTagAdapter(var context: Context, var listener: WorldsFragment.OnProfileSelectedListener?, profile:Profile) : RecyclerView.Adapter<ProfileTagViewHolder>() {
     private val profiles: ArrayList<Profile> = arrayListOf()
 
     val profilesRef = FirebaseFirestore
@@ -24,8 +25,7 @@ class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnPr
     init {
         //we will want to make a characters/world/story parameter later for collection path
         profilesRef
-                .orderBy("name",Query.Direction.DESCENDING)
-                .whereEqualTo("type",type.toString())
+                .whereIn("__name__", profile.tags)
                 .addSnapshotListener{ snapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
                     if(error != null){
                         Log.e("ERROR","Listen error $error")
@@ -59,24 +59,24 @@ class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnPr
 
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, index: Int): ProfileCardViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, index: Int): ProfileTagViewHolder {
         Log.d("PD", "index is ${index}")
         val view = LayoutInflater.from(context).inflate(
             when(profiles[index].picture){
-                null -> R.layout.profile_card
-                else -> R.layout.profile_card_with_picture
+                null -> R.layout.tag_card
+                else -> R.layout.tag_card
             }
             , parent, false)
 
 
-        return ProfileCardViewHolder(view, this, context)
+        return ProfileTagViewHolder(view, this, context)
     }
 
     override fun getItemViewType(position: Int): Int {
         return position
     }
 
-    override fun onBindViewHolder(viewHolder: ProfileCardViewHolder, index: Int) {
+    override fun onBindViewHolder(viewHolder: ProfileTagViewHolder, index: Int) {
         viewHolder.bind(profiles[index])
     }
 

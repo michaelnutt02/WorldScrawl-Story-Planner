@@ -20,6 +20,8 @@ class ProfileFragment() : Fragment() {
     lateinit var recycleView: RecyclerView
     lateinit var profile:Profile
 
+    private var listener : WorldsFragment.OnProfileSelectedListener? = null
+
     private lateinit var con: Context
 
     constructor(context: Context, profile: Profile) : this() {
@@ -41,7 +43,7 @@ class ProfileFragment() : Fragment() {
         var layout = inflater.inflate(if(profile.picture == null) R.layout.profile else R.layout.profile_with_picture, container, false)
 
 //        adapter = ProfileDetailAdapter(con, "szo5if1k5bKSCX1iPtYB")
-        adapter = ProfileDetailAdapter(con, profile.id)
+        adapter = ProfileDetailAdapter(con, profile, listener)
         recycleView = layout.findViewById(R.id.profile_detail_recycler)
         recycleView.layoutManager = LinearLayoutManager(con)
         recycleView.setHasFixedSize(true)
@@ -70,6 +72,22 @@ class ProfileFragment() : Fragment() {
 
 
         return layout
+    }
+
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if(context is WorldsFragment.OnProfileSelectedListener){
+            listener = context
+        }else{
+            throw RuntimeException(context.toString()+ "must implement OnProfileSelected")
+        }
+
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        listener = null
     }
 
 

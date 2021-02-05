@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.wordscrawl.profilecategory.Profile
 import com.google.firebase.firestore.*
 
-class ProfileDetailAdapter(var context: Context, var profileId: String) : RecyclerView.Adapter<ProfileDetailViewHolder>() {
+class ProfileDetailAdapter(var context: Context, var profile: Profile, var listener: WorldsFragment.OnProfileSelectedListener?) : RecyclerView.Adapter<ProfileDetailViewHolder>() {
     private val profileDetails: ArrayList<ProfileDetail> = arrayListOf()
     private val detailsRef = FirebaseFirestore
             .getInstance()
@@ -24,7 +24,7 @@ class ProfileDetailAdapter(var context: Context, var profileId: String) : Recycl
     init {
         detailsRef
         .orderBy(Profile.LAST_TOUCHED_KEY, Query.Direction.ASCENDING)
-        .whereEqualTo("profileId",profileId)
+        .whereEqualTo("profileId", profile.id)
         .addSnapshotListener{ snapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
             if(error != null){
                 Log.e("ERROR","Listen error $error")
@@ -61,7 +61,7 @@ class ProfileDetailAdapter(var context: Context, var profileId: String) : Recycl
                 else -> R.layout.profile_detail_tags_card
             }
             , parent, false)
-        return ProfileDetailViewHolder(view, this, context)
+        return ProfileDetailViewHolder(view, this, context, listener, profile)
     }
 
     fun showAddDialog(position: Int = -1) {
@@ -87,7 +87,7 @@ class ProfileDetailAdapter(var context: Context, var profileId: String) : Recycl
                 "PARAGRAPH" -> ProfileDetail.TYPE.PARAGRAPH
                 "CATEGORY" -> ProfileDetail.TYPE.CATEGORY
                 else -> ProfileDetail.TYPE.TAGS
-            }, profileId = profileId))
+            }, profileId = profile.id))
         }
         builder.setNegativeButton(android.R.string.cancel, null)
         builder.create().show()

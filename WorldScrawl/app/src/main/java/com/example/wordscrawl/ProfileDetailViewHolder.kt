@@ -11,12 +11,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wordscrawl.profilecategory.Profile
 import com.example.wordscrawl.profilecategory.ProfileCardAdapter
+import com.example.wordscrawl.profiletag.ProfileTagAdapter
 
 class ProfileDetailViewHolder : RecyclerView.ViewHolder {
     lateinit var context: Context
+    var listener: WorldsFragment.OnProfileSelectedListener?
+    lateinit var profile: Profile
 
-    constructor(itemView: View, adapter: ProfileDetailAdapter, context: Context): super(itemView) {
+    constructor(itemView: View, adapter: ProfileDetailAdapter, context: Context, listener: WorldsFragment.OnProfileSelectedListener?, profile: Profile): super(itemView) {
         this.context = context
+        this.listener = listener
+        this.profile = profile
         itemView.setOnClickListener {
             adapter.selectProfileDetail(adapterPosition)
         }
@@ -60,10 +65,16 @@ class ProfileDetailViewHolder : RecyclerView.ViewHolder {
         }
 
         if(profileDetail.type == ProfileDetail.TYPE.CATEGORY) {
-            val adapter = ProfileCardAdapter(context, null, Profile.TYPE.CHARACTER)
+            val adapter = ProfileCardAdapter(context, listener, Profile.TYPE.CHARACTER)
             val profileCategoryRecycler = cardView.findViewById<RecyclerView>(R.id.profile_category_recycler)
             profileCategoryRecycler.layoutManager = LinearLayoutManager(context)
-            profileCategoryRecycler.setHasFixedSize(true)
+            profileCategoryRecycler.adapter = adapter
+        }
+
+        if(profileDetail.type == ProfileDetail.TYPE.TAGS) {
+            val adapter = ProfileTagAdapter(context, listener, profile)
+            val profileCategoryRecycler = cardView.findViewById<RecyclerView>(R.id.profile_tags_recycler)
+            profileCategoryRecycler.layoutManager = LinearLayoutManager(context)
             profileCategoryRecycler.adapter = adapter
         }
 

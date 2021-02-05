@@ -28,6 +28,7 @@
         <item>SINGLE</item>
         <item>PARAGRAPH</item>
         <item>CATEGORY</item>
+        <item>TAGS</item>
     </string-array>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>

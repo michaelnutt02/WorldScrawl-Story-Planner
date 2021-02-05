@@ -7,7 +7,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.ServerTimestamp
 
-data class Profile(var type:TYPE = TYPE.CHARACTER, var name: String = "", var details: ArrayList<DocumentReference> = arrayListOf(), var picture: Int? = null){
+data class Profile(var type:TYPE = TYPE.CHARACTER, var name: String = "", var tags: ArrayList<String> = arrayListOf(), var picture: Int? = null){
 
     enum class TYPE { //remove isSelected, it breaks the selection in certain conditions
         WORLD,

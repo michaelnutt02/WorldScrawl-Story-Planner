@@ -2,20 +2,11 @@ package com.example.wordscrawl
 
 import android.content.Context
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
-import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
-import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doAfterTextChanged
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.wordscrawl.profilecategory.Profile
-import com.example.wordscrawl.profilecategory.ProfileCardAdapter
 import com.google.android.material.textfield.TextInputEditText
 
 class EditProfileViewHolder: RecyclerView.ViewHolder {
