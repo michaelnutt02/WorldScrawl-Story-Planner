@@ -2,11 +2,12 @@ package com.example.wordscrawl
 
 import android.os.Bundle
 import android.util.Log
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
+import com.example.wordscrawl.outlines.OutlineFragment
+import com.example.wordscrawl.outlines.StoryOutlinesFragment
 import com.example.wordscrawl.profilecategory.Profile
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -36,8 +37,8 @@ class MainActivity : AppCompatActivity(),WorldsFragment.OnProfileSelectedListene
                     switchTo = WorldsFragment(this)
                 }
                 R.id.navigation_stories -> {
-//                    switchTo = StoriesFragment(this)
-                    switchTo = OutlineFragment()
+                    switchTo = StoriesFragment(this)
+//                    switchTo = OutlineFragment()
                 }
 
             }
@@ -77,8 +78,42 @@ class MainActivity : AppCompatActivity(),WorldsFragment.OnProfileSelectedListene
     }
 
     override fun onProfileSelected(profile: Profile) {
-        Log.i("profile selected", "opening fragment")
-        val profileFragment = ProfileFragment(this, profile)
+
+        var switchTo: Fragment? = null
+
+        when(profile.type){
+            Profile.TYPE.STORY -> {
+                switchTo = StoryOutlinesFragment(this, profile)
+            }
+            else -> {
+                switchTo = ProfileFragment(this, profile)
+            }
+        }
+
+
+        //load proper fragment in based off of navigation
+        if(switchTo != null){
+            val ft = supportFragmentManager.beginTransaction()
+
+            ft.replace(R.id.fragment_container,switchTo)
+
+            ft.commit()
+
+        }
+
+
+
+//        Log.i("profile selected", "opening fragment")
+//        val profileFragment = ProfileFragment(this, profile)
+//        val ft = supportFragmentManager.beginTransaction()
+//        ft.replace(R.id.fragment_container, profileFragment)
+//        ft.addToBackStack("detail")
+//        ft.commit()
+    }
+
+    override fun onOutlineSelected(story: Profile) {
+        Log.i("outline selected", "opening fragment")
+        val profileFragment = OutlineFragment()
         val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.fragment_container, profileFragment)
         ft.addToBackStack("detail")

@@ -1,13 +1,13 @@
-package com.example.wordscrawl
+package com.example.wordscrawl.editprofile
 
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
+import com.example.wordscrawl.ProfileDetail
+import com.example.wordscrawl.R
 import com.example.wordscrawl.profilecategory.Profile
-import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.firestore.*
 
 class EditProfileAdapter(var context: Context, val profileId:String): RecyclerView.Adapter<EditProfileViewHolder>() {
@@ -82,7 +82,7 @@ class EditProfileAdapter(var context: Context, val profileId:String): RecyclerVi
         notifyItemRemoved(position)
     }
 
-    fun get(position: Int):ProfileDetail{
+    fun get(position: Int): ProfileDetail {
         return editDetails[position]
     }
 

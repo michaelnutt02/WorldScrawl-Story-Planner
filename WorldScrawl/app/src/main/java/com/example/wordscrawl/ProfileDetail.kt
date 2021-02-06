@@ -11,7 +11,10 @@ data class ProfileDetail(var type: TYPE = TYPE.SINGLE, var title: String = "", v
         SINGLE,
         PARAGRAPH,
         CATEGORY,
-        TAGS
+        TAGS,
+        FREEFORM,
+        PINCH,
+        FREYTAG
     }
 
     fun setDetailBody(newBody:String){
