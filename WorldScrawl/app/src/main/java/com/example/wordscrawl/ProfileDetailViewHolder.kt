@@ -40,6 +40,7 @@ class ProfileDetailViewHolder : RecyclerView.ViewHolder {
             ProfileDetail.TYPE.PARAGRAPH -> itemView.findViewById<CardView>(R.id.profile_detail_paragraph_view)
             ProfileDetail.TYPE.CATEGORY -> itemView.findViewById<CardView>(R.id.profile_detail_category_view)
             ProfileDetail.TYPE.TAGS -> itemView.findViewById<CardView>(R.id.profile_detail_tags_view)
+            else -> itemView.findViewById<CardView>(R.id.profile_detail_tags_view)
         }
 
         if(profileDetail.type != ProfileDetail.TYPE.TAGS) {

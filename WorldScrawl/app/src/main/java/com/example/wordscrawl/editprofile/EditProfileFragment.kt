@@ -1,4 +1,4 @@
-package com.example.wordscrawl
+package com.example.wordscrawl.editprofile
 
 import android.content.Context
 import android.os.Bundle
@@ -11,6 +11,8 @@ import android.widget.EditText
 import android.widget.ImageButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.wordscrawl.ProfileFragment
+import com.example.wordscrawl.R
 import com.example.wordscrawl.profilecategory.Profile
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.FirebaseFirestore
@@ -33,7 +35,6 @@ class EditProfileFragment() : Fragment() {
 
         this.con = context
         this.profile = profile
-        Log.i("profileId", "profile.id is ${profile.id}")
 
     }
 

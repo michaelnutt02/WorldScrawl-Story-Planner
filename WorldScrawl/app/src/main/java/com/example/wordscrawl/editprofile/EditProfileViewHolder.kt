@@ -1,4 +1,4 @@
-package com.example.wordscrawl
+package com.example.wordscrawl.editprofile
 
 import android.content.Context
 import android.util.Log
@@ -7,12 +7,14 @@ import android.widget.EditText
 import android.widget.ImageButton
 import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.RecyclerView
+import com.example.wordscrawl.ProfileDetail
+import com.example.wordscrawl.R
 import com.google.android.material.textfield.TextInputEditText
 
 class EditProfileViewHolder: RecyclerView.ViewHolder {
 
     lateinit var context:Context
-    lateinit var adapter:EditProfileAdapter
+    lateinit var adapter: EditProfileAdapter
 
     var titleEdit:EditText = itemView.findViewById(R.id.profile_edit_detail_title)
     var bodyEdit:TextInputEditText = itemView.findViewById(R.id.profile_edit_detail_body)

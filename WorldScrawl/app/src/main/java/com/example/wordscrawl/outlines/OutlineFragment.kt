@@ -1,15 +1,13 @@
-package com.example.wordscrawl
+package com.example.wordscrawl.outlines
 
 import android.os.Bundle
-import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
-import android.widget.Button
 import android.widget.ImageButton
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.wordscrawl.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import jp.wasabeef.richeditor.RichEditor
 
@@ -48,6 +46,9 @@ class OutlineFragment : Fragment() {
 //        mEditor.setBackgroundResource(R.drawable.bob);
         //Set the default display statement
         mEditor.setPlaceholder("Insert text here...");
+
+        //set the Text here if firebase isn't null
+        mEditor.html = "<ul><li>Bullets</li><li>Bullets</li><li>Bullets</li></ul><div><br></div><div>So all we need to do is save to firebaze blush <strike>syrikthrough</strike></div><div><strike><br></strike></div><div><input type=\"checkbox\" name=\"1612419546314\" value=\"1612419546314\">checkbox&nbsp;&nbsp;<br></div>"
 
         //Set whether the editor is available
         mEditor.setInputEnabled(true);
@@ -105,15 +106,14 @@ class OutlineFragment : Fragment() {
         view.findViewById<ImageButton>(R.id.subscriptButton).setOnClickListener{
             mEditor.focusEditor();
             mEditor.setSubscript()
+            Log.i("editor", "this is the content ${mEditor.html}")
         }
         view.findViewById<ImageButton>(R.id.checkboxButton).setOnClickListener{
             mEditor.focusEditor();
             mEditor.insertTodo()
         }
 
-
-
-
+        
         return view
     }
 
