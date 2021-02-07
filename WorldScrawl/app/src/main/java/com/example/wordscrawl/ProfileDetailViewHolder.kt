@@ -3,8 +3,11 @@ package com.example.wordscrawl
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.LinearLayout
+import android.widget.Spinner
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.wordscrawl.profilecategory.Profile
 import com.example.wordscrawl.profilecategory.ProfileCardAdapter
 import com.example.wordscrawl.profiletag.ProfileTagAdapter
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class ProfileDetailViewHolder : RecyclerView.ViewHolder {
     lateinit var context: Context
@@ -76,6 +80,20 @@ class ProfileDetailViewHolder : RecyclerView.ViewHolder {
             val profileCategoryRecycler = cardView.findViewById<RecyclerView>(R.id.profile_tags_recycler)
             profileCategoryRecycler.layoutManager = LinearLayoutManager(context)
             profileCategoryRecycler.adapter = adapter
+
+            cardView.findViewById<FloatingActionButton>(R.id.add_tag_fab).setOnClickListener {
+                val builder = AlertDialog.Builder(context)
+                builder.setTitle(context.getString(R.string.add_tag_title))
+                val view = LayoutInflater.from(context).inflate(R.layout.dialog_tag_add, null, false)
+                val adapter = ProfileTagAdapter(context, listener, null)
+                val profileCategoryRecycler = view.findViewById<RecyclerView>(R.id.add_tags_recycler)
+                profileCategoryRecycler.layoutManager = LinearLayoutManager(context)
+                profileCategoryRecycler.adapter = adapter
+
+                builder.setView(view)
+                builder.setNegativeButton(android.R.string.cancel, null)
+                builder.create().show()
+            }
         }
 
         cardView.setCardBackgroundColor(color)

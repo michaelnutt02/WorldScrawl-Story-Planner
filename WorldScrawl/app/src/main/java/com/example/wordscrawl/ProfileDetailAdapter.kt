@@ -25,6 +25,7 @@ class ProfileDetailAdapter(var context: Context, var profile: Profile, var liste
         detailsRef
         .orderBy(Profile.LAST_TOUCHED_KEY, Query.Direction.ASCENDING)
         .whereEqualTo("profileId", profile.id)
+//        .whereNotEqualTo("type", ProfileDetail.TYPE.TAGS.toString())
         .addSnapshotListener{ snapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
             if(error != null){
                 Log.e("ERROR","Listen error $error")
@@ -50,6 +51,7 @@ class ProfileDetailAdapter(var context: Context, var profile: Profile, var liste
                 }
             }
         }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, itemType: Int): ProfileDetailViewHolder {

@@ -11,10 +11,10 @@ import com.example.wordscrawl.WorldsFragment
 import com.example.wordscrawl.profilecategory.*
 import com.google.firebase.firestore.*
 
-class ProfileTagAdapter(var context: Context, var listener: WorldsFragment.OnProfileSelectedListener?, profile:Profile) : RecyclerView.Adapter<ProfileTagViewHolder>() {
+class ProfileTagAdapter(var context: Context, var listener: WorldsFragment.OnProfileSelectedListener?, profile:Profile?) : RecyclerView.Adapter<ProfileTagViewHolder>() {
     private val profiles: ArrayList<Profile> = arrayListOf()
 
-    val profilesRef = FirebaseFirestore
+    private val profilesRef = FirebaseFirestore
             .getInstance()
             .collection("profiles")
 
@@ -24,39 +24,42 @@ class ProfileTagAdapter(var context: Context, var listener: WorldsFragment.OnPro
 
     init {
         //we will want to make a characters/world/story parameter later for collection path
-        profilesRef
-                .whereIn("__name__", profile.tags)
-                .addSnapshotListener{ snapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
-                    if(error != null){
-                        Log.e("ERROR","Listen error $error")
-                    }
-                    for(docChange in snapshot!!.documentChanges){
-                        val profile = Profile.fromSnapshot(docChange.document)
-                        when(docChange.type){
-                            DocumentChange.Type.ADDED ->{
-                                profiles.add(0,profile)
-                                notifyItemInserted(0)
-                                Log.i("adding profile","${profile.name} in adapter with type ${profile.type}")
-                            }
-                            DocumentChange.Type.REMOVED ->{
-                                val pos = profiles.indexOfFirst{profile.id == it.id}
-                                profiles.removeAt(pos)
-                                notifyItemRemoved(pos)
-                            }
-                            DocumentChange.Type.MODIFIED ->{
-                                val pos = profiles.indexOfFirst{profile.id == it.id}
-                                profiles[pos] = profile
-                                notifyItemChanged(pos)
+        if(profile != null) profilesRef
+            .whereIn("__name__", profile.tags)
+            .addSnapshotListener{ snapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
+                handleSnapshot(snapshot, error)
+            }
+        else profilesRef
+            .addSnapshotListener{ snapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
+                handleSnapshot(snapshot, error)
+            }
+    }
 
-                            }
-                        }
-                    }
-
+    private fun handleSnapshot(snapshot: QuerySnapshot?, error: FirebaseFirestoreException?) {
+        if(error != null){
+            Log.e("ERROR","Listen error $error")
+        }
+        for(docChange in snapshot!!.documentChanges){
+            val profile = Profile.fromSnapshot(docChange.document)
+            when(docChange.type){
+                DocumentChange.Type.ADDED ->{
+                    profiles.add(0,profile)
+                    notifyItemInserted(0)
+                    Log.i("adding profile","${profile.name} in adapter with type ${profile.type}")
+                }
+                DocumentChange.Type.REMOVED ->{
+                    val pos = profiles.indexOfFirst{profile.id == it.id}
+                    profiles.removeAt(pos)
+                    notifyItemRemoved(pos)
+                }
+                DocumentChange.Type.MODIFIED ->{
+                    val pos = profiles.indexOfFirst{profile.id == it.id}
+                    profiles[pos] = profile
+                    notifyItemChanged(pos)
 
                 }
-
-
-
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, index: Int): ProfileTagViewHolder {

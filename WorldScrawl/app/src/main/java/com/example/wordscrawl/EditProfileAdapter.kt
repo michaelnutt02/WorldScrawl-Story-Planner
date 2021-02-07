@@ -26,26 +26,26 @@ class EditProfileAdapter(var context: Context, val profileId:String): RecyclerVi
         var isInitialized = false
         //add all existing details of the profile into editDetails
         detailsRef
-                .orderBy(Profile.LAST_TOUCHED_KEY, Query.Direction.ASCENDING)
-                .whereEqualTo("profileId",profileId)
-                .addSnapshotListener{ snapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
-                    if(error != null){
-                        Log.e("ERROR","Listen error $error")
-                    }
-                    if(snapshot != null && !isInitialized){
-                        Log.i("adding", "Has details, profile id is $profileId")
-                        editDetails.addAll(ProfileDetail.fromSnapshots(snapshot))
-                        notifyDataSetChanged()
-                    }else{
-                        var emptyEdit = ProfileDetail()
-                        editDetails.add(0,emptyEdit)
-                        notifyItemInserted(0)
-                        Log.i("adding", "No details, profile id is $profileId")
-                    }
-                    isInitialized = true
+        .orderBy(Profile.LAST_TOUCHED_KEY, Query.Direction.ASCENDING)
+        .whereEqualTo("profileId",profileId)
+        .addSnapshotListener{ snapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
+            if(error != null){
+                Log.e("ERROR","Listen error $error")
+            }
+            if(snapshot != null && !isInitialized){
+                Log.i("adding", "Has details, profile id is $profileId")
+                editDetails.addAll(ProfileDetail.fromSnapshots(snapshot))
+                notifyDataSetChanged()
+            }else{
+                var emptyEdit = ProfileDetail()
+                editDetails.add(0,emptyEdit)
+                notifyItemInserted(0)
+                Log.i("adding", "No details, profile id is $profileId")
+            }
+            isInitialized = true
 
-                    Log.i("adding", "In loop, profile id is $profileId")
-                }
+            Log.i("adding", "In loop, profile id is $profileId")
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EditProfileViewHolder {
