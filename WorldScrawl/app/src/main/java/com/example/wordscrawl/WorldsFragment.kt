@@ -44,13 +44,13 @@ class WorldsFragment() : Fragment() {
     ): View? {
         val layout = inflater.inflate(R.layout.fragment_worlds, container, false)
 
-        adapter = ProfileCardAdapter(con, listener, Profile.TYPE.WORLD)
+        adapter = ProfileCardAdapter(con, listener, "WORLD")
         recycleView = layout.findViewById(R.id.worlds_recycler_view)
         recycleView.layoutManager = LinearLayoutManager(con)
         recycleView.adapter = adapter
 
         layout.findViewById<FloatingActionButton>(R.id.addFAB).setOnClickListener{
-            var newprofile = Profile(Profile.TYPE.WORLD,"Hogwarts")
+            var newprofile = Profile("WORLD","Hogwarts")
             adapter.add(newprofile)
             var size = adapter.itemCount
             Log.i("Adding Profile","In Worlds, number of profiles are $size")

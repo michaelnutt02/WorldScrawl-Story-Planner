@@ -10,7 +10,7 @@ import com.example.wordscrawl.R
 import com.example.wordscrawl.WorldsFragment
 import com.google.firebase.firestore.*
 
-class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnProfileSelectedListener?, type:Profile.TYPE) : RecyclerView.Adapter<ProfileCardViewHolder>() {
+class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnProfileSelectedListener?, type:String) : RecyclerView.Adapter<ProfileCardViewHolder>() {
     private val profiles: ArrayList<Profile> = arrayListOf()
 
     val profilesRef = FirebaseFirestore

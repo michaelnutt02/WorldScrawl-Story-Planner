@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity(),WorldsFragment.OnProfileSelectedListene
         var switchTo: Fragment? = null
 
         when(profile.type){
-            Profile.TYPE.STORY -> {
+            "STORY" -> {
                 switchTo = StoryOutlinesFragment(this, profile)
             }
             else -> {
