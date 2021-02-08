@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.wordscrawl.ProfileDetail
 import com.example.wordscrawl.R
 import com.example.wordscrawl.WorldsFragment
 import com.example.wordscrawl.editprofile.EditProfileViewHolder
@@ -13,19 +12,19 @@ import com.example.wordscrawl.profilecategory.Profile
 import com.google.firebase.firestore.*
 
 class OutlineAdapter(var context: Context, val profile:Profile, var listener : WorldsFragment.OnProfileSelectedListener): RecyclerView.Adapter<OutlineViewHolder>() {
-    private var outlines: ArrayList<ProfileDetail> = arrayListOf()
+    private var outlines: ArrayList<Outline> = arrayListOf()
 
 
 
-    private val detailsRef = FirebaseFirestore
+    private val outlinesRef = FirebaseFirestore
         .getInstance()
-        .collection("profile-details")
+        .collection("outlines")
 
 
     init {
 
         //continously add, modify, delete outlines from a story
-        detailsRef
+        outlinesRef
             .orderBy(Profile.LAST_TOUCHED_KEY, Query.Direction.ASCENDING)
             .whereEqualTo("profileId", profile.id)
             .addSnapshotListener{ snapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
@@ -33,22 +32,22 @@ class OutlineAdapter(var context: Context, val profile:Profile, var listener : W
                     Log.e("ERROR","Listen error $error")
                 }
                 for(docChange in snapshot!!.documentChanges){
-                    val profileDetail = ProfileDetail.fromSnapshot(docChange.document)
+                    val storyOutline = Outline.fromSnapshot(docChange.document)
                     Log.i("adding", "STORIES profile id is ${profile.id} in adapter")
                     when(docChange.type){
                         DocumentChange.Type.ADDED ->{
                             val pos = outlines.size
-                            outlines.add(pos, profileDetail)
+                            outlines.add(pos, storyOutline)
                             notifyItemInserted(pos)
                         }
                         DocumentChange.Type.REMOVED ->{
-                            val pos = outlines.indexOfFirst{profileDetail.id == it.id}
+                            val pos = outlines.indexOfFirst{storyOutline.id == it.id}
                             outlines.removeAt(pos)
                             notifyItemRemoved(pos)
                         }
                         DocumentChange.Type.MODIFIED ->{
-                            val pos = outlines.indexOfFirst{profileDetail.id == it.id}
-                            outlines[pos] = profileDetail
+                            val pos = outlines.indexOfFirst{storyOutline.id == it.id}
+                            outlines[pos] = storyOutline
                             notifyItemChanged(pos)
                         }
                     }
@@ -73,12 +72,12 @@ class OutlineAdapter(var context: Context, val profile:Profile, var listener : W
     }
 
     fun selectOutlineAt(position: Int){
-        listener.onOutlineSelected(profile)
+        listener.onOutlineSelected(outlines[position])
     }
 
-    fun add(outline:ProfileDetail){
+    fun add(outline:Outline){
         Log.i("adding","STORIES, profile id is ${profile.id} in adapter")
-        detailsRef.add(outline)
+        outlinesRef.add(outline)
     }
 
 

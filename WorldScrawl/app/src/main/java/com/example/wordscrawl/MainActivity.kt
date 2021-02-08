@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
+import com.example.wordscrawl.outlines.Outline
 import com.example.wordscrawl.outlines.OutlineFragment
 import com.example.wordscrawl.outlines.StoryOutlinesFragment
 import com.example.wordscrawl.profilecategory.Profile
@@ -111,9 +112,9 @@ class MainActivity : AppCompatActivity(),WorldsFragment.OnProfileSelectedListene
 //        ft.commit()
     }
 
-    override fun onOutlineSelected(story: Profile) {
+    override fun onOutlineSelected(outline: Outline) {
         Log.i("outline selected", "opening fragment")
-        val profileFragment = OutlineFragment()
+        val profileFragment = OutlineFragment(outline)
         val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.fragment_container, profileFragment)
         ft.addToBackStack("detail")

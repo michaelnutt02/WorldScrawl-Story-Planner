@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.wordscrawl.outlines.Outline
 import com.example.wordscrawl.profilecategory.Profile
 import com.example.wordscrawl.profilecategory.ProfileCardAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -94,7 +95,7 @@ class WorldsFragment() : Fragment() {
 
     interface OnProfileSelectedListener{
         fun onProfileSelected(profile:Profile)
-        fun onOutlineSelected(story:Profile)
+        fun onOutlineSelected(outline:Outline)
     }
 
 

@@ -28,7 +28,7 @@ class OutlineViewHolder: RecyclerView.ViewHolder {
 
     }
 
-    fun bind(outline: ProfileDetail) {
+    fun bind(outline: Outline) {
         var color = ContextCompat.getColor(context, R.color.purple_200)
 
         val cardView: CardView = itemView.findViewById<CardView>(R.id.profile_card_view)

@@ -9,13 +9,24 @@ import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import com.example.wordscrawl.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.firestore.FirebaseFirestore
 import jp.wasabeef.richeditor.RichEditor
 
 /**
  * An example full-screen fragment that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-class OutlineFragment : Fragment() {
+class OutlineFragment(outline: Outline) : Fragment() {
+
+    private val outlinesRef = FirebaseFirestore
+            .getInstance()
+            .collection("outlines")
+//    private var outline:Outline = outlinesRef.get()
+
+//    init{
+//        //we want to grab the specific outline so that we can load in the title/body, and later save it. :)
+//
+//    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -111,6 +122,12 @@ class OutlineFragment : Fragment() {
         view.findViewById<ImageButton>(R.id.checkboxButton).setOnClickListener{
             mEditor.focusEditor();
             mEditor.insertTodo()
+        }
+
+        //make save Button
+        view.findViewById<ImageButton>(R.id.italicsButton).setOnClickListener{
+            mEditor.focusEditor();
+            mEditor.setItalic()
         }
 
         

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.wordscrawl.ProfileDetail
 import com.example.wordscrawl.R
 import com.example.wordscrawl.WorldsFragment
+import com.example.wordscrawl.outlines.Outline
 import com.google.firebase.firestore.*
 
 class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnProfileSelectedListener?, type:Profile.TYPE) : RecyclerView.Adapter<ProfileCardViewHolder>() {
@@ -20,6 +21,10 @@ class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnPr
     private val detailsRef = FirebaseFirestore
             .getInstance()
             .collection("profile-details")
+
+    private val outlinesRef = FirebaseFirestore
+            .getInstance()
+            .collection("outlines")
 
     init {
         //we will want to make a characters/world/story parameter later for collection path
@@ -105,15 +110,35 @@ class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnPr
                         for(doc in snapshot){
                             val detail = ProfileDetail.fromSnapshot(doc)
                             details.add(detail)
-                            Log.i("adding", "snapshot is not empty, details is size ${details.size} and detail id is ${detail.id}")
                         }
                         for(detail in details){
                             detailsRef.document(detail.id).delete()
-                            Log.i("adding", "deleting detail with id ${detail.id}")
+
                         }
 
-                    }else{
-                        Log.i("adding", "snapshot is empty")
+                    }
+                }
+
+        //we need to delete all outlines that belong to the profile in firestore
+        var outlines:ArrayList<Outline> = arrayListOf()
+        outlinesRef
+                .whereEqualTo("profileId",profiles[position].id)
+                .addSnapshotListener{ snapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
+
+                    if(error != null){
+                        Log.e("ERROR","Listen error $error")
+                    }
+
+                    if(snapshot != null){
+                        for(doc in snapshot){
+                            val outline = Outline.fromSnapshot(doc)
+                            outlines.add(outline)
+                        }
+                        for(outline in outlines){
+                            outlinesRef.document(outline.id).delete()
+
+                        }
+
                     }
                 }
 

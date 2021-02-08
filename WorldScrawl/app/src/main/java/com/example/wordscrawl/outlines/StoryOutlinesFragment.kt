@@ -58,7 +58,7 @@ class StoryOutlinesFragment() : Fragment() {
 
         //enable add button
         view.findViewById<FloatingActionButton>(R.id.addFAB).setOnClickListener{
-            val firstStory:ProfileDetail = ProfileDetail(ProfileDetail.TYPE.FREEFORM, "First Story", "",profile.id)
+            val firstStory:Outline = Outline(Outline.TYPE.FREEFORM, "First Story", "",profile.id)
             Log.i("adding","STORIES, profile id is ${profile.id}")
             adapter.add(firstStory)
         }
