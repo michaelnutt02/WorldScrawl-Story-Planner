@@ -50,7 +50,7 @@ class EditProfileFragment() : Fragment() {
 
         // Inflate the layout for this fragment
         var view = inflater.inflate(R.layout.fragment_edit_profile, container, false)
-        adapter = EditProfileAdapter(con, profile.id)
+        adapter = EditProfileAdapter(con, profile)
         recycleView = view.findViewById(R.id.edit_profile_recycler)
         recycleView.layoutManager = LinearLayoutManager(con)
         recycleView.adapter = adapter

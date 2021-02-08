@@ -81,20 +81,6 @@ class ProfileDetailViewHolder : RecyclerView.ViewHolder {
             val profileCategoryRecycler = cardView.findViewById<RecyclerView>(R.id.profile_tags_recycler)
             profileCategoryRecycler.layoutManager = LinearLayoutManager(context)
             profileCategoryRecycler.adapter = adapter
-
-            cardView.findViewById<FloatingActionButton>(R.id.add_tag_fab).setOnClickListener {
-                val builder = AlertDialog.Builder(context)
-                builder.setTitle(context.getString(R.string.add_tag_title))
-                val view = LayoutInflater.from(context).inflate(R.layout.dialog_tag_add, null, false)
-                val adapter = ProfileTagAdapter(context, listener, null)
-                val profileCategoryRecycler = view.findViewById<RecyclerView>(R.id.add_tags_recycler)
-                profileCategoryRecycler.layoutManager = LinearLayoutManager(context)
-                profileCategoryRecycler.adapter = adapter
-
-                builder.setView(view)
-                builder.setNegativeButton(android.R.string.cancel, null)
-                builder.create().show()
-            }
         }
 
         cardView.setCardBackgroundColor(color)
