@@ -96,6 +96,7 @@ class WorldsFragment() : Fragment() {
     interface OnProfileSelectedListener{
         fun onProfileSelected(profile:Profile)
         fun onOutlineSelected(outline:Outline)
+
     }
 
 

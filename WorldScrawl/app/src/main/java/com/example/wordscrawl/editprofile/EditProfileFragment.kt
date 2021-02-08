@@ -13,12 +13,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wordscrawl.ProfileFragment
 import com.example.wordscrawl.R
+import com.example.wordscrawl.WorldsFragment
+import com.example.wordscrawl.outlines.Outline
 import com.example.wordscrawl.profilecategory.Profile
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.FirebaseFirestore
 
 
-class EditProfileFragment() : Fragment() {
+class EditProfileFragment() : Fragment(), WorldsFragment.OnProfileSelectedListener {
 
     lateinit var adapter: EditProfileAdapter
     lateinit var recycleView: RecyclerView
@@ -50,7 +52,7 @@ class EditProfileFragment() : Fragment() {
 
         // Inflate the layout for this fragment
         var view = inflater.inflate(R.layout.fragment_edit_profile, container, false)
-        adapter = EditProfileAdapter(con, profile)
+        adapter = EditProfileAdapter(con, profile, this)
         recycleView = view.findViewById(R.id.edit_profile_recycler)
         recycleView.layoutManager = LinearLayoutManager(con)
         recycleView.adapter = adapter
@@ -102,6 +104,14 @@ class EditProfileFragment() : Fragment() {
 
 
         return view
+    }
+
+    override fun onProfileSelected(profile: Profile) {
+        adapter.addTag(profile)
+    }
+
+    override fun onOutlineSelected(outline: Outline) {
+        TODO("Not yet implemented")
     }
 
 

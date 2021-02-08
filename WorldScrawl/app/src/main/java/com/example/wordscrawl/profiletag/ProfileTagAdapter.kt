@@ -85,9 +85,10 @@ class ProfileTagAdapter(var context: Context, var listener: WorldsFragment.OnPro
 
     override fun getItemCount() = profiles.size
 
-    fun add(profile: Profile) {
+    fun add(newProfile: Profile) {
 
-        profilesRef.add(profile)
+        profilesRef.add(newProfile)
+
 
     }
 

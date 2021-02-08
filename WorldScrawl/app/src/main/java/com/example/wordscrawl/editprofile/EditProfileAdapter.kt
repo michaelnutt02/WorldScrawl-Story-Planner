@@ -8,10 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.wordscrawl.ProfileDetail
 import com.example.wordscrawl.ProfileDetailViewHolder
 import com.example.wordscrawl.R
+import com.example.wordscrawl.WorldsFragment
 import com.example.wordscrawl.profilecategory.Profile
 import com.google.firebase.firestore.*
 
-class EditProfileAdapter(var context: Context, var profile: Profile): RecyclerView.Adapter<EditProfileViewHolder>() {
+class EditProfileAdapter(var context: Context, var profile: Profile, var listener : WorldsFragment.OnProfileSelectedListener): RecyclerView.Adapter<EditProfileViewHolder>() {
     private var editDetails: ArrayList<ProfileDetail> = arrayListOf()
 
     private var deletedDetails: ArrayList<ProfileDetail> = arrayListOf()
@@ -20,10 +21,17 @@ class EditProfileAdapter(var context: Context, var profile: Profile): RecyclerVi
             .getInstance()
             .collection("profile-details")
 
+    private val profilesRef = FirebaseFirestore
+            .getInstance()
+            .collection("profiles")
+
     lateinit var viewHolder: EditProfileViewHolder
+
+//    private var listener : WorldsFragment.OnProfileSelectedListener = context as WorldsFragment.OnProfileSelectedListener
 
 
     init {
+
         var isInitialized = false
         //add all existing details of the profile into editDetails
         detailsRef
@@ -60,7 +68,7 @@ class EditProfileAdapter(var context: Context, var profile: Profile): RecyclerVi
                 }
                 , parent, false)
 
-        return EditProfileViewHolder(view, this, context, null, profile)
+        return EditProfileViewHolder(view, this, context, listener, profile)
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -127,6 +135,11 @@ class EditProfileAdapter(var context: Context, var profile: Profile): RecyclerVi
 
         }
 
+    }
+
+    fun addTag(tag:Profile){
+        profile.tags.add(tag.id)
+        Log.i("adding", "IN EDIT PROFILE, CHANGED PROFILE, NEEDS FIRESTORE UPDATED")
     }
 
 
