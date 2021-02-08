@@ -41,14 +41,14 @@ class StoriesFragment() : Fragment() {
         // Inflate the layout for this fragment
         val layout = inflater.inflate(R.layout.fragment_stories, container, false)
 
-        adapter = ProfileCardAdapter(con, listener, Profile.TYPE.STORY)
+        adapter = ProfileCardAdapter(con, listener, "STORY")
         recycleView = layout.findViewById(R.id.stories_recycler_view)
         recycleView.layoutManager = LinearLayoutManager(con)
         recycleView.adapter = adapter
 
 
         layout.findViewById<FloatingActionButton>(R.id.addFAB).setOnClickListener{
-            var newprofile = Profile(Profile.TYPE.STORY,"Great Expectations",arrayListOf(), R.drawable.harry_potter)
+            var newprofile = Profile("STORY","Great Expectations",arrayListOf(), R.drawable.harry_potter)
             adapter.add(newprofile)
             var size = adapter.itemCount
             Log.i("Adding Profile","In Stories, number of profiles are $size")

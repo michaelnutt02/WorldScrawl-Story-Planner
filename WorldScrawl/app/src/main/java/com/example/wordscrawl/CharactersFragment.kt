@@ -51,14 +51,14 @@ class CharactersFragment() : Fragment() {
 
         val layout = inflater.inflate(R.layout.fragment_worlds, container, false)
         //figured out how to do this from https://stackoverflow.com/questions/59864600/recyclerview-still-not-showing-items-on-fragment
-        adapter = ProfileCardAdapter(con, listener, Profile.TYPE.CHARACTER)
+        adapter = ProfileCardAdapter(con, listener, "CHARACTER")
         recycleView = layout.findViewById(R.id.worlds_recycler_view)
         recycleView.layoutManager = LinearLayoutManager(con)
         recycleView.adapter = adapter
 
         layout.findViewById<FloatingActionButton>(R.id.addFAB).setOnClickListener{
 
-            var newprofile = Profile(Profile.TYPE.CHARACTER,"Mary Sue")
+            var newprofile = Profile("CHARACTER","Mary Sue")
             adapter.add(newprofile)
 
             //find newest added profile in firestore, give it to the edit fragment

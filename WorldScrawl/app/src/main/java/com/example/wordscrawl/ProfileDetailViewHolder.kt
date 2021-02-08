@@ -70,7 +70,7 @@ class ProfileDetailViewHolder : RecyclerView.ViewHolder {
         }
 
         if(profileDetail.type == ProfileDetail.TYPE.CATEGORY) {
-            val adapter = ProfileCardAdapter(context, listener, Profile.TYPE.CHARACTER)
+            val adapter = ProfileCardAdapter(context, listener, "CHARACTER")
             val profileCategoryRecycler = cardView.findViewById<RecyclerView>(R.id.profile_category_recycler)
             profileCategoryRecycler.layoutManager = LinearLayoutManager(context)
             profileCategoryRecycler.adapter = adapter
