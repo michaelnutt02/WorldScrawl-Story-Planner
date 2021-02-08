@@ -35,6 +35,13 @@
                 android:layout_gravity="right"
                 android:clickable="true"
                 app:srcCompat="@android:drawable/ic_input_add" />
+            <ImageButton
+                android:id="@+id/trashButton"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:backgroundTint="@color/white"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/ic_baseline_delete_24" />
         </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"

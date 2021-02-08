@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
@@ -20,6 +21,10 @@ import com.example.wordscrawl.profilecategory.ProfileCardAdapter
 import com.example.wordscrawl.profiletag.ProfileTagAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.QuerySnapshot
 
 class EditProfileViewHolder: RecyclerView.ViewHolder {
 
@@ -27,6 +32,9 @@ class EditProfileViewHolder: RecyclerView.ViewHolder {
     var listener: WorldsFragment.OnProfileSelectedListener?
     lateinit var profile: Profile
     lateinit var adapter: EditProfileAdapter
+    val profilesRef = FirebaseFirestore
+            .getInstance()
+            .collection("profiles")
 
     constructor(itemView: View, adapter: EditProfileAdapter, context: Context, listener: WorldsFragment.OnProfileSelectedListener?, profile: Profile): super(itemView) {
         this.context = context
@@ -53,6 +61,11 @@ class EditProfileViewHolder: RecyclerView.ViewHolder {
             titleEdit.doAfterTextChanged {
                 adapter.get(adapterPosition).setDetailTitle(titleEdit.text.toString())
             }
+            var trashButton = itemView.findViewById<ImageButton>(R.id.trashButton)
+            trashButton.setOnClickListener{
+                adapter.remove(adapterPosition)
+                //TODO: Make an undo snackbar for a card, also do it for profile swipe delete
+            }
         }
         if(profileDetail.type == ProfileDetail.TYPE.SINGLE) {
             var bodyEdit:TextInputEditText = itemView.findViewById(R.id.profile_edit_detail_body)
@@ -67,6 +80,31 @@ class EditProfileViewHolder: RecyclerView.ViewHolder {
             val profileCategoryRecycler = cardView.findViewById<RecyclerView>(R.id.profile_category_recycler)
             profileCategoryRecycler.layoutManager = LinearLayoutManager(context)
             profileCategoryRecycler.adapter = adapter
+
+            cardView.findViewById<ImageButton>(R.id.add_category_profile_button).setOnClickListener {
+                var newprofile = Profile("CHARACTER","Mary Sue")
+                adapter.add(newprofile)
+
+                //find newest added profile in firestore, give it to the edit fragment
+                profilesRef
+                        .orderBy(Profile.LAST_TOUCHED_KEY, Query.Direction.DESCENDING)
+                        .limit(1)
+                        .addSnapshotListener { snapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
+                            if(snapshot != null){
+                                for(doc in snapshot.documents){
+                                    newprofile = Profile.fromSnapshot(doc)
+                                    val editProfileFragment = EditProfileFragment(context, newprofile)
+                                    val activity: AppCompatActivity = itemView.context as AppCompatActivity
+                                    val ft = activity.supportFragmentManager.beginTransaction()
+                                    if (ft != null) {
+                                        ft.replace(R.id.fragment_container, editProfileFragment)
+                                        ft.addToBackStack("detail")
+                                        ft.commit()
+                                    }
+                                }
+                            }
+                        }
+            }
         }
 
         if(profileDetail.type == ProfileDetail.TYPE.TAGS) {
