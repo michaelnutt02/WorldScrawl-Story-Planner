@@ -67,7 +67,7 @@ class EditProfileViewHolder: RecyclerView.ViewHolder {
                 //TODO: Make an undo snackbar for a card, also do it for profile swipe delete
             }
         }
-        if(profileDetail.type == ProfileDetail.TYPE.SINGLE) {
+        if(profileDetail.type == ProfileDetail.TYPE.SINGLE || profileDetail.type == ProfileDetail.TYPE.PARAGRAPH) {
             var bodyEdit:TextInputEditText = itemView.findViewById(R.id.profile_edit_detail_body)
             bodyEdit.setText(profileDetail.body)
             bodyEdit.doAfterTextChanged {
@@ -76,13 +76,13 @@ class EditProfileViewHolder: RecyclerView.ViewHolder {
         }
 
         if(profileDetail.type == ProfileDetail.TYPE.CATEGORY) {
-            val adapter = ProfileCardAdapter(context, listener, "CHARACTER")
+            val adapter = ProfileCardAdapter(context, listener, profileDetail.id)
             val profileCategoryRecycler = cardView.findViewById<RecyclerView>(R.id.profile_category_recycler)
             profileCategoryRecycler.layoutManager = LinearLayoutManager(context)
             profileCategoryRecycler.adapter = adapter
 
             cardView.findViewById<ImageButton>(R.id.add_category_profile_button).setOnClickListener {
-                var newprofile = Profile("CHARACTER","Mary Sue")
+                var newprofile = Profile(profileDetail.id,"INSERT NAME")
                 adapter.add(newprofile)
 
                 //find newest added profile in firestore, give it to the edit fragment
