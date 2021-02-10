@@ -2,10 +2,7 @@ package com.example.wordscrawl.profilecategory
 
 import com.example.wordscrawl.ProfileDetail
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.Exclude
-import com.google.firebase.firestore.ServerTimestamp
+import com.google.firebase.firestore.*
 
 data class Profile(var type:String = "CHARACTER", var name: String = "", var tags: ArrayList<String> = arrayListOf(), var picture: Int? = null){
 

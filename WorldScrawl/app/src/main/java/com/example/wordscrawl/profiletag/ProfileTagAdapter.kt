@@ -23,8 +23,12 @@ class ProfileTagAdapter(var context: Context, var listener: WorldsFragment.OnPro
 
     init {
         //we will want to make a characters/world/story parameter later for collection path
-        if(profile != null && profile.tags.size != 0) tagsListener = profilesRef
-            .whereIn("__name__", profile.tags)
+        initListener()
+    }
+
+    private fun initListener() {
+        if(profile != null && profile!!.tags.size != 0) tagsListener = profilesRef
+            .whereIn("__name__", profile!!.tags)
             .addSnapshotListener{ snapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
                 handleSnapshot(snapshot, error)
             }
@@ -55,7 +59,6 @@ class ProfileTagAdapter(var context: Context, var listener: WorldsFragment.OnPro
                     val pos = profiles.indexOfFirst{profile.id == it.id}
                     profiles[pos] = profile
                     notifyItemChanged(pos)
-
                 }
             }
         }
@@ -86,14 +89,16 @@ class ProfileTagAdapter(var context: Context, var listener: WorldsFragment.OnPro
 
 
     fun remove(position: Int) {
-        profile?.tags?.remove(profiles[position].id)
-//        profilesRef.document(profiles[position].id).addSnapshotListener{snapshot, _ ->
-//            val addedProfile = Profile.fromSnapshot(snapshot!!)
-//            profile?.let { addedProfile.tags.remove(it.id) }
-//        }
-        profile?.let { profiles[position].tags.remove(it.id) }
-        profiles.removeAt(position)
-        notifyItemRemoved(position)
+        if(profile != null) {
+            profile!!.tags?.remove(profiles[position].id)
+            profiles[position].tags.remove(profile!!.id)
+            profilesRef.document(profiles[position].id).set(profiles[position])
+            profiles.removeAt(position)
+            tagsListener.remove()
+            initListener()
+            notifyItemRemoved(position)
+        }
+
     }
 
 

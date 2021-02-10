@@ -144,6 +144,7 @@ class EditProfileAdapter(var context: Context, var profile: Profile, var listene
 //            addedProfile.tags.add(profile.id)
 //        }
         tag.tags.add(profile.id)
+        profilesRef.document(tag.id).set(tag)
         notifyDataSetChanged()
         Log.i("adding", "IN EDIT PROFILE, CHANGED PROFILE, NEEDS FIRESTORE UPDATED")
     }

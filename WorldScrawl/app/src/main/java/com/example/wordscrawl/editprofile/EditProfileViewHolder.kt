@@ -1,7 +1,6 @@
 package com.example.wordscrawl.editprofile
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
@@ -13,13 +12,11 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wordscrawl.ProfileDetail
-import com.example.wordscrawl.ProfileDetailAdapter
 import com.example.wordscrawl.R
 import com.example.wordscrawl.WorldsFragment
 import com.example.wordscrawl.profilecategory.Profile
 import com.example.wordscrawl.profilecategory.ProfileCardAdapter
 import com.example.wordscrawl.profiletag.ProfileTagAdapter
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
