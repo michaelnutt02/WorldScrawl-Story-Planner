@@ -1,11 +1,14 @@
 package com.example.wordscrawl.outlines
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.wordscrawl.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -16,17 +19,17 @@ import jp.wasabeef.richeditor.RichEditor
  * An example full-screen fragment that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-class OutlineFragment(outline: Outline) : Fragment() {
+class OutlineFragment(context: Context, outline: Outline) : Fragment() {
 
     private val outlinesRef = FirebaseFirestore
             .getInstance()
             .collection("outlines")
-//    private var outline:Outline = outlinesRef.get()
 
-//    init{
-//        //we want to grab the specific outline so that we can load in the title/body, and later save it. :)
-//
-//    }
+    private var outline = outline
+    private var con = context
+
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,9 +39,18 @@ class OutlineFragment(outline: Outline) : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_outline, container, false)
 
-        var navBar: BottomNavigationView = requireActivity().findViewById(R.id.nav_view)
-        navBar.visibility = View.GONE
+//        var navBar: BottomNavigationView = requireActivity().findViewById(R.id.nav_view)
+//        navBar.visibility = View.GONE
 //        navBar.visibility = View.VISIBLE
+
+        //set title to outline title
+        var editTitle = view.findViewById<EditText>(R.id.edit_Title)
+        if(!outline.title.isEmpty()){
+            editTitle.setText(outline.title)
+        }
+
+
+
 
         var mEditor = view.findViewById<RichEditor>(R.id.editor);
         //Initialize editing height
@@ -59,7 +71,12 @@ class OutlineFragment(outline: Outline) : Fragment() {
         mEditor.setPlaceholder("Insert text here...");
 
         //set the Text here if firebase isn't null
-        mEditor.html = "<ul><li>Bullets</li><li>Bullets</li><li>Bullets</li></ul><div><br></div><div>So all we need to do is save to firebaze blush <strike>syrikthrough</strike></div><div><strike><br></strike></div><div><input type=\"checkbox\" name=\"1612419546314\" value=\"1612419546314\">checkbox&nbsp;&nbsp;<br></div>"
+        if(outline.body.isEmpty()){
+            //set html to hold type of outline template
+        }else{
+            mEditor.html = outline.body
+        }
+
 
         //Set whether the editor is available
         mEditor.setInputEnabled(true);
@@ -125,9 +142,14 @@ class OutlineFragment(outline: Outline) : Fragment() {
         }
 
         //make save Button
-        view.findViewById<ImageButton>(R.id.italicsButton).setOnClickListener{
-            mEditor.focusEditor();
-            mEditor.setItalic()
+        view.findViewById<ImageButton>(R.id.saveButton).setOnClickListener{
+            outline.setDetailTitle(editTitle.text.toString())
+            outline.setDetailBody(mEditor.html)
+            //update firestore
+            outlinesRef.document(outline.id).set(outline)
+
+            //make a toast letting user know that outline is saved
+            Toast.makeText(con, getString(R.string.savedOutlineToast), Toast.LENGTH_SHORT).show()
         }
 
         

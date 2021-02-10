@@ -27,7 +27,8 @@
             app:layout_constraintStart_toStartOf="parent"
             android:textSize="30sp"
             android:text="@string/title"
-            android:hint="@string/enter_a_label" />
+            android:hint="@string/enter_a_label"
+            android:inputType="textCapWords"/>
 
         <ImageButton
             android:id="@+id/trashButton"
@@ -57,6 +58,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/profile_edit_detail_body"
                 android:maxLength="1200"
+                android:inputType="textCapSentences"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 

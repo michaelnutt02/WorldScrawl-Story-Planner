@@ -114,7 +114,7 @@ class MainActivity : AppCompatActivity(),WorldsFragment.OnProfileSelectedListene
 
     override fun onOutlineSelected(outline: Outline) {
         Log.i("outline selected", "opening fragment")
-        val profileFragment = OutlineFragment(outline)
+        val profileFragment = OutlineFragment(this, outline)
         val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.fragment_container, profileFragment)
         ft.addToBackStack("detail")

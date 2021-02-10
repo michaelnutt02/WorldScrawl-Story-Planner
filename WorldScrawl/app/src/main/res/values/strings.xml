@@ -33,4 +33,7 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="add_tag_title">Select a tag to add</string>
+    <string name="savedOutlineToast">Outline saved</string>
+    <string name="enter_title">Enter title</string>
+    <string name="add_a_story">Add a Story</string>
 </resources>
