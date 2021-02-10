@@ -143,8 +143,15 @@ class OutlineFragment(context: Context, outline: Outline) : Fragment() {
 
         //make save Button
         view.findViewById<ImageButton>(R.id.saveButton).setOnClickListener{
-            outline.setDetailTitle(editTitle.text.toString())
-            outline.setDetailBody(mEditor.html)
+            if(!editTitle.text.isEmpty()){
+                outline.setDetailTitle(editTitle.text.toString())
+            }
+            if(mEditor.html != null){
+                outline.setDetailBody(mEditor.html)
+            }else{
+                outline.setDetailBody("")
+            }
+
             //update firestore
             outlinesRef.document(outline.id).set(outline)
 

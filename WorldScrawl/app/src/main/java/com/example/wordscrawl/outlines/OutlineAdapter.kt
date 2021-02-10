@@ -4,6 +4,9 @@ import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wordscrawl.R
 import com.example.wordscrawl.WorldsFragment
@@ -78,6 +81,35 @@ class OutlineAdapter(var context: Context, val profile:Profile, var listener : W
     fun add(outline:Outline){
         Log.i("adding","STORIES, profile id is ${profile.id} in adapter")
         outlinesRef.add(outline)
+    }
+
+    fun showAddDialog() {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle(context.getString(R.string.add_outline))
+        val view = LayoutInflater.from(context).inflate(R.layout.dialog_add, null, false)
+        val spinner: Spinner = view.findViewById(R.id.add_details_spinner)
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter.createFromResource(
+                context,
+                R.array.add_outlines_array,
+                android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            spinner.adapter = adapter
+        }
+        builder.setView(view)
+        builder.setPositiveButton(android.R.string.ok) {_,_->
+            add(Outline(type = when(spinner.selectedItem){
+                "FREEFORM" -> Outline.TYPE.FREEFORM
+                "PINCH" -> Outline.TYPE.PINCH
+                "FREYTAG" -> Outline.TYPE.FREYTAG
+                else -> Outline.TYPE.FREEFORM
+            }, profileId = profile.id))
+        }
+        builder.setNegativeButton(android.R.string.cancel, null)
+        builder.create().show()
     }
 
 
