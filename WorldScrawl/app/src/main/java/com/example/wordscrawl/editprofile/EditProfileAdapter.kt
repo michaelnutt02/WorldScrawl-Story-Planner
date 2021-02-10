@@ -139,6 +139,11 @@ class EditProfileAdapter(var context: Context, var profile: Profile, var listene
 
     fun addTag(tag:Profile){
         profile.tags.add(tag.id)
+//        profilesRef.document(tag.id).addSnapshotListener{snapshot, _ ->
+//            val addedProfile = Profile.fromSnapshot(snapshot!!)
+//            addedProfile.tags.add(profile.id)
+//        }
+        tag.tags.add(profile.id)
         notifyDataSetChanged()
         Log.i("adding", "IN EDIT PROFILE, CHANGED PROFILE, NEEDS FIRESTORE UPDATED")
     }

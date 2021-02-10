@@ -13,23 +13,22 @@ import com.google.firebase.firestore.*
 
 class ProfileTagAdapter(var context: Context, var listener: WorldsFragment.OnProfileSelectedListener?, profile:Profile?) : RecyclerView.Adapter<ProfileTagViewHolder>() {
     private val profiles: ArrayList<Profile> = arrayListOf()
+    private var profile: Profile? = profile
 
     private val profilesRef = FirebaseFirestore
             .getInstance()
             .collection("profiles")
 
-    private val detailsRef = FirebaseFirestore
-            .getInstance()
-            .collection("profile-details")
+    private lateinit var tagsListener: ListenerRegistration
 
     init {
         //we will want to make a characters/world/story parameter later for collection path
-        if(profile != null) profilesRef
+        if(profile != null && profile.tags.size != 0) tagsListener = profilesRef
             .whereIn("__name__", profile.tags)
             .addSnapshotListener{ snapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
                 handleSnapshot(snapshot, error)
             }
-        else profilesRef
+        else if(profile == null) profilesRef
             .addSnapshotListener{ snapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
                 handleSnapshot(snapshot, error)
             }
@@ -85,45 +84,16 @@ class ProfileTagAdapter(var context: Context, var listener: WorldsFragment.OnPro
 
     override fun getItemCount() = profiles.size
 
-    fun add(newProfile: Profile) {
-
-        profilesRef.add(newProfile)
-
-
-    }
-
 
     fun remove(position: Int) {
-
-        //DONE: we need to also delete all details that belong to that profile in firestore
-        var details:ArrayList<ProfileDetail> = arrayListOf()
-        detailsRef
-                .whereEqualTo("profileId",profiles[position].id)
-                .addSnapshotListener{ snapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
-
-                    if(error != null){
-                        Log.e("ERROR","Listen error $error")
-                    }
-
-                    if(snapshot != null){
-                        for(doc in snapshot){
-                            val detail = ProfileDetail.fromSnapshot(doc)
-                            details.add(detail)
-                            Log.i("adding", "snapshot is not empty, details is size ${details.size} and detail id is ${detail.id}")
-                        }
-                        for(detail in details){
-                            detailsRef.document(detail.id).delete()
-                            Log.i("adding", "deleting detail with id ${detail.id}")
-                        }
-
-                    }else{
-                        Log.i("adding", "snapshot is empty")
-                    }
-                }
-
-
-
-        profilesRef.document(profiles[position].id).delete()
+        profile?.tags?.remove(profiles[position].id)
+//        profilesRef.document(profiles[position].id).addSnapshotListener{snapshot, _ ->
+//            val addedProfile = Profile.fromSnapshot(snapshot!!)
+//            profile?.let { addedProfile.tags.remove(it.id) }
+//        }
+        profile?.let { profiles[position].tags.remove(it.id) }
+        profiles.removeAt(position)
+        notifyItemRemoved(position)
     }
 
 
