@@ -2,6 +2,7 @@ package com.example.wordscrawl
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,9 +14,9 @@ import com.example.wordscrawl.SwipeToDeleteCallbacks.ProfileSwipeToDeleteCallbac
 import com.example.wordscrawl.editprofile.EditProfileFragment
 import com.example.wordscrawl.profilecategory.Profile
 import com.example.wordscrawl.profilecategory.ProfileCardAdapter
+import com.google.android.gms.tasks.Tasks
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 
@@ -61,33 +62,27 @@ class CharactersFragment() : Fragment() {
         //code adapted from https://medium.com/@zackcosborn/step-by-step-recyclerview-swipe-to-delete-and-undo-7bbae1fce27e
         recycleView.setAdapter(adapter)
         recycleView.setLayoutManager(LinearLayoutManager(con))
-        val itemTouchHelper = ItemTouchHelper(ProfileSwipeToDeleteCallback(adapter,layout.findViewById(R.id.coordinator_layout)))
+        val itemTouchHelper = ItemTouchHelper(ProfileSwipeToDeleteCallback(adapter, con))
         itemTouchHelper.attachToRecyclerView(recycleView)
 
         layout.findViewById<FloatingActionButton>(R.id.addFAB).setOnClickListener{
+            //NOTE: When we only want values once, use .get().addOn listener. It only does it once and is more lightweight, less errors.
 
             var newprofile = Profile("CHARACTER","Mary Sue")
             adapter.add(newprofile)
+            profilesRef.orderBy(Profile.LAST_TOUCHED_KEY, Query.Direction.DESCENDING).limit(1).get().addOnSuccessListener {
+                Log.i("adding", "we are getting here :)))")
+                for(doc in it){
+                    newprofile = Profile.fromSnapshot(doc)
+                    val editProfileFragment = EditProfileFragment(con, newprofile)
+                    val ft = getActivity()?.supportFragmentManager?.beginTransaction()
+                    if (ft != null) {
+                        ft.replace(R.id.fragment_container, editProfileFragment)
+                        ft.addToBackStack(getString(R.string.skip_edit_page))
+                        ft.commit()
+                }
+            }}
 
-            //find newest added profile in firestore, give it to the edit fragment
-            val listener = profilesRef
-                    .orderBy(Profile.LAST_TOUCHED_KEY, Query.Direction.DESCENDING)
-                    .limit(1)
-                    .addSnapshotListener { snapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
-                        if(snapshot != null){
-                            for(doc in snapshot.documents){
-                                newprofile = Profile.fromSnapshot(doc)
-                                val editProfileFragment = EditProfileFragment(con, newprofile)
-                                val ft = getActivity()?.supportFragmentManager?.beginTransaction()
-                                if (ft != null) {
-                                    ft.replace(R.id.fragment_container, editProfileFragment)
-                                    ft.addToBackStack(getString(R.string.skip_edit_page))
-                                    ft.commit()
-                                }
-                            }
-                        }
-                    }
-            listener.remove()
         }
 
 

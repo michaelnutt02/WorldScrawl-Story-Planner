@@ -48,5 +48,6 @@
     <string name="pinch_initialize"><![CDATA[<h2>Inciting Incident</h2><h3>Plot Point 1</h3><h3>Pinch Point 1</h3><h2>Confrontation</h2><h3>Pinch Point 2</h3><h3>Plot Point 2</h3><h2>Resolution</h2><h3>Climax</h3><div><br></div>]]></string>
     <string name="skip_edit_page">edit page</string>
     <string name="back_to_tabs">root_fragment</string>
+    <string name="delete_profile">Delete Profile</string>
 
 </resources>

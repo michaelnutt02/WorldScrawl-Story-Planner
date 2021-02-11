@@ -1,6 +1,6 @@
 package com.example.wordscrawl.profilecategory
 
-import com.example.wordscrawl.ProfileDetail
+import com.google.android.gms.tasks.Task
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.*
 

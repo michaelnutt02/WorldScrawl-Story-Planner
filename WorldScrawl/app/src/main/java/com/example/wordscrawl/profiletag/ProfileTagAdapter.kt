@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.wordscrawl.ProfileDetail
 import com.example.wordscrawl.R
 import com.example.wordscrawl.WorldsFragment
 import com.example.wordscrawl.profilecategory.*

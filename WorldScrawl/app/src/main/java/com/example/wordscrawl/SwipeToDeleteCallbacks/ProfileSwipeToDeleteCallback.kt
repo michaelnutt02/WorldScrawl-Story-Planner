@@ -1,12 +1,18 @@
 package com.example.wordscrawl.SwipeToDeleteCallbacks
 
+import android.content.Context
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wordscrawl.ProfileDetail
 import com.example.wordscrawl.R
 import com.example.wordscrawl.editprofile.EditProfileFragment
+import com.example.wordscrawl.outlines.Outline
 import com.example.wordscrawl.profilecategory.Profile
 import com.example.wordscrawl.profilecategory.ProfileCardAdapter
 import com.google.android.material.snackbar.Snackbar
@@ -15,14 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 
-class ProfileSwipeToDeleteCallback(val adapter:ProfileCardAdapter, val coordinator_layout: View):ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
-    private val detailsRef = FirebaseFirestore
-        .getInstance()
-        .collection("profile-details")
-
-    private val profilesRef = FirebaseFirestore
-        .getInstance()
-        .collection("profiles")
+class ProfileSwipeToDeleteCallback(val adapter:ProfileCardAdapter, val context: Context):ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
 
     override fun onMove(
         recyclerView: RecyclerView,
@@ -34,64 +33,22 @@ class ProfileSwipeToDeleteCallback(val adapter:ProfileCardAdapter, val coordinat
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
 
-        var savedProfile = adapter.getProfile(viewHolder.adapterPosition)
+        //save profile so we can get name
+        val savedProfile = adapter.getProfile(viewHolder.adapterPosition)
 
-        val savedDetails:ArrayList<ProfileDetail> = arrayListOf()
-        //we do save the correct profile id
-        Log.i("adding", "saved profile id is ${savedProfile.id}")
-        //get details to save from firestore.
+        //DONE: Make dialog box here to ensure that we really want to delete a profile.
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle(context.getString(R.string.delete_profile))
+        builder.setMessage("Are you sure you want to delete ${savedProfile.name}? \n This cannot be undone.")
 
-        var listener = detailsRef.whereEqualTo("profileId",savedProfile.id).addSnapshotListener{ snapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
-                Log.i("adding", "IN LISTENER")
-                if(error != null){
-                    Log.i("adding", "ERROR IN LISTENERJ")
-                }
-                if(snapshot != null){
-                    Log.i("adding", "saving a detail for ${savedProfile.name}")
-                    savedDetails.addAll(ProfileDetail.fromSnapshots(snapshot))
-                }else{
-                    Log.i("adding", "snapshot is null")
-                }
-            }
-//        var listener = detailsRef.whereEqualTo("profileId",savedProfile.id).add
-
-
-        if(direction == ItemTouchHelper.RIGHT){
+        builder.setPositiveButton(android.R.string.ok) {_,_->
             adapter.remove(viewHolder.adapterPosition)
-            //add snackbar for undo
-            var snackbar: Snackbar = Snackbar.make(coordinator_layout, "Profile deleted", Snackbar.LENGTH_LONG)
-            snackbar.setAction("UNDO",  View.OnClickListener(){
-                adapter.add(savedProfile)
-                //find newest added profile in firestore, give it to the edit fragment
-
-                val profileListener = profilesRef
-                    .orderBy(Profile.LAST_TOUCHED_KEY, Query.Direction.DESCENDING)
-                    .limit(1)
-                    .addSnapshotListener { snapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
-                        if(snapshot != null){
-                            for(doc in snapshot.documents){
-                                savedProfile = Profile.fromSnapshot(doc)
-                            }
-                        }
-                    }
-                Log.i("adding", "recovered profile id is ${savedProfile.id}")
-                profileListener.remove()
-
-                //add details with the proper id (if this works, we will also want to do this with outlines)
-                for(detail in savedDetails){
-                    detail.profileId = savedProfile.id
-                    detailsRef.add(detail)
-                }
-
-                Snackbar.make(coordinator_layout,"Profile is restored", Snackbar.LENGTH_LONG)
-
-            })
-            snackbar.show()
-        }else{
-            //add back food if it was a left swipe
-            adapter.remove(viewHolder.adapterPosition)
-            adapter.add(savedProfile)
         }
+        builder.setNegativeButton(android.R.string.cancel){_,_->
+            adapter.notifyItemChanged(viewHolder.adapterPosition)
+        }
+        builder.create().show()
+
 
 
     }
