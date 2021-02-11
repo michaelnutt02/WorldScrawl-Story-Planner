@@ -10,6 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WorldScrawl">
         <activity
+            android:windowSoftInputMode="stateVisible|adjustResize"
             android:name="com.example.wordscrawl.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.WorldScrawl.NoActionBar">

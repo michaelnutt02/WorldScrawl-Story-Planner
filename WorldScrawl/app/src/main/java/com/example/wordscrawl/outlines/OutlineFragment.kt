@@ -2,22 +2,31 @@ package com.example.wordscrawl.outlines
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Environment
+import android.print.PrintAttributes
+import android.print.PrintManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.wordscrawl.R
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.FirebaseFirestore
 import jp.wasabeef.richeditor.RichEditor
+import java.io.File
 
 /**
- * An example full-screen fragment that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
+ * Library used for rich-text editor: https://github.com/wasabeef/richeditor-android
+ * This code is heavily based off of the library sample example
+ * here: https://github.com/wasabeef/richeditor-android/blob/master/sample/src/main/java/jp/wasabeef/sample/MainActivity.java
+ *
+ *The printing code is adapted from this documentation: https://developer.android.com/training/printing/html-docs
  */
 class OutlineFragment(context: Context, outline: Outline) : Fragment() {
 
@@ -28,13 +37,13 @@ class OutlineFragment(context: Context, outline: Outline) : Fragment() {
     private var outline = outline
     private var con = context
 
-
+    private var mWebView: WebView? = null
 
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
 
         val view = inflater.inflate(R.layout.fragment_outline, container, false)
@@ -68,6 +77,7 @@ class OutlineFragment(context: Context, outline: Outline) : Fragment() {
         // mEditor.setBackgroundColor(Color.BLUE);
 //        mEditor.setBackgroundResource(R.drawable.bob);
         //Set the default display statement
+
         mEditor.setPlaceholder("Insert text here...");
 
         //set the Text here if firebase isn't null
@@ -83,12 +93,14 @@ class OutlineFragment(context: Context, outline: Outline) : Fragment() {
 
         //look at all buttons on the menu :)
         view.findViewById<ImageButton>(R.id.italicsButton).setOnClickListener{
-            mEditor.focusEditor();
+            mEditor.focusEditor()
             mEditor.setItalic()
+            toggleButtonColor(R.id.italicsButton)
+
         }
 
         view.findViewById<ImageButton>(R.id.boldButton).setOnClickListener{
-            mEditor.focusEditor();
+            mEditor.focusEditor()
             mEditor.setBold()
         }
 
@@ -159,6 +171,12 @@ class OutlineFragment(context: Context, outline: Outline) : Fragment() {
             Toast.makeText(con, getString(R.string.savedOutlineToast), Toast.LENGTH_SHORT).show()
         }
 
+        //make export Button
+        view.findViewById<ImageButton>(R.id.printButton).setOnClickListener{
+            doWebViewPrint(mEditor.html)
+
+        }
+
         
         return view
     }
@@ -167,6 +185,75 @@ class OutlineFragment(context: Context, outline: Outline) : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
     }
+
+    fun toggleButtonColor(id: Int){
+
+        val button = view?.findViewById<ImageButton>(id)
+        if (button != null) {
+            //toggle selected boolean
+            button.isSelected = !button.isSelected
+            Log.i("adding", "button is ${button.isSelected}")
+            if(button.isSelected){
+                Log.i("adding", "making white")
+                button?.setColorFilter(con.getColor(R.color.white))
+            }else{
+                Log.i("adding", "making grey")
+                button?.setColorFilter(con.getColor(R.color.dark_grey))
+            }
+
+        }
+
+    }
+
+    /*This printing code was adapted from https://developer.android.com/training/printing/html-docs*/
+    private fun doWebViewPrint(htmlDocument:String) {
+        // Create a WebView object specifically for printing
+        val webView = WebView(con)
+        webView.webViewClient = object : WebViewClient() {
+
+            override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest) = false
+
+            override fun onPageFinished(view: WebView, url: String) {
+//                Log.i(TAG, "page finished loading $url")
+                createWebPrintJob(view)
+                mWebView = null
+            }
+        }
+
+        // Generate an HTML document on the fly:
+//        val htmlDocument =
+//                "<html><body><h1>Test Content</h1><p>Testing, testing, testing...</p></body></html>"
+        webView.loadDataWithBaseURL(null, htmlDocument, "text/HTML", "UTF-8", null)
+
+        // Keep a reference to WebView object until you pass the PrintDocumentAdapter
+        // to the PrintManager
+        mWebView = webView
+    }
+
+    private fun createWebPrintJob(webView: WebView) {
+
+        // Get a PrintManager instance
+        (activity?.getSystemService(Context.PRINT_SERVICE) as? PrintManager)?.let { printManager ->
+
+            val jobName = "${getString(R.string.app_name)} Document"
+
+            // Get a print adapter instance
+            val printAdapter = webView.createPrintDocumentAdapter(jobName)
+
+            // Create a print job with name and adapter instance
+
+            printManager.print(
+                    jobName,
+                    printAdapter,
+                    PrintAttributes.Builder().build()
+            ).also { printJob ->
+
+                // Save the job object for later status checking
+                printManager.printJobs += printJob
+            }
+        }
+    }
+
 
 
 
