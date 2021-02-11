@@ -17,6 +17,7 @@ import com.example.wordscrawl.SwipeToDeleteCallbacks.ProfileSwipeToDeleteCallbac
 import com.example.wordscrawl.outlines.Outline
 import com.example.wordscrawl.profilecategory.Profile
 import com.example.wordscrawl.profilecategory.ProfileCardAdapter
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
@@ -64,6 +65,10 @@ class WorldsFragment() : Fragment() {
             var size = adapter.itemCount
             Log.i("Adding Profile","In Worlds, number of profiles are $size")
         }
+        layout.findViewById<BottomNavigationView>(R.id.nav_view).setOnNavigationItemSelectedListener {
+            listener?.onNavPressed(it.itemId)
+            true
+        }
 
         return layout
     }
@@ -104,6 +109,7 @@ class WorldsFragment() : Fragment() {
     interface OnProfileSelectedListener{
         fun onProfileSelected(profile:Profile)
         fun onOutlineSelected(outline:Outline)
+        fun onNavPressed(id:Int)
 
     }
 

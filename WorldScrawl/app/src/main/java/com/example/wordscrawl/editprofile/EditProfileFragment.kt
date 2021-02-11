@@ -117,5 +117,9 @@ class EditProfileFragment() : Fragment(), WorldsFragment.OnProfileSelectedListen
         TODO("Not yet implemented")
     }
 
+    override fun onNavPressed(id: Int) {
+        TODO("Not yet implemented")
+    }
+
 
 }

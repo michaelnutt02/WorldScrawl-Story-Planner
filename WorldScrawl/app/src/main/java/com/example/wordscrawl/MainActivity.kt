@@ -26,7 +26,6 @@ class MainActivity : AppCompatActivity(),WorldsFragment.OnProfileSelectedListene
 
         //based this code off of https://stackoverflow.com/a/44190200 , which is recommended in the "hint" section of the lab
 
-        var navigation: BottomNavigationView = findViewById(R.id.nav_view)
 
         //set the fragment to characters initially
         var switchTo: Fragment? = CharactersFragment(this)
@@ -37,44 +36,6 @@ class MainActivity : AppCompatActivity(),WorldsFragment.OnProfileSelectedListene
         val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.fragment_container, switchTo!!)
         ft.commit()
-        navigation.setOnNavigationItemSelectedListener {
-
-
-            when(it.itemId){
-                R.id.navigation_characters -> {
-                    switchTo = CharactersFragment(this)
-                }
-                R.id.navigation_worlds -> {
-                    switchTo = WorldsFragment(this)
-                }
-                R.id.navigation_stories -> {
-                    switchTo = StoriesFragment(this)
-//                    switchTo = OutlineFragment()
-                }
-
-            }
-
-
-
-
-            //load proper fragment in based off of navigation
-            if(switchTo != null){
-
-                //pop off everything up to and including the current tab
-                supportFragmentManager.popBackStack(getString(R.string.back_to_tabs), FragmentManager.POP_BACK_STACK_INCLUSIVE)
-
-                //add new tab fragment
-                val ft = supportFragmentManager.beginTransaction()
-                ft.replace(R.id.fragment_container, switchTo!!)
-                ft.commit()
-
-            }
-
-            true
-        }
-
-
-
 
 
     }
@@ -130,7 +91,33 @@ class MainActivity : AppCompatActivity(),WorldsFragment.OnProfileSelectedListene
         ft.commit()
     }
 
+    override fun onNavPressed(id: Int) {
+        var switchTo:Fragment? = null
+        when(id) {
+            R.id.navigation_characters -> {
+                switchTo = CharactersFragment(this)
+            }
+            R.id.navigation_worlds -> {
+                switchTo = WorldsFragment(this)
+            }
+            R.id.navigation_stories -> {
+                switchTo = StoriesFragment(this)
 
+            }
+        }
 
+            //load proper fragment in based off of navigation
+            if(switchTo != null){
+
+                //pop off everything up to and including the current tab
+                supportFragmentManager.popBackStack(getString(R.string.back_to_tabs), FragmentManager.POP_BACK_STACK_INCLUSIVE)
+
+                //add new tab fragment
+                val ft = supportFragmentManager.beginTransaction()
+                ft.replace(R.id.fragment_container, switchTo!!)
+                ft.commit()
+
+            }
+    }
 
 }

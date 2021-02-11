@@ -6,37 +6,11 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:theme="@style/Theme.WorldScrawl.AppBarOverlay">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/Theme.WorldScrawl.PopupOverlay" />
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        app:menu="@menu/top_nav_menu"
-        app:itemTextColor="@color/white"
-        android:outlineAmbientShadowColor="?attr/colorPrimary"/>
-
 
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/nav_view"
         android:background="@color/white">
 
     </FrameLayout>

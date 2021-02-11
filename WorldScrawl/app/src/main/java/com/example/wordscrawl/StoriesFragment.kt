@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.wordscrawl.SwipeToDeleteCallbacks.ProfileSwipeToDeleteCallback
 import com.example.wordscrawl.profilecategory.Profile
 import com.example.wordscrawl.profilecategory.ProfileCardAdapter
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
@@ -61,6 +62,11 @@ class StoriesFragment() : Fragment() {
             //TODO: Add a dialog box to input the story name
             addStoryDialog()
 
+        }
+
+        layout.findViewById<BottomNavigationView>(R.id.nav_view).setOnNavigationItemSelectedListener {
+            listener?.onNavPressed(it.itemId)
+            true
         }
 
         return layout

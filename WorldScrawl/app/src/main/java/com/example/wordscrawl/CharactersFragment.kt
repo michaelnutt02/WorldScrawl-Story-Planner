@@ -15,6 +15,7 @@ import com.example.wordscrawl.editprofile.EditProfileFragment
 import com.example.wordscrawl.profilecategory.Profile
 import com.example.wordscrawl.profilecategory.ProfileCardAdapter
 import com.google.android.gms.tasks.Tasks
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -84,6 +85,11 @@ class CharactersFragment() : Fragment() {
                 }
             }}
 
+        }
+
+        layout.findViewById<BottomNavigationView>(R.id.nav_view).setOnNavigationItemSelectedListener {
+            listener?.onNavPressed(it.itemId)
+            true
         }
 
 
