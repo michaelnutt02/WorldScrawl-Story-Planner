@@ -6,8 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.wordscrawl.SwipeToDeleteCallbacks.ProfileSwipeToDeleteCallback
 import com.example.wordscrawl.editprofile.EditProfileFragment
 import com.example.wordscrawl.profilecategory.Profile
 import com.example.wordscrawl.profilecategory.ProfileCardAdapter
@@ -56,13 +58,19 @@ class CharactersFragment() : Fragment() {
         recycleView.layoutManager = LinearLayoutManager(con)
         recycleView.adapter = adapter
 
+        //code adapted from https://medium.com/@zackcosborn/step-by-step-recyclerview-swipe-to-delete-and-undo-7bbae1fce27e
+        recycleView.setAdapter(adapter)
+        recycleView.setLayoutManager(LinearLayoutManager(con))
+        val itemTouchHelper = ItemTouchHelper(ProfileSwipeToDeleteCallback(adapter,layout.findViewById(R.id.coordinator_layout)))
+        itemTouchHelper.attachToRecyclerView(recycleView)
+
         layout.findViewById<FloatingActionButton>(R.id.addFAB).setOnClickListener{
 
             var newprofile = Profile("CHARACTER","Mary Sue")
             adapter.add(newprofile)
 
             //find newest added profile in firestore, give it to the edit fragment
-            profilesRef
+            val listener = profilesRef
                     .orderBy(Profile.LAST_TOUCHED_KEY, Query.Direction.DESCENDING)
                     .limit(1)
                     .addSnapshotListener { snapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
@@ -79,7 +87,7 @@ class CharactersFragment() : Fragment() {
                             }
                         }
                     }
-
+            listener.remove()
         }
 
 

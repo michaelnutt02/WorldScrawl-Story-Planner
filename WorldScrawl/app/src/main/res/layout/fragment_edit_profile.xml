@@ -42,7 +42,8 @@
                     android:textSize="20sp"
                     android:layout_marginLeft="20dp"
                     android:layout_gravity="center_vertical"
-                    android:hint="@string/enter_name"/>
+                    android:hint="@string/enter_name"
+                    android:inputType="textCapWords"/>
 
                 <ImageButton
                     android:id="@+id/saveButton"

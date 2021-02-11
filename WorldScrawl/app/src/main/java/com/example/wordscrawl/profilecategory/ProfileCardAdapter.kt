@@ -154,6 +154,10 @@ class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnPr
         if(listener != null){
             listener?.onProfileSelected(profile)
         }
-
     }
+
+    fun getProfile(position: Int):Profile{
+        return profiles[position]
+    }
+
 }

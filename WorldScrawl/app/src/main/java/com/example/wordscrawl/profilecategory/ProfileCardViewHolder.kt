@@ -21,10 +21,10 @@ class ProfileCardViewHolder : RecyclerView.ViewHolder {
         }
 
         //TODO: Make a copy function where writer can long click on a profile and copy its fields (bodies not filled) into a new profile
-        itemView.setOnLongClickListener{
-            adapter.remove(adapterPosition)
-            true
-        }
+//        itemView.setOnLongClickListener{
+//            adapter.remove(adapterPosition)
+//            true
+//        }
     }
 
     fun bind(profile: Profile) {
