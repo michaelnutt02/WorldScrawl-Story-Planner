@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity(),WorldsFragment.OnProfileSelectedListene
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
 
-//        var addButton:FloatingActionButton = findViewById<FloatingActionButton>(R.id.addFAB)
 
         //based this code off of https://stackoverflow.com/a/44190200 , which is recommended in the "hint" section of the lab
 

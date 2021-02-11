@@ -40,9 +40,9 @@ class ProfileFragment() : Fragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
 
-        var layout = inflater.inflate(if(profile.picture == null) R.layout.profile else R.layout.profile_with_picture, container, false)
+        var layout = inflater.inflate(if(profile.picture == "") R.layout.profile else R.layout.profile_with_picture, container, false)
 
-//        adapter = ProfileDetailAdapter(con, "szo5if1k5bKSCX1iPtYB")
+
         adapter = ProfileDetailAdapter(con, profile, listener)
         recycleView = layout.findViewById(R.id.profile_detail_recycler)
         recycleView.layoutManager = LinearLayoutManager(con)
@@ -52,6 +52,8 @@ class ProfileFragment() : Fragment() {
         //set name on view
         var name:TextView = layout.findViewById(R.id.profile_name_no_pic)
         name.setText(profile.name)
+
+
 
 
         layout.findViewById<FloatingActionButton>(R.id.addFAB).setOnClickListener {

@@ -29,7 +29,7 @@ class ProfileTagViewHolder : RecyclerView.ViewHolder {
     }
 
     fun bind(profile: Profile) {
-        if(profile.picture == null){
+        if(profile.picture.equals("")){
             Log.i("adding profile", "${profile.name} has null picture" )
         }else{
             Log.i("adding profile", "${profile.name} does not have null picture" )
@@ -37,8 +37,8 @@ class ProfileTagViewHolder : RecyclerView.ViewHolder {
 
         var color = ContextCompat.getColor(context, R.color.light_blue_600)
         val cardView: CardView = when (profile.picture) {
-            null -> itemView.findViewById<CardView>(R.id.tag_card_view)
-            -1 -> itemView.findViewById<CardView>(R.id.tag_card_view)
+            "" -> itemView.findViewById<CardView>(R.id.tag_card_view)
+//            -1 -> itemView.findViewById<CardView>(R.id.tag_card_view)
             else -> itemView.findViewById<CardView>(R.id.tag_card_view)
         }
 

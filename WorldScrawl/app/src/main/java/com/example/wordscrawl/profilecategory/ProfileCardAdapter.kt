@@ -68,7 +68,7 @@ class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnPr
         Log.d("PD", "index is ${index}")
         val view = LayoutInflater.from(context).inflate(
             when(profiles[index].picture){
-                null -> R.layout.profile_card
+                "" -> R.layout.profile_card
                 else -> R.layout.profile_card_with_picture
             }
             , parent, false)

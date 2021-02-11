@@ -36,15 +36,14 @@ class ProfileCardViewHolder : RecyclerView.ViewHolder {
 
         var color = ContextCompat.getColor(context, R.color.purple_200)
         val cardView: CardView = when (profile.picture) {
-            null -> itemView.findViewById<CardView>(R.id.profile_card_view)
-//            -1 -> itemView.findViewById<CardView>(R.id.profile_card_view)
+            "" -> itemView.findViewById<CardView>(R.id.profile_card_view)
             else -> itemView.findViewById<CardView>(R.id.profile_card_with_picture_view)
         }
 
         if(profile.picture != null) {
-            itemView.findViewById<ImageView>(R.id.profile_card_picture).setImageResource(
-                profile.picture!!
-            )
+//            itemView.findViewById<ImageView>(R.id.profile_card_picture).setImageResource(
+//                profile.picture!!
+//            )
         }
 
         itemView.findViewById<TextView>(R.id.profile_card_title).text = profile.name
