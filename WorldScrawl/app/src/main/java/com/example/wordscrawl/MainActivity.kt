@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.example.wordscrawl.outlines.Outline
 import com.example.wordscrawl.outlines.OutlineFragment
 import com.example.wordscrawl.outlines.StoryOutlinesFragment
@@ -13,6 +14,7 @@ import com.example.wordscrawl.profilecategory.Profile
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity(),WorldsFragment.OnProfileSelectedListener {
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,9 +28,17 @@ class MainActivity : AppCompatActivity(),WorldsFragment.OnProfileSelectedListene
 
         var navigation: BottomNavigationView = findViewById(R.id.nav_view)
 
+        //set the fragment to characters initially
+        var switchTo: Fragment? = CharactersFragment(this)
+        //pop off everything up to and including the current tab
+        supportFragmentManager.popBackStack(getString(R.string.back_to_tabs), FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
+        //add new tab fragment
+        val ft = supportFragmentManager.beginTransaction()
+        ft.replace(R.id.fragment_container, switchTo!!)
+        ft.commit()
         navigation.setOnNavigationItemSelectedListener {
-            var switchTo: Fragment? = null
+
 
             when(it.itemId){
                 R.id.navigation_characters -> {
@@ -45,18 +55,25 @@ class MainActivity : AppCompatActivity(),WorldsFragment.OnProfileSelectedListene
             }
 
 
+
+
             //load proper fragment in based off of navigation
             if(switchTo != null){
+
+                //pop off everything up to and including the current tab
+                supportFragmentManager.popBackStack(getString(R.string.back_to_tabs), FragmentManager.POP_BACK_STACK_INCLUSIVE)
+
+                //add new tab fragment
                 val ft = supportFragmentManager.beginTransaction()
-
-                ft.replace(R.id.fragment_container,switchTo)
-
+                ft.replace(R.id.fragment_container, switchTo!!)
                 ft.commit()
 
             }
 
             true
         }
+
+
 
 
 
@@ -95,21 +112,13 @@ class MainActivity : AppCompatActivity(),WorldsFragment.OnProfileSelectedListene
         //load proper fragment in based off of navigation
         if(switchTo != null){
             val ft = supportFragmentManager.beginTransaction()
-
             ft.replace(R.id.fragment_container,switchTo)
-
+            ft.addToBackStack(getString(R.string.skip_edit_page))
             ft.commit()
 
         }
 
 
-
-//        Log.i("profile selected", "opening fragment")
-//        val profileFragment = ProfileFragment(this, profile)
-//        val ft = supportFragmentManager.beginTransaction()
-//        ft.replace(R.id.fragment_container, profileFragment)
-//        ft.addToBackStack("detail")
-//        ft.commit()
     }
 
     override fun onOutlineSelected(outline: Outline) {
@@ -117,7 +126,7 @@ class MainActivity : AppCompatActivity(),WorldsFragment.OnProfileSelectedListene
         val profileFragment = OutlineFragment(this, outline)
         val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.fragment_container, profileFragment)
-        ft.addToBackStack("detail")
+        ft.addToBackStack(null)
         ft.commit()
     }
 

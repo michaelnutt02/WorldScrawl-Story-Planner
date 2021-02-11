@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageButton
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wordscrawl.ProfileFragment
@@ -94,9 +95,11 @@ class EditProfileFragment() : Fragment(), WorldsFragment.OnProfileSelectedListen
             val profileFragment = ProfileFragment(con, profile)
             val ft = getActivity()?.supportFragmentManager?.beginTransaction()
             if (ft != null) {
+                //go straight back to profile page
+                getActivity()?.supportFragmentManager?.popBackStack(getString(R.string.skip_edit_page),FragmentManager.POP_BACK_STACK_INCLUSIVE)
+
                 ft.replace(R.id.fragment_container, profileFragment)
-                ft.addToBackStack("detail")
-//                ft.disallowAddToBackStack()
+                ft.addToBackStack(getString(R.string.back_to_tabs))
                 ft.commit()
             }
         }

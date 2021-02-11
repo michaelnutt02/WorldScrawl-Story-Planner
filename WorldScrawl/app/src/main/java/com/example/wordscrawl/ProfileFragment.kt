@@ -65,7 +65,8 @@ class ProfileFragment() : Fragment() {
             val ft = getActivity()?.supportFragmentManager?.beginTransaction()
             if (ft != null) {
                 ft.replace(R.id.fragment_container, editProfileFragment)
-                ft.addToBackStack("detail")
+                ft.addToBackStack(getString(R.string.skip_edit_page))
+//                getActivity()?.supportFragmentManager?.popBackStackImmediate()
                 ft.commit()
             }
         }
