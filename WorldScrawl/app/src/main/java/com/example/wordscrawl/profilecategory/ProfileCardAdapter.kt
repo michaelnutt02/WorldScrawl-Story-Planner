@@ -100,11 +100,9 @@ class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnPr
         var details:ArrayList<ProfileDetail> = arrayListOf()
         detailsRef
                 .whereEqualTo("profileId",profiles[position].id)
-                .addSnapshotListener{ snapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
+                .get()
+                .addOnSuccessListener{ snapshot: QuerySnapshot? ->
 
-                    if(error != null){
-                        Log.e("ERROR","Listen error $error")
-                    }
 
                     if(snapshot != null){
                         for(doc in snapshot){
@@ -123,11 +121,8 @@ class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnPr
         var outlines:ArrayList<Outline> = arrayListOf()
         outlinesRef
                 .whereEqualTo("profileId",profiles[position].id)
-                .addSnapshotListener{ snapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
-
-                    if(error != null){
-                        Log.e("ERROR","Listen error $error")
-                    }
+                .get()
+                .addOnSuccessListener{ snapshot: QuerySnapshot? ->
 
                     if(snapshot != null){
                         for(doc in snapshot){

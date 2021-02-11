@@ -10,8 +10,10 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.wordscrawl.SwipeToDeleteCallbacks.ProfileSwipeToDeleteCallback
 import com.example.wordscrawl.outlines.Outline
 import com.example.wordscrawl.profilecategory.Profile
 import com.example.wordscrawl.profilecategory.ProfileCardAdapter
@@ -49,6 +51,12 @@ class WorldsFragment() : Fragment() {
         recycleView = layout.findViewById(R.id.worlds_recycler_view)
         recycleView.layoutManager = LinearLayoutManager(con)
         recycleView.adapter = adapter
+
+        //code adapted from https://medium.com/@zackcosborn/step-by-step-recyclerview-swipe-to-delete-and-undo-7bbae1fce27e
+        recycleView.setAdapter(adapter)
+        recycleView.setLayoutManager(LinearLayoutManager(con))
+        val itemTouchHelper = ItemTouchHelper(ProfileSwipeToDeleteCallback(adapter, con))
+        itemTouchHelper.attachToRecyclerView(recycleView)
 
         layout.findViewById<FloatingActionButton>(R.id.addFAB).setOnClickListener{
             var newprofile = Profile("WORLD","Hogwarts")

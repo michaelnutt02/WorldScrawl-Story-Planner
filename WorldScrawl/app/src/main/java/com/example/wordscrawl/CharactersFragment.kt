@@ -67,9 +67,10 @@ class CharactersFragment() : Fragment() {
 
         layout.findViewById<FloatingActionButton>(R.id.addFAB).setOnClickListener{
             //NOTE: When we only want values once, use .get().addOn listener. It only does it once and is more lightweight, less errors.
-
             var newprofile = Profile("CHARACTER","Mary Sue")
             adapter.add(newprofile)
+
+            //find the newest profile added and load its edit detail page.
             profilesRef.orderBy(Profile.LAST_TOUCHED_KEY, Query.Direction.DESCENDING).limit(1).get().addOnSuccessListener {
                 Log.i("adding", "we are getting here :)))")
                 for(doc in it){

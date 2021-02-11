@@ -32,29 +32,26 @@ class EditProfileAdapter(var context: Context, var profile: Profile, var listene
 
     init {
 
-        var isInitialized = false
         //add all existing details of the profile into editDetails
         detailsRef
-        .orderBy(Profile.LAST_TOUCHED_KEY, Query.Direction.ASCENDING)
-        .whereEqualTo("profileId",profile.id)
-        .addSnapshotListener{ snapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
-            if(error != null){
-                Log.e("ERROR","Listen error $error")
-            }
-            if(snapshot != null && !isInitialized){
-                Log.i("adding", "Has details, profile id is ${profile.id}")
-                editDetails.addAll(ProfileDetail.fromSnapshots(snapshot))
-                notifyDataSetChanged()
-            }else{
-                var emptyEdit = ProfileDetail()
-                editDetails.add(0,emptyEdit)
-                notifyItemInserted(0)
-                Log.i("adding", "No details, profile id is ${profile.id}")
-            }
-            isInitialized = true
+                .orderBy(Profile.LAST_TOUCHED_KEY, Query.Direction.ASCENDING)
+                .whereEqualTo("profileId",profile.id)
+                .get()
+                .addOnSuccessListener{ snapshot: QuerySnapshot? ->
 
-            Log.i("adding", "In loop, profile id is ${profile.id}")
-        }
+                    if(snapshot != null){
+                        Log.i("adding", "Has details, profile id is ${profile.id}")
+                        editDetails.addAll(ProfileDetail.fromSnapshots(snapshot))
+                        notifyDataSetChanged()
+                    }else{
+                        var emptyEdit = ProfileDetail()
+                        editDetails.add(0,emptyEdit)
+                        notifyItemInserted(0)
+                        Log.i("adding", "No details, profile id is ${profile.id}")
+                    }
+
+                    Log.i("adding", "In loop, profile id is ${profile.id}")
+                }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, itemType: Int): EditProfileViewHolder {
