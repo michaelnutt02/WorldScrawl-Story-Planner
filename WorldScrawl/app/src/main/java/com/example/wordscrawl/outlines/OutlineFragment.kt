@@ -2,13 +2,13 @@ package com.example.wordscrawl.outlines
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Environment
 import android.print.PrintAttributes
 import android.print.PrintManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -19,7 +19,7 @@ import androidx.fragment.app.Fragment
 import com.example.wordscrawl.R
 import com.google.firebase.firestore.FirebaseFirestore
 import jp.wasabeef.richeditor.RichEditor
-import java.io.File
+
 
 /**
  * Library used for rich-text editor: https://github.com/wasabeef/richeditor-android
@@ -28,13 +28,12 @@ import java.io.File
  *
  *The printing code is adapted from this documentation: https://developer.android.com/training/printing/html-docs
  */
-class OutlineFragment(context: Context, outline: Outline) : Fragment() {
+class OutlineFragment(context: Context, var outline: Outline) : Fragment() {
 
     private val outlinesRef = FirebaseFirestore
             .getInstance()
             .collection("outlines")
 
-    private var outline = outline
     private var con = context
 
     private var mWebView: WebView? = null
@@ -53,7 +52,7 @@ class OutlineFragment(context: Context, outline: Outline) : Fragment() {
 //        navBar.visibility = View.VISIBLE
 
         //set title to outline title
-        var editTitle = view.findViewById<EditText>(R.id.edit_Title)
+        val editTitle = view.findViewById<EditText>(R.id.edit_Title)
         if(!outline.title.isEmpty()){
             editTitle.setText(outline.title)
         }
@@ -61,100 +60,167 @@ class OutlineFragment(context: Context, outline: Outline) : Fragment() {
 
 
 
-        var mEditor = view.findViewById<RichEditor>(R.id.editor);
+        val mEditor = view.findViewById<RichEditor>(R.id.editor);
         //Initialize editing height
-        mEditor.setEditorHeight(200);
+        mEditor.setEditorHeight(200)
         //Initialize font size
-        mEditor.setEditorFontSize(22);
+        mEditor.setEditorFontSize(22)
         //Initialize font color
-        mEditor.setEditorFontColor(R.color.black);
-        //mEditor.setEditorBackgroundColor(Color.BLUE);
+        mEditor.setEditorFontColor(R.color.black)
+
 
         //Initialize the padding
         mEditor.setPadding(10, 10, 10, 10);
-        //Set the background of the edit box, which can be a network picture
-        // mEditor.setBackground("https://raw.githubusercontent.com/wasabeef/art/master/chip.jpg");
-        // mEditor.setBackgroundColor(Color.BLUE);
-//        mEditor.setBackgroundResource(R.drawable.bob);
-        //Set the default display statement
 
-        mEditor.setPlaceholder("Insert text here...");
+        //Set the default display text
+        mEditor.setPlaceholder(getString(R.string.Insert_text_here));
 
         //set the Text here if firebase isn't null
         if(outline.body.isEmpty()){
             //set html to hold type of outline template
+            if(outline.type == Outline.TYPE.PINCH){
+                mEditor.html = "<h2 style=\"text-align: center;\">I. Inciting Incident</h2><h2 style=\"text-align: center;\">II. Plot Point 1</h2><h2 style=\"text-align: center;\">III. Pinch 1</h2><h2 style=\"text-align: center;\">IV. Midpoint</h2><h2 style=\"text-align: center;\">V. Pinch 2</h2><h2 style=\"text-align: center;\">VI. Plot Point 2</h2><h2 style=\"text-align: center;\">VII. Climax&nbsp;</h2>"
+            }
+            if(outline.type == Outline.TYPE.FREYTAG){
+                mEditor.html = "<h2 style=\"text-align: center;\">I. Exposition</h2><h2 style=\"text-align: center;\">II. Rising Action</h2><h2 style=\"text-align: center;\">III. Climax</h2><h2 style=\"text-align: center;\">IV. Falling Action</h2><h2 style=\"text-align: center;\">V. Denouement&nbsp;</h2>"
+            }
+
         }else{
             mEditor.html = outline.body
         }
 
 
         //Set whether the editor is available
+
         mEditor.setInputEnabled(true);
 
+
+
         //look at all buttons on the menu :)
+        view.findViewById<ImageButton>(R.id.undoButton).setOnClickListener{
+            mEditor.focusEditor()
+            mEditor.undo()
+            toggleButtonColor(R.id.undoButton)
+        }
+
+
+        view.findViewById<ImageButton>(R.id.redoButton).setOnClickListener{
+            mEditor.focusEditor()
+            mEditor.redo()
+            toggleButtonColor(R.id.redoButton)
+        }
+
         view.findViewById<ImageButton>(R.id.italicsButton).setOnClickListener{
             mEditor.focusEditor()
             mEditor.setItalic()
             toggleButtonColor(R.id.italicsButton)
-
         }
 
         view.findViewById<ImageButton>(R.id.boldButton).setOnClickListener{
             mEditor.focusEditor()
             mEditor.setBold()
+            toggleButtonColor(R.id.boldButton)
         }
 
         view.findViewById<ImageButton>(R.id.underlineButton).setOnClickListener{
-            mEditor.focusEditor();
+            mEditor.focusEditor()
             mEditor.setUnderline()
+            toggleButtonColor(R.id.underlineButton)
         }
         view.findViewById<ImageButton>(R.id.strikeThroughButton).setOnClickListener{
-            mEditor.focusEditor();
+            mEditor.focusEditor()
             mEditor.setStrikeThrough()
+            toggleButtonColor(R.id.strikeThroughButton)
         }
 
         view.findViewById<ImageButton>(R.id.bulletButton).setOnClickListener{
-            mEditor.focusEditor();
+            mEditor.focusEditor()
             mEditor.setBullets()
+            toggleButtonColor(R.id.bulletButton)
         }
 
         view.findViewById<ImageButton>(R.id.numberedListButton).setOnClickListener{
-            mEditor.focusEditor();
+            mEditor.focusEditor()
             mEditor.setNumbers()
+            toggleButtonColor(R.id.numberedListButton)
         }
         view.findViewById<ImageButton>(R.id.indentButton).setOnClickListener{
-            mEditor.focusEditor();
+            mEditor.focusEditor()
             mEditor.setIndent()
+            toggleButtonColor(R.id.indentButton)
         }
         view.findViewById<ImageButton>(R.id.leftalignButton).setOnClickListener{
-            mEditor.focusEditor();
+            mEditor.focusEditor()
             mEditor.setAlignLeft()
+            toggleButtonColor(R.id.leftalignButton)
         }
         view.findViewById<ImageButton>(R.id.centeralignButton).setOnClickListener{
             mEditor.focusEditor();
             mEditor.setAlignCenter()
+            toggleButtonColor(R.id.centeralignButton)
         }
         view.findViewById<ImageButton>(R.id.rightalignButton).setOnClickListener{
             mEditor.focusEditor();
             mEditor.setAlignRight()
+            toggleButtonColor(R.id.rightalignButton)
+        }
+
+        view.findViewById<ImageButton>(R.id.header1Button).setOnClickListener{
+            mEditor.focusEditor();
+            mEditor.setHeading(1)
+            toggleButtonColor(R.id.header1Button)
+        }
+
+        view.findViewById<ImageButton>(R.id.header2Button).setOnClickListener{
+            mEditor.focusEditor();
+            mEditor.setHeading(2)
+            toggleButtonColor(R.id.header2Button)
+        }
+
+        view.findViewById<ImageButton>(R.id.header3Button).setOnClickListener{
+            mEditor.focusEditor();
+            mEditor.setHeading(3)
+            toggleButtonColor(R.id.header3Button)
+        }
+
+        view.findViewById<ImageButton>(R.id.header4Button).setOnClickListener{
+            mEditor.focusEditor();
+            mEditor.setHeading(4)
+            toggleButtonColor(R.id.header4Button)
+        }
+
+        view.findViewById<ImageButton>(R.id.header5Button).setOnClickListener{
+            mEditor.focusEditor();
+            mEditor.setHeading(5)
+            toggleButtonColor(R.id.header5Button)
+        }
+
+        view.findViewById<ImageButton>(R.id.header6Button).setOnClickListener{
+            mEditor.focusEditor();
+            mEditor.setHeading(6)
+            toggleButtonColor(R.id.header6Button)
         }
 
         view.findViewById<ImageButton>(R.id.superscriptButton).setOnClickListener{
             mEditor.focusEditor();
             mEditor.setSuperscript()
+            toggleButtonColor(R.id.superscriptButton)
         }
         view.findViewById<ImageButton>(R.id.subscriptButton).setOnClickListener{
             mEditor.focusEditor();
             mEditor.setSubscript()
-            Log.i("editor", "this is the content ${mEditor.html}")
+            toggleButtonColor(R.id.subscriptButton)
         }
         view.findViewById<ImageButton>(R.id.checkboxButton).setOnClickListener{
             mEditor.focusEditor();
             mEditor.insertTodo()
+            toggleButtonColor(R.id.checkboxButton)
         }
 
         //make save Button
         view.findViewById<ImageButton>(R.id.saveButton).setOnClickListener{
+            Log.i("adding", "${mEditor.html}")
+
             if(!editTitle.text.isEmpty()){
                 outline.setDetailTitle(editTitle.text.toString())
             }
@@ -171,7 +237,7 @@ class OutlineFragment(context: Context, outline: Outline) : Fragment() {
             Toast.makeText(con, getString(R.string.savedOutlineToast), Toast.LENGTH_SHORT).show()
         }
 
-        //make export Button
+        //make print Button
         view.findViewById<ImageButton>(R.id.printButton).setOnClickListener{
             doWebViewPrint(mEditor.html)
 
@@ -190,17 +256,8 @@ class OutlineFragment(context: Context, outline: Outline) : Fragment() {
 
         val button = view?.findViewById<ImageButton>(id)
         if (button != null) {
-            //toggle selected boolean
-            button.isSelected = !button.isSelected
-            Log.i("adding", "button is ${button.isSelected}")
-            if(button.isSelected){
-                Log.i("adding", "making white")
-                button?.setColorFilter(con.getColor(R.color.white))
-            }else{
-                Log.i("adding", "making grey")
-                button?.setColorFilter(con.getColor(R.color.dark_grey))
-            }
-
+            val buttonClick:AlphaAnimation = AlphaAnimation(1F,0.2F)
+            button.startAnimation(buttonClick)
         }
 
     }

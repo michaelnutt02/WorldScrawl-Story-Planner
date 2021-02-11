@@ -42,4 +42,9 @@
     <string name="savedOutlineToast">Outline saved</string>
     <string name="enter_title">Enter title</string>
     <string name="add_a_story">Add a Story</string>
+    <string name="Insert_text_here">Insert text here...</string>
+
+    <string name="freytag_intialization">Add a Story</string>
+    <string name="pinch_initialize"><![CDATA[<h2>Inciting Incident</h2><h3>Plot Point 1</h3><h3>Pinch Point 1</h3><h2>Confrontation</h2><h3>Pinch Point 2</h3><h3>Plot Point 2</h3><h2>Resolution</h2><h3>Climax</h3><div><br></div>]]></string>
+
 </resources>
