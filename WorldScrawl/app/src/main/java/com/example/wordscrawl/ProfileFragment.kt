@@ -66,11 +66,11 @@ class ProfileFragment() : Fragment() {
 
 
 
-        layout.findViewById<FloatingActionButton>(R.id.addFAB).setOnClickListener {
-            if (adapter != null) {
-                adapter.showAddDialog()
-            }
-        }
+//        layout.findViewById<FloatingActionButton>(R.id.addFAB).setOnClickListener {
+//            if (adapter != null) {
+//                adapter.showAddDialog()
+//            }
+//        }
 
         layout.findViewById<ImageButton>(R.id.editButton).setOnClickListener() {
             val editProfileFragment = EditProfileFragment(con, profile)
