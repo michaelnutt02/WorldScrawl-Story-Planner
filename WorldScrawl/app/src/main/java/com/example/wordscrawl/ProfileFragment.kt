@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.wordscrawl.editprofile.EditProfileFragment
 import com.example.wordscrawl.profilecategory.Profile
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.squareup.picasso.Picasso
 
 
 class ProfileFragment() : Fragment() {
@@ -49,8 +50,17 @@ class ProfileFragment() : Fragment() {
         recycleView.setHasFixedSize(true)
         recycleView.adapter = adapter
 
-        //set name on view
-        var name:TextView = layout.findViewById(R.id.profile_name_no_pic)
+        //set name on view, inflate picture with picasso
+        var name:TextView? = null
+        if(!profile.picture.isEmpty()){
+            name = layout.findViewById(R.id.profile_name_with_picture)
+
+            Picasso.get()
+                .load(profile.picture)
+                .into(layout.findViewById<ImageView>(R.id.profile_picture))
+        }else{
+            name = layout.findViewById(R.id.profile_name_no_pic)
+        }
         name.setText(profile.name)
 
 

@@ -9,6 +9,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wordscrawl.R
+import com.squareup.picasso.Picasso
 
 class ProfileCardViewHolder : RecyclerView.ViewHolder {
     lateinit var context: Context
@@ -40,10 +41,10 @@ class ProfileCardViewHolder : RecyclerView.ViewHolder {
             else -> itemView.findViewById<CardView>(R.id.profile_card_with_picture_view)
         }
 
-        if(profile.picture != null) {
-//            itemView.findViewById<ImageView>(R.id.profile_card_picture).setImageResource(
-//                profile.picture!!
-//            )
+        if(profile.picture.isNotEmpty()) {
+            Picasso.get()
+                .load(profile.picture)
+                .into(itemView.findViewById<ImageView>(R.id.profile_card_picture))
         }
 
         itemView.findViewById<TextView>(R.id.profile_card_title).text = profile.name

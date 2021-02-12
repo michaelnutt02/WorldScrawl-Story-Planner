@@ -10,6 +10,7 @@ import com.example.wordscrawl.R
 import com.example.wordscrawl.WorldsFragment
 import com.example.wordscrawl.outlines.Outline
 import com.google.firebase.firestore.*
+import com.google.firebase.storage.FirebaseStorage
 
 class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnProfileSelectedListener?, type:String) : RecyclerView.Adapter<ProfileCardViewHolder>() {
     private val profiles: ArrayList<Profile> = arrayListOf()
@@ -25,6 +26,11 @@ class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnPr
     private val outlinesRef = FirebaseFirestore
             .getInstance()
             .collection("outlines")
+
+    private val storageRef = FirebaseStorage
+        .getInstance()
+        .reference
+        .child("images")
 
     init {
         //we will want to make a characters/world/story parameter later for collection path
@@ -137,6 +143,19 @@ class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnPr
                     }
                 }
 
+        //we need to delete the image in storage
+        if(profiles[position].picture.isNotEmpty()){
+            //delete file in storage
+            val imageRef = storageRef.storage.getReferenceFromUrl(profiles[position].picture)
+            // Delete the file
+            imageRef.delete().addOnSuccessListener {
+//            Log.d(Constants.TAG, "image deleted successfully")
+            }.addOnFailureListener {
+                // Uh-oh, an error occurred!
+//            Log.d(Constants.TAG, "ERROR: image did not delete")
+            }
+
+        }
 
 
         profilesRef.document(profiles[position].id).delete()

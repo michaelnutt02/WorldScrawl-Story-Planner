@@ -1,16 +1,23 @@
 package com.example.wordscrawl.editprofile
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.net.Uri
+import android.os.AsyncTask
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.wordscrawl.ProfileDetail
-import com.example.wordscrawl.ProfileDetailViewHolder
+import com.example.wordscrawl.*
 import com.example.wordscrawl.R
-import com.example.wordscrawl.WorldsFragment
 import com.example.wordscrawl.profilecategory.Profile
+import com.google.android.gms.tasks.Continuation
+import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.UploadTask
+import java.io.ByteArrayOutputStream
+import kotlin.random.Random
 
 class EditProfileAdapter(var context: Context, var profile: Profile, var listener : WorldsFragment.OnProfileSelectedListener): RecyclerView.Adapter<EditProfileViewHolder>() {
     private var editDetails: ArrayList<ProfileDetail> = arrayListOf()
@@ -24,6 +31,8 @@ class EditProfileAdapter(var context: Context, var profile: Profile, var listene
     private val profilesRef = FirebaseFirestore
             .getInstance()
             .collection("profiles")
+
+
 
     lateinit var viewHolder: EditProfileViewHolder
 
@@ -145,6 +154,8 @@ class EditProfileAdapter(var context: Context, var profile: Profile, var listene
         notifyDataSetChanged()
         Log.i("adding", "IN EDIT PROFILE, CHANGED PROFILE, NEEDS FIRESTORE UPDATED")
     }
+
+
 
 
 }
