@@ -9,10 +9,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wordscrawl.ProfileDetail
 import com.example.wordscrawl.R
+import com.example.wordscrawl.SwipeToDeleteCallbacks.ProfileSwipeToDeleteCallback
+import com.example.wordscrawl.SwipeToDeleteCallbacks.TagSwipeToDeleteCallback
 import com.example.wordscrawl.WorldsFragment
 import com.example.wordscrawl.profilecategory.Profile
 import com.example.wordscrawl.profilecategory.ProfileCardAdapter
@@ -109,6 +112,12 @@ class EditProfileViewHolder: RecyclerView.ViewHolder {
             val profileCategoryRecycler = cardView.findViewById<RecyclerView>(R.id.profile_tags_recycler)
             profileCategoryRecycler.layoutManager = LinearLayoutManager(context)
             profileCategoryRecycler.adapter = adapter
+
+            //code adapted from https://medium.com/@zackcosborn/step-by-step-recyclerview-swipe-to-delete-and-undo-7bbae1fce27e
+            profileCategoryRecycler.setAdapter(adapter)
+            profileCategoryRecycler.setLayoutManager(LinearLayoutManager(context))
+            val itemTouchHelper = ItemTouchHelper(TagSwipeToDeleteCallback(adapter, context))
+            itemTouchHelper.attachToRecyclerView(profileCategoryRecycler)
 
             cardView.findViewById<ImageButton>(R.id.add_tag_button).setOnClickListener {
                 val builder = AlertDialog.Builder(context)

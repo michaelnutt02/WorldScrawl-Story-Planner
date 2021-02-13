@@ -49,8 +49,6 @@ class ProfileSwipeToDeleteCallback(val adapter:ProfileCardAdapter, val context: 
         }
         builder.create().show()
 
-
-
     }
 
 

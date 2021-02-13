@@ -83,6 +83,14 @@ class OutlineAdapter(var context: Context, val profile:Profile, var listener : W
         outlinesRef.add(outline)
     }
 
+    fun remove(position: Int){
+        outlinesRef.document(outlines[position].id).delete()
+    }
+
+    fun getOutline(position:Int):Outline{
+        return outlines[position]
+    }
+
     fun showAddDialog() {
         val builder = AlertDialog.Builder(context)
         builder.setTitle(context.getString(R.string.add_outline))
@@ -111,6 +119,7 @@ class OutlineAdapter(var context: Context, val profile:Profile, var listener : W
         builder.setNegativeButton(android.R.string.cancel, null)
         builder.create().show()
     }
+
 
 
 }

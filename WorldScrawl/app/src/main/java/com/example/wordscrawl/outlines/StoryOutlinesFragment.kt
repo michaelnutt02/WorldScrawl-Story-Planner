@@ -11,10 +11,13 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wordscrawl.ProfileDetail
 import com.example.wordscrawl.R
+import com.example.wordscrawl.SwipeToDeleteCallbacks.OutlineSwipeToDeleteCallback
+import com.example.wordscrawl.SwipeToDeleteCallbacks.ProfileSwipeToDeleteCallback
 import com.example.wordscrawl.WorldsFragment
 import com.example.wordscrawl.editprofile.EditProfileAdapter
 import com.example.wordscrawl.profilecategory.Profile
@@ -50,10 +53,16 @@ class StoryOutlinesFragment() : Fragment() {
         var view = inflater.inflate(R.layout.fragment_story_outlines, container, false)
         adapter = listener?.let { OutlineAdapter(con, profile, it) }!!
 
-        //TODO:change this part to recycler view in fragment story outlines
+
         recycleView = view.findViewById(R.id.outline_recycler)
         recycleView.layoutManager = LinearLayoutManager(con)
         recycleView.adapter = adapter
+
+        //code adapted from https://medium.com/@zackcosborn/step-by-step-recyclerview-swipe-to-delete-and-undo-7bbae1fce27e
+        recycleView.setAdapter(adapter)
+        recycleView.setLayoutManager(LinearLayoutManager(con))
+        val itemTouchHelper = ItemTouchHelper(OutlineSwipeToDeleteCallback(adapter, con))
+        itemTouchHelper.attachToRecyclerView(recycleView)
 
         //change name to title of story
         var name = view.findViewById<TextView>(R.id.story_name)

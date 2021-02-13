@@ -49,5 +49,6 @@
     <string name="skip_edit_page">edit page</string>
     <string name="back_to_tabs">root_fragment</string>
     <string name="delete_profile">Delete Profile</string>
+    <string name="outlines">Outlines</string>
 
 </resources>

@@ -10,8 +10,11 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.wordscrawl.SwipeToDeleteCallbacks.ProfileSwipeToDeleteCallback
+import com.example.wordscrawl.SwipeToDeleteCallbacks.TagSwipeToDeleteCallback
 import com.example.wordscrawl.profilecategory.Profile
 import com.example.wordscrawl.profilecategory.ProfileCardAdapter
 import com.example.wordscrawl.profiletag.ProfileTagAdapter
@@ -52,22 +55,7 @@ class ProfileDetailViewHolder : RecyclerView.ViewHolder {
             detailBody.text = ": ${profileDetail.body}"
         }
 
-//        if(profileDetail.type == ProfileDetail.TYPE.PARAGRAPH) {
-//            if(profileDetail.isSelected) {
-//                val verticalView: LinearLayout = itemView.findViewById(R.id.paragraph_vertical_view)
-//                val bodyView: View? = itemView.findViewById(R.id.paragraph_detail_body_view)
-//                if(bodyView != null) {
-//                    verticalView.removeView(bodyView)
-//                    verticalView.addView(bodyView)
-//                }
-//                else LayoutInflater.from(context).inflate(R.layout.paragraph_body, verticalView)
-//                val detailBody: TextView = itemView.findViewById(R.id.profile_detail_body)
-//                detailBody.text = profileDetail.body
-//                color = ContextCompat.getColor(context, R.color.white)
-//            } else {
-//
-//            }
-//        }
+
         if(profileDetail.type == ProfileDetail.TYPE.PARAGRAPH) {
             if(profileDetail.isSelected) {
                 val verticalView: LinearLayout = itemView.findViewById(R.id.paragraph_vertical_view)
@@ -96,6 +84,12 @@ class ProfileDetailViewHolder : RecyclerView.ViewHolder {
             val profileCategoryRecycler = cardView.findViewById<RecyclerView>(R.id.profile_category_recycler)
             profileCategoryRecycler.layoutManager = LinearLayoutManager(context)
             profileCategoryRecycler.adapter = adapter
+
+            //code adapted from https://medium.com/@zackcosborn/step-by-step-recyclerview-swipe-to-delete-and-undo-7bbae1fce27e
+            profileCategoryRecycler.setAdapter(adapter)
+            profileCategoryRecycler.setLayoutManager(LinearLayoutManager(context))
+            val itemTouchHelper = ItemTouchHelper(ProfileSwipeToDeleteCallback(adapter, context))
+            itemTouchHelper.attachToRecyclerView(profileCategoryRecycler)
         }
 
         if(profileDetail.type == ProfileDetail.TYPE.TAGS) {
@@ -103,6 +97,7 @@ class ProfileDetailViewHolder : RecyclerView.ViewHolder {
             val profileCategoryRecycler = cardView.findViewById<RecyclerView>(R.id.profile_tags_recycler)
             profileCategoryRecycler.layoutManager = LinearLayoutManager(context)
             profileCategoryRecycler.adapter = adapter
+            
         }
 
         cardView.setCardBackgroundColor(color)
