@@ -74,7 +74,7 @@ class EditProfileFragment() : Fragment(), WorldsFragment.OnProfileSelectedListen
 
         // Inflate the layout for this fragment
         var view = inflater.inflate(R.layout.fragment_edit_profile, container, false)
-        adapter = EditProfileAdapter(con, profile, this)
+        adapter = EditProfileAdapter(con, profile, this, this)
         recycleView = view.findViewById(R.id.edit_profile_recycler)
         recycleView.layoutManager = LinearLayoutManager(con)
         recycleView.adapter = adapter
@@ -127,6 +127,10 @@ class EditProfileFragment() : Fragment(), WorldsFragment.OnProfileSelectedListen
 
 
         return view
+    }
+
+    fun scrollToPosition(pos: Int) {
+        recycleView.scrollToPosition(pos)
     }
 
     override fun onProfileSelected(profile: Profile) {

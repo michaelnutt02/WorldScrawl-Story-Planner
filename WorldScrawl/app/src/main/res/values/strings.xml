@@ -28,7 +28,6 @@
         <item>SINGLE</item>
         <item>PARAGRAPH</item>
         <item>CATEGORY</item>
-        <item>TAGS</item>
     </string-array>
     <string-array name="add_outlines_array">
         <item>FREEFORM</item>

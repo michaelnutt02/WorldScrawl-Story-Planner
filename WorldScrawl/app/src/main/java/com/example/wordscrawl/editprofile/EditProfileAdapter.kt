@@ -7,6 +7,9 @@ import android.os.AsyncTask
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wordscrawl.*
 import com.example.wordscrawl.R
@@ -19,8 +22,9 @@ import com.google.firebase.storage.UploadTask
 import java.io.ByteArrayOutputStream
 import kotlin.random.Random
 
-class EditProfileAdapter(var context: Context, var profile: Profile, var listener : WorldsFragment.OnProfileSelectedListener): RecyclerView.Adapter<EditProfileViewHolder>() {
-    private var editDetails: ArrayList<ProfileDetail> = arrayListOf()
+class EditProfileAdapter(var context: Context, var profile: Profile, var listener : WorldsFragment.OnProfileSelectedListener, var editFragment: EditProfileFragment): RecyclerView.Adapter<EditProfileViewHolder>() {
+    private var editDetails: ArrayList<ProfileDetail> = arrayListOf(ProfileDetail(ProfileDetail.TYPE.TAGS))
+    private val tagsOffset = 1
 
     private var deletedDetails: ArrayList<ProfileDetail> = arrayListOf()
 
@@ -50,12 +54,16 @@ class EditProfileAdapter(var context: Context, var profile: Profile, var listene
 
                     if(snapshot != null){
                         Log.i("adding", "Has details, profile id is ${profile.id}")
-                        editDetails.addAll(ProfileDetail.fromSnapshots(snapshot))
-                        notifyDataSetChanged()
+                        for(editDetail in ProfileDetail.fromSnapshots(snapshot))
+                        {
+                            val pos = editDetails.size - tagsOffset
+                            editDetails.add(pos, editDetail)
+                            notifyItemInserted(pos)
+                        }
                     }else{
-                        var emptyEdit = ProfileDetail()
-                        editDetails.add(0,emptyEdit)
-                        notifyItemInserted(0)
+//                        var emptyEdit = ProfileDetail()
+//                        editDetails.add(0,emptyEdit)
+//                        notifyItemInserted(0)
                         Log.i("adding", "No details, profile id is ${profile.id}")
                     }
 
@@ -94,10 +102,48 @@ class EditProfileAdapter(var context: Context, var profile: Profile, var listene
         return editDetails.size
     }
 
-    fun add(){
-        var emptyEdit = ProfileDetail()
-        editDetails.add(0,emptyEdit)
-        notifyItemInserted(0)
+    fun add() {
+        when(profile.type) {
+            "CHARACTER" -> add(ProfileDetail(ProfileDetail.TYPE.SINGLE))
+            "WORLD" -> add(ProfileDetail(ProfileDetail.TYPE.CATEGORY))
+            else -> showAddDialog(R.array.add_details_array)
+        }
+    }
+
+    fun add(profileDetail: ProfileDetail) {
+        val pos = editDetails.size - tagsOffset
+        editDetails.add(pos, profileDetail)
+        notifyItemInserted(pos)
+        editFragment.scrollToPosition(pos)
+    }
+
+    fun showAddDialog(arrayRes: Int) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle(context.getString(R.string.add_detail_title))
+        val view = LayoutInflater.from(context).inflate(R.layout.dialog_add, null, false)
+        val spinner: Spinner = view.findViewById(R.id.add_details_spinner)
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter.createFromResource(
+            context,
+            arrayRes,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            spinner.adapter = adapter
+        }
+        builder.setView(view)
+        builder.setPositiveButton(android.R.string.ok) {_,_->
+            add(ProfileDetail(type = when(spinner.selectedItem){
+                "SINGLE" -> ProfileDetail.TYPE.SINGLE
+                "PARAGRAPH" -> ProfileDetail.TYPE.PARAGRAPH
+                "CATEGORY" -> ProfileDetail.TYPE.CATEGORY
+                else -> ProfileDetail.TYPE.TAGS
+            }, profileId = profile.id))
+        }
+        builder.setNegativeButton(android.R.string.cancel, null)
+        builder.create().show()
     }
 
     fun remove(position: Int){
@@ -120,25 +166,24 @@ class EditProfileAdapter(var context: Context, var profile: Profile, var listene
 
         //delete all details
         for(detail in deletedDetails){
-            detailsRef.document(detail.id).delete()
+            if(detail.type != ProfileDetail.TYPE.TAGS) detailsRef.document(detail.id).delete()
         }
         Log.i("arrayList is","${editDetails.toString()}")
 
         //add and modify the rest of the details (make sure to convert to profileDetail)
         for(detail in editDetails){
+            if(detail.type != ProfileDetail.TYPE.TAGS){
+                if(detail.profileId.equals("")){
+                    detail.profileId = profile.id
 
+                    detailsRef.add(detail)
+                    Log.i("profileId","adding ${detail.title} to firestore")
+                }else{
 
-            if(detail.profileId.equals("")){
-                detail.profileId = profile.id
-
-                detailsRef.add(detail)
-                Log.i("profileId","adding ${detail.title} to firestore")
-            }else{
-
-                detailsRef.document(detail.id).set(detail)
-                Log.i("profileId","modifying ${detail.title} in firestore")
+                    detailsRef.document(detail.id).set(detail)
+                    Log.i("profileId","modifying ${detail.title} in firestore")
+                }
             }
-
         }
 
     }

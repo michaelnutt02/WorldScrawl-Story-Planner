@@ -16,7 +16,8 @@ import com.example.wordscrawl.profilecategory.Profile
 import com.google.firebase.firestore.*
 
 class ProfileDetailAdapter(var context: Context, var profile: Profile, var listener: WorldsFragment.OnProfileSelectedListener?) : RecyclerView.Adapter<ProfileDetailViewHolder>() {
-    private val profileDetails: ArrayList<ProfileDetail> = arrayListOf()
+    private val profileDetails: ArrayList<ProfileDetail> = arrayListOf(ProfileDetail(ProfileDetail.TYPE.TAGS))
+    private val tagsOffset = 1
     private val detailsRef = FirebaseFirestore
             .getInstance()
             .collection("profile-details")
@@ -28,7 +29,7 @@ class ProfileDetailAdapter(var context: Context, var profile: Profile, var liste
 
 
                 for(doc in snapshot.documents){
-                    var pos = profileDetails.size
+                    var pos = profileDetails.size - tagsOffset
                     val newProfile = ProfileDetail.fromSnapshot(doc)
                     profileDetails.add(pos, newProfile)
                     notifyItemInserted(pos)
