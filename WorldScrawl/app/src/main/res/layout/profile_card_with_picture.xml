@@ -14,17 +14,22 @@
         android:layout_height="wrap_content"
         android:minHeight="64dp"
         android:orientation="horizontal">
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:scaleType="fitXY"
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_height="55dp"
+            android:layout_width="55dp"
+            android:layout_margin="4dp"
             android:id="@+id/profile_card_picture"
-            android:src="@drawable/harry_potter"
-            />
+            app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
+            app:strokeColor="@color/purple_200"
+            app:strokeWidth="1dp"
+            app:srcCompat="@drawable/harry_potter"
+            android:scaleType="fitXY"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/profile_card_title"
+            android:layout_margin="5dp"
             android:textSize="30dp"
             android:text="Profile"/>
     </LinearLayout>
