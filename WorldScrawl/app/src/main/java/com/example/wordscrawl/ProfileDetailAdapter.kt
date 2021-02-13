@@ -22,35 +22,50 @@ class ProfileDetailAdapter(var context: Context, var profile: Profile, var liste
             .collection("profile-details")
 
     init {
-        detailsRef
-        .orderBy(Profile.LAST_TOUCHED_KEY, Query.Direction.ASCENDING)
-        .whereEqualTo("profileId", profile.id)
-//        .whereNotEqualTo("type", ProfileDetail.TYPE.TAGS.toString())
-        .addSnapshotListener{ snapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
-            if(error != null){
-                Log.e("ERROR","Listen error $error")
-            }
-            for(docChange in snapshot!!.documentChanges){
-                val profileDetail = ProfileDetail.fromSnapshot(docChange.document)
-                when(docChange.type){
-                    DocumentChange.Type.ADDED ->{
-                        val pos = profileDetails.size
-                        profileDetails.add(pos, profileDetail)
-                        notifyItemInserted(pos)
-                    }
-                    DocumentChange.Type.REMOVED ->{
-                        val pos = profileDetails.indexOfFirst{profileDetail.id == it.id}
-                        profileDetails.removeAt(pos)
-                        notifyItemRemoved(pos)
-                    }
-                    DocumentChange.Type.MODIFIED ->{
-                        val pos = profileDetails.indexOfFirst{profileDetail.id == it.id}
-                        profileDetails[pos] = profileDetail
-                        notifyItemChanged(pos)
-                    }
+
+        detailsRef.orderBy(Profile.LAST_TOUCHED_KEY, Query.Direction.ASCENDING).whereEqualTo("profileId",profile.id).get()
+            .addOnSuccessListener { snapshot:QuerySnapshot->
+
+
+                for(doc in snapshot.documents){
+                    var pos = profileDetails.size
+                    val newProfile = ProfileDetail.fromSnapshot(doc)
+                    profileDetails.add(pos, newProfile)
+                    notifyItemInserted(pos)
                 }
+
             }
-        }
+
+
+//        detailsRef
+//        .orderBy(Profile.LAST_TOUCHED_KEY, Query.Direction.ASCENDING)
+//        .whereEqualTo("profileId", profile.id)
+////        .whereNotEqualTo("type", ProfileDetail.TYPE.TAGS.toString())
+//        .addSnapshotListener{ snapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
+//            if(error != null){
+//                Log.e("ERROR","Listen error $error")
+//            }
+//            for(docChange in snapshot!!.documentChanges){
+//                val profileDetail = ProfileDetail.fromSnapshot(docChange.document)
+//                when(docChange.type){
+//                    DocumentChange.Type.ADDED ->{
+//                        val pos = profileDetails.size
+//                        profileDetails.add(pos, profileDetail)
+//                        notifyItemInserted(pos)
+//                    }
+//                    DocumentChange.Type.REMOVED ->{
+//                        val pos = profileDetails.indexOfFirst{profileDetail.id == it.id}
+//                        profileDetails.removeAt(pos)
+//                        notifyItemRemoved(pos)
+//                    }
+//                    DocumentChange.Type.MODIFIED ->{
+//                        val pos = profileDetails.indexOfFirst{profileDetail.id == it.id}
+//                        profileDetails[pos] = profileDetail
+//                        notifyItemChanged(pos)
+//                    }
+//                }
+//            }
+//        }
 
     }
 
@@ -112,6 +127,8 @@ class ProfileDetailAdapter(var context: Context, var profile: Profile, var liste
 
     fun add(profileDetail: ProfileDetail) {
         detailsRef.add(profileDetail)
+        val pos = profileDetails.size
+        notifyItemInserted(pos)
     }
 
     fun remove(position: Int) {

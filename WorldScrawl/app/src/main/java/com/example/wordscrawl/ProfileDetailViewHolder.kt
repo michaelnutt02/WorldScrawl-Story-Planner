@@ -34,7 +34,7 @@ class ProfileDetailViewHolder : RecyclerView.ViewHolder {
     fun bind(profileDetail: ProfileDetail) {
 //        val existingCardView = itemView.findViewById<CardView>(R.id.profile_detail_single_view)
 //        if(existingCardView != null) itemView.findViewById<RecyclerView>(R.id.profile_detail_recycler).remove(existingCardView)
-        var color = ContextCompat.getColor(context, R.color.grey)
+        var color = ContextCompat.getColor(context, R.color.light_grey)
         val cardView: CardView = when (profileDetail.type) {
             ProfileDetail.TYPE.SINGLE -> itemView.findViewById<CardView>(R.id.profile_detail_single_view)
             ProfileDetail.TYPE.PARAGRAPH -> itemView.findViewById<CardView>(R.id.profile_detail_paragraph_view)
@@ -52,6 +52,22 @@ class ProfileDetailViewHolder : RecyclerView.ViewHolder {
             detailBody.text = ": ${profileDetail.body}"
         }
 
+//        if(profileDetail.type == ProfileDetail.TYPE.PARAGRAPH) {
+//            if(profileDetail.isSelected) {
+//                val verticalView: LinearLayout = itemView.findViewById(R.id.paragraph_vertical_view)
+//                val bodyView: View? = itemView.findViewById(R.id.paragraph_detail_body_view)
+//                if(bodyView != null) {
+//                    verticalView.removeView(bodyView)
+//                    verticalView.addView(bodyView)
+//                }
+//                else LayoutInflater.from(context).inflate(R.layout.paragraph_body, verticalView)
+//                val detailBody: TextView = itemView.findViewById(R.id.profile_detail_body)
+//                detailBody.text = profileDetail.body
+//                color = ContextCompat.getColor(context, R.color.white)
+//            } else {
+//
+//            }
+//        }
         if(profileDetail.type == ProfileDetail.TYPE.PARAGRAPH) {
             if(profileDetail.isSelected) {
                 val verticalView: LinearLayout = itemView.findViewById(R.id.paragraph_vertical_view)
@@ -65,6 +81,12 @@ class ProfileDetailViewHolder : RecyclerView.ViewHolder {
                 detailBody.text = profileDetail.body
                 color = ContextCompat.getColor(context, R.color.white)
             } else {
+
+                val verticalView: LinearLayout = itemView.findViewById(R.id.paragraph_vertical_view)
+                val bodyView: View? = itemView.findViewById(R.id.paragraph_detail_body_view)
+                if(bodyView != null) {
+                    verticalView.removeView(bodyView)
+                }
 
             }
         }
