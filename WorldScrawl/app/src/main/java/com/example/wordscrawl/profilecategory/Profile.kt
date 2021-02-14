@@ -4,7 +4,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.*
 
-data class Profile(var type:String = "CHARACTER", var name: String = "", var tags: ArrayList<String> = arrayListOf(), var picture: String = ""){
+data class Profile(var uid: String? = "default", var type:String = "CHARACTER", var name: String = "", var tags: ArrayList<String> = arrayListOf(), var picture: String = ""){
 
 
     @get:Exclude

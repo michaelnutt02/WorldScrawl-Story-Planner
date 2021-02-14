@@ -27,10 +27,14 @@ class StoriesFragment() : Fragment() {
     private var listener : WorldsFragment.OnProfileSelectedListener? = null
 
     private lateinit var con:Context
+    private lateinit var uid: String
+    private lateinit var mainActivity: MainActivity
 
-    constructor(context: Context) : this() {
+    constructor(context: Context, uid: String, mainActivity: MainActivity) : this() {
 
         this.con = context
+        this.uid = uid
+        this.mainActivity = mainActivity
 
     }
 
@@ -46,7 +50,7 @@ class StoriesFragment() : Fragment() {
         // Inflate the layout for this fragment
         val layout = inflater.inflate(R.layout.fragment_stories, container, false)
 
-        adapter = ProfileCardAdapter(con, listener, "STORY")
+        adapter = ProfileCardAdapter(con, listener, "STORY", uid)
         recycleView = layout.findViewById(R.id.stories_recycler_view)
         recycleView.layoutManager = LinearLayoutManager(con)
         recycleView.adapter = adapter
@@ -67,6 +71,10 @@ class StoriesFragment() : Fragment() {
         layout.findViewById<BottomNavigationView>(R.id.nav_view).setOnNavigationItemSelectedListener {
             listener?.onNavPressed(it.itemId)
             true
+        }
+
+        layout.findViewById<FloatingActionButton>(R.id.logoutFAB).setOnClickListener{
+            mainActivity.signout()
         }
 
         return layout
@@ -102,7 +110,7 @@ class StoriesFragment() : Fragment() {
 
         builder.setPositiveButton(android.R.string.ok){ _, _->
             val characterName = view.findViewById<EditText>(R.id.name_edit_text).text.toString()
-            var newprofile = Profile("STORY","Story")
+            var newprofile = Profile(uid, "STORY","ENTER NAME")
 
             if(!characterName.isEmpty()){
                 newprofile = Profile("STORY",characterName)

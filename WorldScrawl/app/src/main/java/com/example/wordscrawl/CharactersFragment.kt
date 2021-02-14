@@ -34,11 +34,14 @@ class CharactersFragment() : Fragment() {
             .collection("profiles")
 
     private lateinit var con: Context
+    private lateinit var uid: String
+    private lateinit var mainActivity: MainActivity
 
 
-    constructor(context: Context) : this() {
-
+    constructor(context: Context, uid: String, mainActivity: MainActivity) : this() {
         this.con = context
+        this.uid = uid
+        this.mainActivity = mainActivity
     }
 
 
@@ -55,7 +58,7 @@ class CharactersFragment() : Fragment() {
 
         val layout = inflater.inflate(R.layout.fragment_worlds, container, false)
         //figured out how to do this from https://stackoverflow.com/questions/59864600/recyclerview-still-not-showing-items-on-fragment
-        adapter = ProfileCardAdapter(con, listener, "CHARACTER")
+        adapter = ProfileCardAdapter(con, listener, "CHARACTER", uid)
         recycleView = layout.findViewById(R.id.worlds_recycler_view)
         recycleView.layoutManager = LinearLayoutManager(con)
         recycleView.adapter = adapter
@@ -68,7 +71,7 @@ class CharactersFragment() : Fragment() {
 
         layout.findViewById<FloatingActionButton>(R.id.addFAB).setOnClickListener{
             //NOTE: When we only want values once, use .get().addOn listener. It only does it once and is more lightweight, less errors.
-            var newprofile = Profile("CHARACTER","Mary Sue")
+            var newprofile = Profile(uid ,"CHARACTER","ENTER NAME")
             adapter.add(newprofile)
 
             //find the newest profile added and load its edit detail page.
@@ -92,6 +95,9 @@ class CharactersFragment() : Fragment() {
             true
         }
 
+        layout.findViewById<FloatingActionButton>(R.id.logoutFAB).setOnClickListener{
+            mainActivity.signout()
+        }
 
         return layout
 

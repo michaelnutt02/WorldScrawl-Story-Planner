@@ -76,13 +76,13 @@ class EditProfileViewHolder: RecyclerView.ViewHolder {
         }
 
         if(profileDetail.type == ProfileDetail.TYPE.CATEGORY) {
-            val adapter = ProfileCardAdapter(context, listener, profileDetail.id)
+            val adapter = ProfileCardAdapter(context, listener, profileDetail.id, null)
             val profileCategoryRecycler = cardView.findViewById<RecyclerView>(R.id.profile_category_recycler)
             profileCategoryRecycler.layoutManager = LinearLayoutManager(context)
             profileCategoryRecycler.adapter = adapter
 
             cardView.findViewById<ImageButton>(R.id.add_category_profile_button).setOnClickListener {
-                var newprofile = Profile(profileDetail.id,"INSERT NAME")
+                var newprofile = Profile(null, profileDetail.id,"ENTER NAME")
                 adapter.add(newprofile)
 
                 //find newest added profile in firestore, give it to the edit fragment

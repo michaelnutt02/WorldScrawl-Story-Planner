@@ -12,7 +12,7 @@ import com.example.wordscrawl.outlines.Outline
 import com.google.firebase.firestore.*
 import com.google.firebase.storage.FirebaseStorage
 
-class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnProfileSelectedListener?, type:String) : RecyclerView.Adapter<ProfileCardViewHolder>() {
+class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnProfileSelectedListener?, type:String, uid: String?) : RecyclerView.Adapter<ProfileCardViewHolder>() {
     private val profiles: ArrayList<Profile> = arrayListOf()
 
     val profilesRef = FirebaseFirestore
@@ -36,6 +36,7 @@ class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnPr
         //we will want to make a characters/world/story parameter later for collection path
         profilesRef
                 .orderBy("name",Query.Direction.DESCENDING)
+                .whereEqualTo("uid", uid)
                 .whereEqualTo("type",type.toString())
                 .addSnapshotListener{ snapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
                     if(error != null){

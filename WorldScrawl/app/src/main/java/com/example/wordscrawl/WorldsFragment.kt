@@ -30,10 +30,14 @@ class WorldsFragment() : Fragment() {
     private var listener : OnProfileSelectedListener? = null
 
     private lateinit var con:Context
+    private lateinit var uid: String
+    private lateinit var mainActivity: MainActivity
 
-    constructor(context: Context) : this() {
+    constructor(context: Context, uid: String, mainActivity: MainActivity) : this() {
 
         this.con = context
+        this.uid = uid
+        this.mainActivity = mainActivity
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,7 +52,7 @@ class WorldsFragment() : Fragment() {
     ): View? {
         val layout = inflater.inflate(R.layout.fragment_worlds, container, false)
 
-        adapter = ProfileCardAdapter(con, listener, "WORLD")
+        adapter = ProfileCardAdapter(con, listener, "WORLD", uid)
         recycleView = layout.findViewById(R.id.worlds_recycler_view)
         recycleView.layoutManager = LinearLayoutManager(con)
         recycleView.adapter = adapter
@@ -60,7 +64,7 @@ class WorldsFragment() : Fragment() {
         itemTouchHelper.attachToRecyclerView(recycleView)
 
         layout.findViewById<FloatingActionButton>(R.id.addFAB).setOnClickListener{
-            var newprofile = Profile("WORLD","Hogwarts")
+            var newprofile = Profile(uid, "WORLD","ENTER NAME")
             adapter.add(newprofile)
             var size = adapter.itemCount
             Log.i("Adding Profile","In Worlds, number of profiles are $size")
@@ -68,6 +72,10 @@ class WorldsFragment() : Fragment() {
         layout.findViewById<BottomNavigationView>(R.id.nav_view).setOnNavigationItemSelectedListener {
             listener?.onNavPressed(it.itemId)
             true
+        }
+
+        layout.findViewById<FloatingActionButton>(R.id.logoutFAB).setOnClickListener{
+            mainActivity.signout()
         }
 
         return layout

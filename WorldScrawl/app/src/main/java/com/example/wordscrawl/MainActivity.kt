@@ -14,19 +14,24 @@ import com.example.wordscrawl.outlines.Outline
 import com.example.wordscrawl.outlines.OutlineFragment
 import com.example.wordscrawl.outlines.StoryOutlinesFragment
 import com.example.wordscrawl.profilecategory.Profile
+import com.firebase.ui.auth.AuthUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 
-class MainActivity : AppCompatActivity(),WorldsFragment.OnProfileSelectedListener {
+class MainActivity : AppCompatActivity(),WorldsFragment.OnProfileSelectedListener, SplashFragment.OnLoginButtonPressedListener {
 
     private val WRITE_EXTERNAL_STORAGE_PERMISSION = 2
     private val auth = FirebaseAuth.getInstance()
+    lateinit var authListener: FirebaseAuth.AuthStateListener
+    private var uid: String? = null
+    private val RC_SIGN_IN = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
         checkPermissions()
+        initializeListeners()
 
 
         //based this code off of https://stackoverflow.com/a/44190200 , which is recommended in the "hint" section of the lab
@@ -100,13 +105,13 @@ class MainActivity : AppCompatActivity(),WorldsFragment.OnProfileSelectedListene
         var switchTo:Fragment? = null
         when(id) {
             R.id.navigation_characters -> {
-                switchTo = CharactersFragment(this)
+                switchTo = uid?.let { CharactersFragment(this, it, this) }
             }
             R.id.navigation_worlds -> {
-                switchTo = WorldsFragment(this)
+                switchTo = uid?.let { WorldsFragment(this, it, this) }
             }
             R.id.navigation_stories -> {
-                switchTo = StoriesFragment(this)
+                switchTo = uid?.let { StoriesFragment(this, it, this) }
 
             }
         }
@@ -123,6 +128,45 @@ class MainActivity : AppCompatActivity(),WorldsFragment.OnProfileSelectedListene
                 ft.commit()
 
             }
+    }
+
+    override fun onLoginButtonPressed() {
+        launchLoginUI()
+    }
+
+    private fun launchLoginUI() {
+        val providers = arrayListOf(
+            AuthUI.IdpConfig.EmailBuilder().build(),
+            AuthUI.IdpConfig.PhoneBuilder().build(),
+            AuthUI.IdpConfig.GoogleBuilder().build())
+
+
+        val loginIntent = AuthUI.getInstance()
+            .createSignInIntentBuilder()
+            .setAvailableProviders(providers)
+            .setLogo(R.drawable.ic_launcher_custom)
+            .build()
+        // Create and launch sign-in intent
+        startActivityForResult(
+            loginIntent,
+            RC_SIGN_IN)
+    }
+
+
+    private fun initializeListeners() {
+        authListener = FirebaseAuth.AuthStateListener { auth ->
+            val user = auth.currentUser
+            Log.d("PB", "In auth listener, User: $user")
+            if (user != null) {
+                Log.d("PB", "UID: ${user.uid}")
+                this.uid = user.uid
+                Log.d("PB", "Name: ${user.displayName}")
+                // plus email, photoUrl, phoneNumber
+                switchToCharacterFragment(user.uid)
+            } else {
+                switchToSplashFragment()
+            }
+        }
     }
 
     // Android’s security policy requires permissions to be requested
@@ -144,32 +188,19 @@ class MainActivity : AppCompatActivity(),WorldsFragment.OnProfileSelectedListene
         }
     }
 
-
-    //TODO: REMOVE ANONYMOUS SIGN-IN EVENTUALLY
-    // This is a very simple workflow for anonymous auth.
-    // Storage requires a user to be authenticated, even if the
-    // rules allow public access.
     override fun onStart() {
         super.onStart()
-        val user = auth.currentUser
-        if (user != null) {
-            switchToCharacterFragment()
-        } else {
-            signInAnonymously()
-        }
+        auth.addAuthStateListener(authListener)
     }
 
-    private fun signInAnonymously() {
-        auth.signInAnonymously().addOnSuccessListener(this) {
-            switchToCharacterFragment()
-        }.addOnFailureListener(this) { e ->
-//            Log.e(Constants.TAG, "signInAnonymously:FAILURE", e)
-        }
+    override fun onStop() {
+        super.onStop()
+        auth.removeAuthStateListener(authListener)
     }
 
-    fun switchToCharacterFragment(){
+    fun switchToCharacterFragment(uid: String){
         //set the fragment to characters initially
-        var switchTo: Fragment? = CharactersFragment(this)
+        var switchTo: Fragment? = CharactersFragment(this, uid, this)
         //pop off everything up to and including the current tab
         supportFragmentManager.popBackStack(getString(R.string.back_to_tabs), FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
@@ -177,6 +208,16 @@ class MainActivity : AppCompatActivity(),WorldsFragment.OnProfileSelectedListene
         val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.fragment_container, switchTo!!)
         ft.commit()
+    }
+
+    private fun switchToSplashFragment() {
+        val ft = supportFragmentManager.beginTransaction()
+        ft.replace(R.id.fragment_container, SplashFragment())
+        ft.commit()
+    }
+
+    fun signout() {
+        auth.signOut()
     }
 
 }
