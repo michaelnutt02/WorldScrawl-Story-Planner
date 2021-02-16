@@ -53,6 +53,8 @@
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="@dimen/fab_margin"
         app:srcCompat="@android:drawable/ic_input_add"
+        app:tint="@color/white"
+        android:backgroundTint="?attr/colorPrimary"
         android:contentDescription= "@string/add_a_profile" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
