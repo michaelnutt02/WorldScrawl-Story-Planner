@@ -123,7 +123,7 @@ class EditProfileViewHolder: RecyclerView.ViewHolder {
                 val builder = AlertDialog.Builder(context)
                 builder.setTitle(context.getString(R.string.add_tag_title))
                 val view = LayoutInflater.from(context).inflate(R.layout.dialog_tag_add, null, false)
-                val adapter = ProfileTagAdapter(context, listener, null)
+                val adapter = ProfileTagAdapter(context, listener, null, profile.uid)
                 val profileCategoryRecycler = view.findViewById<RecyclerView>(R.id.add_tags_recycler)
                 profileCategoryRecycler.layoutManager = LinearLayoutManager(context)
                 profileCategoryRecycler.adapter = adapter

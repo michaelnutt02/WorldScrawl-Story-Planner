@@ -10,7 +10,7 @@ import com.example.wordscrawl.WorldsFragment
 import com.example.wordscrawl.profilecategory.*
 import com.google.firebase.firestore.*
 
-class ProfileTagAdapter(var context: Context, var listener: WorldsFragment.OnProfileSelectedListener?, profile:Profile?) : RecyclerView.Adapter<ProfileTagViewHolder>() {
+class ProfileTagAdapter(var context: Context, var listener: WorldsFragment.OnProfileSelectedListener?, profile:Profile?, var uid:String? = null) : RecyclerView.Adapter<ProfileTagViewHolder>() {
     private val profiles: ArrayList<Profile> = arrayListOf()
     private var profile: Profile? = profile
 
@@ -32,6 +32,7 @@ class ProfileTagAdapter(var context: Context, var listener: WorldsFragment.OnPro
                 handleSnapshot(snapshot, error)
             }
         else if(profile == null) profilesRef
+            .whereEqualTo("uid", uid)
             .addSnapshotListener{ snapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
                 handleSnapshot(snapshot, error)
             }
