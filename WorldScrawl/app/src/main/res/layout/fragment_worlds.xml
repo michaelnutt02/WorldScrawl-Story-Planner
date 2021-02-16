@@ -8,34 +8,52 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/appbar"
         android:theme="@style/Theme.WorldScrawl.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/Theme.WorldScrawl.PopupOverlay" />
+            android:layout_height="wrap_content"
+            android:background="@null">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/logoutFAB"
+                    android:src="@drawable/ic_baseline_assignment_return_24"
+                    android:backgroundTint="?attr/colorPrimary"
+                    android:layout_above="@id/nav_view"/>
+
+                <com.google.android.material.bottomnavigation.BottomNavigationView
+                    android:id="@+id/nav_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="?attr/colorPrimary"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    app:menu="@menu/top_nav_menu"
+                    app:itemTextColor="@color/white"
+                    android:outlineAmbientShadowColor="?attr/colorPrimary"/>
+
+            </LinearLayout>
+
+
+        </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        app:menu="@menu/top_nav_menu"
-        app:itemTextColor="@color/white"
-        android:outlineAmbientShadowColor="?attr/colorPrimary"/>
+
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/worlds_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/nav_view"
+        android:layout_below="@id/appbar"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context=".CharactersFragment">
 
@@ -57,18 +75,7 @@
         android:backgroundTint="?attr/colorPrimary"
         android:contentDescription= "@string/add_a_profile" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/logoutFAB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginStart="@dimen/fab_margin"
-        android:layout_marginTop="@dimen/fab_margin"
-        android:layout_marginEnd="@dimen/fab_margin"
-        android:layout_marginBottom="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_baseline_assignment_return_24"
-        android:contentDescription= "@string/add_a_profile" />
+
 
 
 </RelativeLayout>

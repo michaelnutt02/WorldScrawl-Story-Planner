@@ -5,11 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import android.view.*
+import android.widget.ImageButton
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.widget.Toolbar
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -33,6 +32,7 @@ class WorldsFragment() : Fragment() {
     private lateinit var uid: String
     private lateinit var mainActivity: MainActivity
 
+
     constructor(context: Context, uid: String, mainActivity: MainActivity) : this() {
 
         this.con = context
@@ -42,8 +42,22 @@ class WorldsFragment() : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mainActivity.setSupportActionBar(mainActivity.findViewById(R.id.toolbar))
+        setHasOptionsMenu(true)
 
+    }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        return when (item.itemId) {
+            R.id.action_settings -> true
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onCreateView(
@@ -74,9 +88,13 @@ class WorldsFragment() : Fragment() {
             true
         }
 
-        layout.findViewById<FloatingActionButton>(R.id.logoutFAB).setOnClickListener{
+//        layout.findViewById<FloatingActionButton>(R.id.logoutFAB).setOnClickListener{
+//            mainActivity.signout()
+//        }
+        layout.findViewById<ImageButton>(R.id.logoutFAB).setOnClickListener{
             mainActivity.signout()
         }
+
 
         return layout
     }
@@ -97,22 +115,8 @@ class WorldsFragment() : Fragment() {
 
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
-            R.id.action_settings -> {
-                startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
-                Log.i("Clear","Pressed trash can")
-                true
-            }
 
 
-            else -> super.onOptionsItemSelected(item)
-        }
-
-    }
 
     interface OnProfileSelectedListener{
         fun onProfileSelected(profile:Profile)

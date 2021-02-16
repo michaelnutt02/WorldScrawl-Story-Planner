@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageButton
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -48,10 +49,10 @@ class StoriesFragment() : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        val layout = inflater.inflate(R.layout.fragment_stories, container, false)
+        val layout = inflater.inflate(R.layout.fragment_worlds, container, false)
 
         adapter = ProfileCardAdapter(con, listener, "STORY", uid)
-        recycleView = layout.findViewById(R.id.stories_recycler_view)
+        recycleView = layout.findViewById(R.id.worlds_recycler_view)
         recycleView.layoutManager = LinearLayoutManager(con)
         recycleView.adapter = adapter
 
@@ -73,7 +74,10 @@ class StoriesFragment() : Fragment() {
             true
         }
 
-        layout.findViewById<FloatingActionButton>(R.id.logoutFAB).setOnClickListener{
+        //        layout.findViewById<FloatingActionButton>(R.id.logoutFAB).setOnClickListener{
+//            mainActivity.signout()
+//        }
+        layout.findViewById<ImageButton>(R.id.logoutFAB).setOnClickListener{
             mainActivity.signout()
         }
 

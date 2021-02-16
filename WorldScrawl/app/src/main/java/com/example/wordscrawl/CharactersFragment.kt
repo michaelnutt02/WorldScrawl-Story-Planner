@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -95,7 +96,10 @@ class CharactersFragment() : Fragment() {
             true
         }
 
-        layout.findViewById<FloatingActionButton>(R.id.logoutFAB).setOnClickListener{
+        //        layout.findViewById<FloatingActionButton>(R.id.logoutFAB).setOnClickListener{
+//            mainActivity.signout()
+//        }
+        layout.findViewById<ImageButton>(R.id.logoutFAB).setOnClickListener{
             mainActivity.signout()
         }
 
