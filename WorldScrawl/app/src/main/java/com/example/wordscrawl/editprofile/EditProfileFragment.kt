@@ -25,6 +25,7 @@ import com.example.wordscrawl.ProfileFragment
 import com.example.wordscrawl.R
 import com.example.wordscrawl.WorldsFragment
 import com.example.wordscrawl.outlines.Outline
+import com.example.wordscrawl.outlines.StoryOutlinesFragment
 import com.example.wordscrawl.profilecategory.Profile
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
@@ -84,6 +85,10 @@ class EditProfileFragment() : Fragment(), WorldsFragment.OnProfileSelectedListen
         var editTitle:EditText = view.findViewById(R.id.edit_Title)
         editTitle.setText(profile.name)
 
+        if(profile.type.equals("STORY")){
+            view.findViewById<FloatingActionButton>(R.id.addFAB).hide()
+        }
+
         view.findViewById<FloatingActionButton>(R.id.addFAB).setOnClickListener {
             if (adapter != null) {
                 adapter.add()
@@ -107,14 +112,20 @@ class EditProfileFragment() : Fragment(), WorldsFragment.OnProfileSelectedListen
 
             profilesRef.document(profile.id).set(profile)
 
+            //make it switch depending on what type
+            var switchTo:Fragment? = null
+            if(profile.type.equals("STORY")){
+                switchTo = StoryOutlinesFragment(con,profile)
+            }else{
+                switchTo = ProfileFragment(con, profile)
+            }
 
-            val profileFragment = ProfileFragment(con, profile)
             val ft = getActivity()?.supportFragmentManager?.beginTransaction()
             if (ft != null) {
                 //go straight back to profile page
                 getActivity()?.supportFragmentManager?.popBackStack(getString(R.string.skip_edit_page),FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
-                ft.replace(R.id.fragment_container, profileFragment)
+                ft.replace(R.id.fragment_container, switchTo)
                 ft.addToBackStack(getString(R.string.back_to_tabs))
                 ft.commit()
             }

@@ -51,5 +51,6 @@
     <string name="outlines">Outlines</string>
     <string name="login">LOGIN</string>
     <string name="icon">ICON</string>
+    <string name="tags">Tags:</string>
 
 </resources>

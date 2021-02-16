@@ -114,7 +114,7 @@ class OutlineAdapter(var context: Context, val profile:Profile, var listener : W
                 "PINCH" -> Outline.TYPE.PINCH
                 "FREYTAG" -> Outline.TYPE.FREYTAG
                 else -> Outline.TYPE.FREEFORM
-            }, profileId = profile.id))
+            }, profileId = profile.id, title = "ENTER NAME"))
         }
         builder.setNegativeButton(android.R.string.cancel, null)
         builder.create().show()

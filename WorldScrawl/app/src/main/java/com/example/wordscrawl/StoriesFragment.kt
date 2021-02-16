@@ -117,7 +117,7 @@ class StoriesFragment() : Fragment() {
             var newprofile = Profile(uid, "STORY","ENTER NAME")
 
             if(!characterName.isEmpty()){
-                newprofile = Profile("STORY",characterName)
+                newprofile = Profile(uid,"STORY",characterName)
             }
 
             adapter.add(newprofile)

@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.ImageButton
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -20,7 +21,9 @@ import com.example.wordscrawl.SwipeToDeleteCallbacks.OutlineSwipeToDeleteCallbac
 import com.example.wordscrawl.SwipeToDeleteCallbacks.ProfileSwipeToDeleteCallback
 import com.example.wordscrawl.WorldsFragment
 import com.example.wordscrawl.editprofile.EditProfileAdapter
+import com.example.wordscrawl.editprofile.EditProfileFragment
 import com.example.wordscrawl.profilecategory.Profile
+import com.example.wordscrawl.profiletag.ProfileTagAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
@@ -28,6 +31,9 @@ class StoryOutlinesFragment() : Fragment() {
 
     lateinit var adapter: OutlineAdapter
     lateinit var recycleView: RecyclerView
+    lateinit var tagAdapter: ProfileTagAdapter
+    lateinit var tagRecycleView: RecyclerView
+
     lateinit var profile:Profile
 
     lateinit var con:Context
@@ -53,7 +59,7 @@ class StoryOutlinesFragment() : Fragment() {
         var view = inflater.inflate(R.layout.fragment_story_outlines, container, false)
         adapter = listener?.let { OutlineAdapter(con, profile, it) }!!
 
-
+        //outline recycler
         recycleView = view.findViewById(R.id.outline_recycler)
         recycleView.layoutManager = LinearLayoutManager(con)
         recycleView.adapter = adapter
@@ -64,6 +70,12 @@ class StoryOutlinesFragment() : Fragment() {
         val itemTouchHelper = ItemTouchHelper(OutlineSwipeToDeleteCallback(adapter, con))
         itemTouchHelper.attachToRecyclerView(recycleView)
 
+        //tag recycler
+        tagAdapter = listener?.let { ProfileTagAdapter(con, it, profile) }!!
+        tagRecycleView = view.findViewById(R.id.outline_tag_recycler)
+        tagRecycleView .layoutManager = LinearLayoutManager(con)
+        tagRecycleView .adapter = tagAdapter
+
         //change name to title of story
         var name = view.findViewById<TextView>(R.id.story_name)
         name.setText(profile.name)
@@ -72,6 +84,17 @@ class StoryOutlinesFragment() : Fragment() {
         view.findViewById<FloatingActionButton>(R.id.addFAB).setOnClickListener{
             //DONE: Make a dialog box that makes them select an outline type
             adapter.showAddDialog()
+        }
+
+        view.findViewById<ImageButton>(R.id.editButton).setOnClickListener() {
+            val editProfileFragment = EditProfileFragment(con, profile)
+            val ft = getActivity()?.supportFragmentManager?.beginTransaction()
+            if (ft != null) {
+                ft.replace(R.id.fragment_container, editProfileFragment)
+                ft.addToBackStack(getString(R.string.skip_edit_page))
+//                getActivity()?.supportFragmentManager?.popBackStackImmediate()
+                ft.commit()
+            }
         }
 
         return view
