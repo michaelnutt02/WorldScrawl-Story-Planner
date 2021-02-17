@@ -106,7 +106,7 @@ class EditProfileAdapter(var context: Context, var profile: Profile, var listene
         when(profile.type) {
             "CHARACTER" -> add(ProfileDetail(ProfileDetail.TYPE.SINGLE))
             "WORLD" -> add(ProfileDetail(ProfileDetail.TYPE.CATEGORY))
-            else -> showAddDialog(R.array.add_details_array)
+            else -> add(ProfileDetail(ProfileDetail.TYPE.SINGLE))
         }
     }
 
@@ -140,7 +140,7 @@ class EditProfileAdapter(var context: Context, var profile: Profile, var listene
                 "PARAGRAPH" -> ProfileDetail.TYPE.PARAGRAPH
                 "CATEGORY" -> ProfileDetail.TYPE.CATEGORY
                 else -> ProfileDetail.TYPE.TAGS
-            }, profileId = profile.id))
+            }))
         }
         builder.setNegativeButton(android.R.string.cancel, null)
         builder.create().show()
