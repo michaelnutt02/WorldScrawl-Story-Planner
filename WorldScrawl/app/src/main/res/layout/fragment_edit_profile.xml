@@ -23,21 +23,11 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/editBackButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="16dp"
-                    android:src="@drawable/ic_baseline_arrow_back_24"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
                 <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/editBackButton"
+                    app:layout_constraintStart_toStartOf="parent"
                     android:id="@+id/edit_Title"
                     android:textSize="20sp"
                     android:layout_marginLeft="20dp"

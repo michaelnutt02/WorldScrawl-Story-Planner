@@ -74,7 +74,7 @@ class EditProfileAdapter(var context: Context, var profile: Profile, var mainAct
                 }
                 , parent, false)
 
-        return EditProfileViewHolder(view, this, context, mainActivity, profile)
+        return EditProfileViewHolder(view, this, context, editFragment, mainActivity, profile)
     }
 
     override fun getItemViewType(position: Int): Int {

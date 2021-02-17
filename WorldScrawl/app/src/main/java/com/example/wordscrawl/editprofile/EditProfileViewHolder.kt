@@ -35,9 +35,9 @@ class EditProfileViewHolder: RecyclerView.ViewHolder {
             .getInstance()
             .collection("profiles")
 
-    constructor(itemView: View, adapter: EditProfileAdapter, context: Context, mainActivity: MainActivity, profile: Profile): super(itemView) {
+    constructor(itemView: View, adapter: EditProfileAdapter, context: Context, listener: WorldsFragment.OnProfileSelectedListener, mainActivity: MainActivity, profile: Profile): super(itemView) {
         this.context = context
-        this.listener = mainActivity
+        this.listener = listener
         this.mainActivity = mainActivity
         this.profile = profile
         this.adapter = adapter

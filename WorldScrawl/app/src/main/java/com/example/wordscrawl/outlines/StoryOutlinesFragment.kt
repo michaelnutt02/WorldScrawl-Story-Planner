@@ -12,6 +12,7 @@ import android.widget.ImageButton
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -98,6 +99,10 @@ class StoryOutlinesFragment() : Fragment() {
 //                getActivity()?.supportFragmentManager?.popBackStackImmediate()
                 ft.commit()
             }
+        }
+
+        view.findViewById<AppCompatImageView>(R.id.homeButton).setOnClickListener() {
+            mainActivity.switchToCharacterFragment()
         }
 
         return view
