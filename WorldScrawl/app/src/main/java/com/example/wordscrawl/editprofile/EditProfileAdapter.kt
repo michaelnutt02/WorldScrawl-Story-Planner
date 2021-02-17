@@ -1,5 +1,6 @@
 package com.example.wordscrawl.editprofile
 
+import android.app.PendingIntent.getActivity
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
@@ -110,6 +111,21 @@ class EditProfileAdapter(var context: Context, var profile: Profile, var listene
         }
     }
 
+    fun addCategory(profileDetail: ProfileDetail){
+        detailsRef.add(profileDetail)
+        var newDetail:ProfileDetail? = null
+        //get latest added detail so we can have detail id
+        detailsRef.orderBy(ProfileDetail.LAST_TOUCHED_KEY, Query.Direction.DESCENDING).limit(1).get().addOnSuccessListener {
+            Log.i("adding", "we are getting here :)))")
+
+            for(doc in it){
+                newDetail = ProfileDetail.fromSnapshot(doc)
+                }
+            }
+
+        newDetail?.let { add(it) }
+    }
+
     fun add(profileDetail: ProfileDetail) {
         val pos = editDetails.size - tagsOffset
         editDetails.add(pos, profileDetail)
@@ -117,34 +133,7 @@ class EditProfileAdapter(var context: Context, var profile: Profile, var listene
         editFragment.scrollToPosition(pos)
     }
 
-    fun showAddDialog(arrayRes: Int) {
-        val builder = AlertDialog.Builder(context)
-        builder.setTitle(context.getString(R.string.add_detail_title))
-        val view = LayoutInflater.from(context).inflate(R.layout.dialog_add, null, false)
-        val spinner: Spinner = view.findViewById(R.id.add_details_spinner)
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter.createFromResource(
-            context,
-            arrayRes,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            // Specify the layout to use when the list of choices appears
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            // Apply the adapter to the spinner
-            spinner.adapter = adapter
-        }
-        builder.setView(view)
-        builder.setPositiveButton(android.R.string.ok) {_,_->
-            add(ProfileDetail(type = when(spinner.selectedItem){
-                "SINGLE" -> ProfileDetail.TYPE.SINGLE
-                "PARAGRAPH" -> ProfileDetail.TYPE.PARAGRAPH
-                "CATEGORY" -> ProfileDetail.TYPE.CATEGORY
-                else -> ProfileDetail.TYPE.TAGS
-            }))
-        }
-        builder.setNegativeButton(android.R.string.cancel, null)
-        builder.create().show()
-    }
+
 
     fun remove(position: Int){
         //add to delete list if it was in firestore

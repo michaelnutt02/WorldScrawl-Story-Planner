@@ -74,9 +74,10 @@ class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnPr
     override fun onCreateViewHolder(parent: ViewGroup, index: Int): ProfileCardViewHolder {
         Log.d("PD", "index is ${index}")
         val view = LayoutInflater.from(context).inflate(
-            when(profiles[index].picture){
-                "" -> R.layout.profile_card
-                else -> R.layout.profile_card_with_picture
+            when(index){
+                0 -> R.layout.profile_card
+                1 -> R.layout.profile_card_with_picture
+                else -> R.layout.profile_card
             }
             , parent, false)
 
@@ -84,8 +85,13 @@ class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnPr
         return ProfileCardViewHolder(view, this, context)
     }
 
+
+
     override fun getItemViewType(position: Int): Int {
-        return position
+        return when(profiles[position].picture){
+            "" -> 0
+            else -> 1
+        }
     }
 
     override fun onBindViewHolder(viewHolder: ProfileCardViewHolder, index: Int) {
