@@ -80,7 +80,7 @@ class CharactersFragment() : Fragment() {
                 Log.i("adding", "we are getting here :)))")
                 for(doc in it){
                     newprofile = Profile.fromSnapshot(doc)
-                    val editProfileFragment = EditProfileFragment(con, newprofile)
+                    val editProfileFragment = EditProfileFragment(con, newprofile, mainActivity)
                     val ft = getActivity()?.supportFragmentManager?.beginTransaction()
                     if (ft != null) {
                         ft.replace(R.id.fragment_container, editProfileFragment)

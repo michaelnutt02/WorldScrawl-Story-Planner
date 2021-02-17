@@ -1,9 +1,6 @@
 package com.example.wordscrawl.editprofile
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.net.Uri
-import android.os.AsyncTask
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -14,15 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.wordscrawl.*
 import com.example.wordscrawl.R
 import com.example.wordscrawl.profilecategory.Profile
-import com.google.android.gms.tasks.Continuation
-import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.UploadTask
-import java.io.ByteArrayOutputStream
-import kotlin.random.Random
 
-class EditProfileAdapter(var context: Context, var profile: Profile, var listener : WorldsFragment.OnProfileSelectedListener, var editFragment: EditProfileFragment): RecyclerView.Adapter<EditProfileViewHolder>() {
+class EditProfileAdapter(var context: Context, var profile: Profile, var mainActivity : MainActivity, var editFragment: EditProfileFragment): RecyclerView.Adapter<EditProfileViewHolder>() {
     private var editDetails: ArrayList<ProfileDetail> = arrayListOf(ProfileDetail(ProfileDetail.TYPE.TAGS))
     private val tagsOffset = 1
 
@@ -82,7 +73,7 @@ class EditProfileAdapter(var context: Context, var profile: Profile, var listene
                 }
                 , parent, false)
 
-        return EditProfileViewHolder(view, this, context, listener, profile)
+        return EditProfileViewHolder(view, this, context, mainActivity, profile)
     }
 
     override fun getItemViewType(position: Int): Int {

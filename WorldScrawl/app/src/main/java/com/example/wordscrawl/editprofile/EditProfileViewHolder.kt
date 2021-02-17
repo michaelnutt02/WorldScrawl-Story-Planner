@@ -12,11 +12,9 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.wordscrawl.ProfileDetail
-import com.example.wordscrawl.R
+import com.example.wordscrawl.*
 import com.example.wordscrawl.SwipeToDeleteCallbacks.ProfileSwipeToDeleteCallback
 import com.example.wordscrawl.SwipeToDeleteCallbacks.TagSwipeToDeleteCallback
-import com.example.wordscrawl.WorldsFragment
 import com.example.wordscrawl.profilecategory.Profile
 import com.example.wordscrawl.profilecategory.ProfileCardAdapter
 import com.example.wordscrawl.profiletag.ProfileTagAdapter
@@ -29,16 +27,18 @@ import com.google.firebase.firestore.QuerySnapshot
 class EditProfileViewHolder: RecyclerView.ViewHolder {
 
     lateinit var context: Context
-    var listener: WorldsFragment.OnProfileSelectedListener?
+    lateinit var listener: WorldsFragment.OnProfileSelectedListener
+    lateinit var mainActivity: MainActivity
     lateinit var profile: Profile
     lateinit var adapter: EditProfileAdapter
     val profilesRef = FirebaseFirestore
             .getInstance()
             .collection("profiles")
 
-    constructor(itemView: View, adapter: EditProfileAdapter, context: Context, listener: WorldsFragment.OnProfileSelectedListener?, profile: Profile): super(itemView) {
+    constructor(itemView: View, adapter: EditProfileAdapter, context: Context, mainActivity: MainActivity, profile: Profile): super(itemView) {
         this.context = context
-        this.listener = listener
+        this.listener = mainActivity
+        this.mainActivity = mainActivity
         this.profile = profile
         this.adapter = adapter
     }
@@ -93,7 +93,7 @@ class EditProfileViewHolder: RecyclerView.ViewHolder {
                             if(snapshot != null){
                                 for(doc in snapshot.documents){
                                     newprofile = Profile.fromSnapshot(doc)
-                                    val editProfileFragment = EditProfileFragment(context, newprofile)
+                                    val editProfileFragment = EditProfileFragment(context, newprofile, mainActivity)
                                     val activity: AppCompatActivity = itemView.context as AppCompatActivity
                                     val ft = activity.supportFragmentManager.beginTransaction()
                                     if (ft != null) {

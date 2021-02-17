@@ -20,10 +20,7 @@ import android.widget.ImageButton
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.wordscrawl.BitmapUtils
-import com.example.wordscrawl.ProfileFragment
-import com.example.wordscrawl.R
-import com.example.wordscrawl.WorldsFragment
+import com.example.wordscrawl.*
 import com.example.wordscrawl.outlines.Outline
 import com.example.wordscrawl.outlines.StoryOutlinesFragment
 import com.example.wordscrawl.profilecategory.Profile
@@ -44,6 +41,7 @@ class EditProfileFragment() : Fragment(), WorldsFragment.OnProfileSelectedListen
     lateinit var recycleView: RecyclerView
 
     lateinit var profile:Profile
+    lateinit var mainActivity: MainActivity
 
     private val profilesRef = FirebaseFirestore
             .getInstance()
@@ -56,10 +54,11 @@ class EditProfileFragment() : Fragment(), WorldsFragment.OnProfileSelectedListen
 
     private lateinit var con: Context
 
-    constructor(context: Context, profile: Profile) : this() {
+    constructor(context: Context, profile: Profile, mainActivity: MainActivity) : this() {
 
         this.con = context
         this.profile = profile
+        this.mainActivity = mainActivity
 
     }
 
@@ -75,7 +74,7 @@ class EditProfileFragment() : Fragment(), WorldsFragment.OnProfileSelectedListen
 
         // Inflate the layout for this fragment
         var view = inflater.inflate(R.layout.fragment_edit_profile, container, false)
-        adapter = EditProfileAdapter(con, profile, this, this)
+        adapter = EditProfileAdapter(con, profile, mainActivity, this)
         recycleView = view.findViewById(R.id.edit_profile_recycler)
         recycleView.layoutManager = LinearLayoutManager(con)
         recycleView.adapter = adapter
@@ -115,9 +114,9 @@ class EditProfileFragment() : Fragment(), WorldsFragment.OnProfileSelectedListen
             //make it switch depending on what type
             var switchTo:Fragment? = null
             if(profile.type.equals("STORY")){
-                switchTo = StoryOutlinesFragment(con,profile)
+                switchTo = StoryOutlinesFragment(con,profile, mainActivity)
             }else{
-                switchTo = ProfileFragment(con, profile)
+                switchTo = ProfileFragment(con, profile, mainActivity)
             }
 
             val ft = getActivity()?.supportFragmentManager?.beginTransaction()
