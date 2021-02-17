@@ -15,6 +15,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.wordscrawl.MainActivity
 import com.example.wordscrawl.ProfileDetail
 import com.example.wordscrawl.R
 import com.example.wordscrawl.SwipeToDeleteCallbacks.OutlineSwipeToDeleteCallback
@@ -35,15 +36,17 @@ class StoryOutlinesFragment() : Fragment() {
     lateinit var tagRecycleView: RecyclerView
 
     lateinit var profile:Profile
+    lateinit var mainActivity: MainActivity
 
     lateinit var con:Context
 
     private var listener : WorldsFragment.OnProfileSelectedListener? = null
 
-    constructor(context: Context, profile: Profile) : this() {
+    constructor(context: Context, profile: Profile, mainActivity: MainActivity) : this() {
 
         this.con = context
         this.profile = profile
+        this.mainActivity = mainActivity
 
     }
 
@@ -87,7 +90,7 @@ class StoryOutlinesFragment() : Fragment() {
         }
 
         view.findViewById<ImageButton>(R.id.editButton).setOnClickListener() {
-            val editProfileFragment = EditProfileFragment(con, profile)
+            val editProfileFragment = EditProfileFragment(con, profile, mainActivity)
             val ft = getActivity()?.supportFragmentManager?.beginTransaction()
             if (ft != null) {
                 ft.replace(R.id.fragment_container, editProfileFragment)

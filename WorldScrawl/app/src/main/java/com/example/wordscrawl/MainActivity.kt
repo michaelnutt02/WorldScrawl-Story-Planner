@@ -18,7 +18,7 @@ import com.firebase.ui.auth.AuthUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 
-class MainActivity : AppCompatActivity(),WorldsFragment.OnProfileSelectedListener, SplashFragment.OnLoginButtonPressedListener {
+class MainActivity : AppCompatActivity(),WorldsFragment.OnProfileSelectedListener, SplashFragment.OnLoginButtonPressedListener, ProfileFragment.OnHomeButtonPressedListener {
 
     private val WRITE_EXTERNAL_STORAGE_PERMISSION = 2
     private val auth = FirebaseAuth.getInstance()
@@ -72,10 +72,10 @@ class MainActivity : AppCompatActivity(),WorldsFragment.OnProfileSelectedListene
 
         when(profile.type){
             "STORY" -> {
-                switchTo = StoryOutlinesFragment(this, profile)
+                switchTo = StoryOutlinesFragment(this, profile, this)
             }
             else -> {
-                switchTo = ProfileFragment(this, profile)
+                switchTo = ProfileFragment(this, profile, this)
             }
         }
 
@@ -137,7 +137,6 @@ class MainActivity : AppCompatActivity(),WorldsFragment.OnProfileSelectedListene
     private fun launchLoginUI() {
         val providers = arrayListOf(
             AuthUI.IdpConfig.EmailBuilder().build(),
-            AuthUI.IdpConfig.PhoneBuilder().build(),
             AuthUI.IdpConfig.GoogleBuilder().build())
 
 
@@ -162,7 +161,7 @@ class MainActivity : AppCompatActivity(),WorldsFragment.OnProfileSelectedListene
                 this.uid = user.uid
                 Log.d("PB", "Name: ${user.displayName}")
                 // plus email, photoUrl, phoneNumber
-                switchToCharacterFragment(user.uid)
+                switchToCharacterFragment()
             } else {
                 switchToSplashFragment()
             }
@@ -198,9 +197,9 @@ class MainActivity : AppCompatActivity(),WorldsFragment.OnProfileSelectedListene
         auth.removeAuthStateListener(authListener)
     }
 
-    fun switchToCharacterFragment(uid: String){
+    override fun switchToCharacterFragment(){
         //set the fragment to characters initially
-        var switchTo: Fragment? = CharactersFragment(this, uid, this)
+        var switchTo: Fragment? = CharactersFragment(this, uid!!, this)
         //pop off everything up to and including the current tab
         supportFragmentManager.popBackStack(getString(R.string.back_to_tabs), FragmentManager.POP_BACK_STACK_INCLUSIVE)
 

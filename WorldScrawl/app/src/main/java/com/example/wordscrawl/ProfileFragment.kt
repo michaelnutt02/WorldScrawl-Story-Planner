@@ -7,10 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wordscrawl.editprofile.EditProfileFragment
+import com.example.wordscrawl.outlines.Outline
 import com.example.wordscrawl.profilecategory.Profile
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.squareup.picasso.Picasso
@@ -21,15 +24,19 @@ class ProfileFragment() : Fragment() {
     lateinit var adapter: ProfileDetailAdapter
     lateinit var recycleView: RecyclerView
     lateinit var profile:Profile
+    lateinit var homeListener:OnHomeButtonPressedListener
+    lateinit var mainActivity: MainActivity
 
     private var listener : WorldsFragment.OnProfileSelectedListener? = null
 
     private lateinit var con: Context
 
-    constructor(context: Context, profile: Profile) : this() {
+    constructor(context: Context, profile: Profile, mainActivity: MainActivity) : this() {
 
         this.con = context
         this.profile = profile
+        this.homeListener = mainActivity
+        this.mainActivity = mainActivity
 
     }
 
@@ -74,7 +81,7 @@ class ProfileFragment() : Fragment() {
 //        }
 
         layout.findViewById<ImageButton>(R.id.editButton).setOnClickListener() {
-            val editProfileFragment = EditProfileFragment(con, profile)
+            val editProfileFragment = EditProfileFragment(con, profile, mainActivity)
             val ft = getActivity()?.supportFragmentManager?.beginTransaction()
             if (ft != null) {
                 ft.replace(R.id.fragment_container, editProfileFragment)
@@ -84,6 +91,9 @@ class ProfileFragment() : Fragment() {
             }
         }
 
+        layout.findViewById<AppCompatImageView>(R.id.homeButton).setOnClickListener() {
+            homeListener.switchToCharacterFragment()
+        }
 
         return layout
     }
@@ -102,6 +112,11 @@ class ProfileFragment() : Fragment() {
     override fun onDetach() {
         super.onDetach()
         listener = null
+    }
+
+    interface OnHomeButtonPressedListener{
+        fun switchToCharacterFragment()
+
     }
 
 
