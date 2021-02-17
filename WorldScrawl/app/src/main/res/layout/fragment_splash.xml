@@ -12,6 +12,9 @@
             android:id="@+id/login_button"
             android:layout_centerInParent="true"
             android:drawableTop="@drawable/ic_login_foreground"
+            android:fontFamily="@font/authentic_signature"
+            android:textAllCaps="false"
+            android:textSize="34dp"
             android:text="@string/login"/>
 
     <ImageView
