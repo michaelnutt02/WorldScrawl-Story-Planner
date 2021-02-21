@@ -1,5 +1,6 @@
 package com.example.wordscrawl.profilecategory
 
+import android.app.PendingIntent.getActivity
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.wordscrawl.ProfileDetail
 import com.example.wordscrawl.R
 import com.example.wordscrawl.WorldsFragment
+import com.example.wordscrawl.editprofile.EditProfileFragment
 import com.example.wordscrawl.outlines.Outline
 import com.google.firebase.firestore.*
 import com.google.firebase.storage.FirebaseStorage
@@ -105,6 +107,38 @@ class ProfileCardAdapter(var context: Context, var listener: WorldsFragment.OnPr
         profilesRef.add(profile)
 
     }
+
+    fun addCopy(position: Int){
+        var copyProfile = profiles[position]
+        copyProfile.name = "Copy of ".plus(copyProfile.name)
+        copyProfile.picture = ""
+        var details:ArrayList<ProfileDetail> = arrayListOf()
+
+        //add the appropriate details to the copy
+        detailsRef.orderBy(Profile.LAST_TOUCHED_KEY, Query.Direction.ASCENDING).whereEqualTo("profileId",profiles[position].id).get().addOnSuccessListener {query:QuerySnapshot ->
+            for(doc in query){
+                var detail = ProfileDetail.fromSnapshot(doc)
+                detail.profileId = ""
+                detail.body = ""
+                details.add(detail)
+
+
+            }
+            profilesRef.add(copyProfile).addOnSuccessListener {
+
+
+                for(detail in details){
+                    detail.profileId = it.id
+                    Log.i("adding", "the profile id NOW is ${it.id}")
+                    detailsRef.add(detail)
+                }
+            }
+        }
+
+
+    }
+
+
 
 
     fun remove(position: Int) {

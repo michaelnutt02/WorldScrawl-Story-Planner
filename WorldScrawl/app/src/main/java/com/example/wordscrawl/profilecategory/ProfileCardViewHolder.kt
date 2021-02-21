@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -22,10 +23,12 @@ class ProfileCardViewHolder : RecyclerView.ViewHolder {
         }
 
         //TODO: Make a copy function where writer can long click on a profile and copy its fields (bodies not filled) into a new profile
-//        itemView.setOnLongClickListener{
-//            adapter.remove(adapterPosition)
-//            true
-//        }
+        itemView.setOnLongClickListener{
+            adapter.addCopy(adapterPosition)
+            val toast = Toast.makeText(context, "copy added", Toast.LENGTH_SHORT)
+            toast.show()
+            true
+        }
     }
 
     fun bind(profile: Profile) {
